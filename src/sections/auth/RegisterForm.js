@@ -11,7 +11,7 @@ import FormProvider, { RHFTextField } from "../../components/hook-form";
 import { Eye, EyeSlash } from "phosphor-react";
 import { useDispatch, useSelector } from "react-redux";
 import { RegisterUser } from "../../redux/slices/auth";
-import classes from "../../css/authCommon.module.css";
+import csscommon from "../../css/authCommon.module.css";
 
 // ----------------------------------------------------------------------
 
@@ -70,11 +70,11 @@ export default function AuthRegisterForm() {
         )}
 
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-          <RHFTextField name="firstName" label="First name" className={classes.input_field01} />
-          <RHFTextField name="lastName" label="Last name" className={classes.input_field01} />
+          <RHFTextField name="firstName" label="First name" className={csscommon.input_field01} />
+          <RHFTextField name="lastName" label="Last name" className={csscommon.input_field01} />
         </Stack>
 
-        <RHFTextField name="email" label="Email address" className={classes.input_field01} />
+        <RHFTextField name="email" label="Email address" className={csscommon.input_field01} />
 
         <RHFTextField
           name="password"
@@ -92,10 +92,9 @@ export default function AuthRegisterForm() {
               </InputAdornment>
             ),
           }}
-          className={classes.input_field01} 
+          className={csscommon.input_field01} 
         />
       </Stack>
-
       <LoadingButton
         loading={isLoading}
         sx={{
@@ -108,7 +107,7 @@ export default function AuthRegisterForm() {
               theme.palette.mode === "light" ? "common.white" : "grey.800",
           },
         }}
-        className={classes.a_signupbtn}
+        className={csscommon.a_signupbtn}
       >
         Create Account
       </LoadingButton>

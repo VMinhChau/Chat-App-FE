@@ -12,6 +12,7 @@ import FormProvider, { RHFTextField } from "../../components/hook-form";
 import { Eye, EyeSlash } from "phosphor-react";
 import { LoginUser } from "../../redux/slices/auth";
 import { useDispatch, useSelector } from "react-redux";
+import csscommon from "../../css/authCommon.module.css";
 
 // ----------------------------------------------------------------------
 
@@ -67,7 +68,7 @@ export default function AuthLoginForm() {
           <Alert severity="error">{errors.afterSubmit.message}</Alert>
         )}
 
-        <RHFTextField name="email" label="Email address" />
+        <RHFTextField name="email" label="Email address" className={csscommon.input_field01} />
 
         <RHFTextField
           name="password"
@@ -85,21 +86,17 @@ export default function AuthLoginForm() {
               </InputAdornment>
             ),
           }}
+          className={csscommon.input_field01}
         />
       </Stack>
 
       <Stack alignItems="flex-end" sx={{ my: 2 }}>
-        <Link component={RouterLink} to="/auth/reset-password" variant="body2" color="inherit" underline="always">
+        <Link component={RouterLink} to="/auth/reset-password" variant="body2" color="inherit" underline="always" className={csscommon.a_signupbtn01}>
           Forgot password?
         </Link>
       </Stack>
 
       <LoadingButton
-        fullWidth
-        color="inherit"
-        size="large"
-        type="submit"
-        variant="contained"
         loading={isLoading}
         sx={{
           bgcolor: "text.primary",
@@ -111,6 +108,7 @@ export default function AuthLoginForm() {
               theme.palette.mode === "light" ? "common.white" : "grey.800",
           },
         }}
+        className={csscommon.a_signupbtn}
       >
         Login
       </LoadingButton>
