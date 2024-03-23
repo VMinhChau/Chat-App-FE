@@ -1,0 +1,31 @@
+.a_bgcommon {
+    position: relative;
+    background-image: url(../assets/images/auth/bg-auth.jpg);
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-position: center;
+    background-size: 100% 100%;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+.input_field01 {
+    background: #fff;
+    border-radius: 10px;
+}
+.a_signupbtn {
+    display: block;
+    width: 100%;
+    max-width: 338px;
+    margin: 0 auto!important;
+    padding: 14px 10px!important;
+    background-image: linear-gradient(90deg, #F3AC16, #ED711A);
+    border: solid 1px transparent;
+    transition: all 0.3s ease;
+    &:hover {
+        background: #fff;
+        color: #ED711A;
+        border-color: #ED711A;
+    }
+}

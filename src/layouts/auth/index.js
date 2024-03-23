@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Stack } from "@mui/material";
 import { Navigate, Outlet } from "react-router-dom";
+import classes from "../../css/authCommon.module.css";
 
 // import Logo from "../../assets/Images/logo.ico";
 import Background from "../../assets/background.png";
@@ -15,16 +16,7 @@ const AuthLayout = () => {
 
   return (
     <>
-      <div
-        style={{
-          backgroundImage: `url(${Background})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          width: "100vw",
-          minHeight: "100vh",
-        }}
-      >
+      <div className={classes.a_bgcommon}>
         <Container
           // sx={{ mt: 5 }}
           maxWidth="sm"
