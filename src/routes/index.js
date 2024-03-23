@@ -2,7 +2,7 @@ import { Suspense, lazy } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 
 // layouts
-// import DashboardLayout from "../layouts/dashboard";
+// import DashboardLayout from "../layouts/home";
 import AuthLayout from "../layouts/auth";
 
 // config
@@ -23,6 +23,7 @@ export default function Router() {
       path: "/auth",
       element: <AuthLayout />,
       children: [
+        {path: "", element: <TopPage />},
         { path: "login", element: <LoginPage /> },
         { path: "signup", element: <SignUpPage /> },
         // { path: "reset-password", element: <ResetPasswordPage /> },
@@ -32,7 +33,7 @@ export default function Router() {
     },
     // {
     //   path: "/",
-    //   element: <DashboardLayout />,
+    //   element: <DashboardLayout/>,
     //   children: [
     //     { element: <Navigate to={DEFAULT_PATH} replace />, index: true },
     //     { path: "app", element: <GeneralApp /> },
@@ -69,6 +70,7 @@ export default function Router() {
 const LoginPage = Loadable(lazy(() => import("../pages/auth/Login")));
 // const VerifyPage = Loadable(lazy(() => import("../pages/auth/Verify")));
 const SignUpPage = Loadable(lazy(() => import("../pages/auth/SignUp")));
+const TopPage = Loadable(lazy(() => import("../pages/auth/Top")));
 // const ResetPasswordPage = Loadable(
 //   lazy(() => import("../pages/auth/ResetPassword"))
 // );

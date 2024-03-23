@@ -30,7 +30,7 @@ export default function AuthLoginForm() {
   });
 
   const defaultValues = {
-    email: "demo@tawk.com",
+    email: "demo@gmail.com",
     password: "demo1234",
   };
 
@@ -74,6 +74,7 @@ export default function AuthLoginForm() {
           name="password"
           label="Password"
           type={showPassword ? "text" : "password"}
+          color="success"
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -90,12 +91,15 @@ export default function AuthLoginForm() {
         />
       </Stack>
 
+<<<<<<< HEAD
       <Stack alignItems="flex-end" sx={{ my: 2 }}>
         <Link component={RouterLink} to="/auth/reset-password" variant="body2" color="inherit" underline="always" className={csscommon.a_signupbtn01}>
           Forgot password?
         </Link>
       </Stack>
 
+=======
+>>>>>>> 5dca0461bff372fbc18ae2d0828e65288d68867e
       <LoadingButton
         loading={isLoading}
         sx={{
