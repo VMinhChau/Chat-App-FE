@@ -17,7 +17,6 @@ export default function LoginPage() {
         </a>
       </div>
       <Stack spacing={2} sx={{ mb: 5, position: "relative" }}>
-<<<<<<< HEAD
         <Typography variant="h1" style={{textAlign: 'center'}} className={csscommon.s_ttl01}>My <span className={csscommon.is_orange}>Crystal</span></Typography>
         <Stack direction="row" spacing={0.5}>
           <Typography variant="body2">New user?</Typography>
@@ -31,19 +30,11 @@ export default function LoginPage() {
             Create an account
           </Link>
         </Stack>
-=======
-        <Typography variant="h4" style={{textAlign: 'center'}}>My Crystal</Typography>
-        <Typography variant="h4" style={{textAlign: 'center'}}>Login with email</Typography>
->>>>>>> 5dca0461bff372fbc18ae2d0828e65288d68867e
       </Stack>
       {/* Form */}
       <Login />
 
-<<<<<<< HEAD
-      {/* <AuthSocial /> */}
-=======
       {/* <AuthSocial/> */}
->>>>>>> 5dca0461bff372fbc18ae2d0828e65288d68867e
     </>
   );
 }
