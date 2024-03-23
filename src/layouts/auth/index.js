@@ -2,9 +2,6 @@ import React from "react";
 import { Container, Stack } from "@mui/material";
 import { Navigate, Outlet } from "react-router-dom";
 import classes from "../../css/authCommon.module.css";
-
-// import Logo from "../../assets/Images/logo.ico";
-import Background from "../../assets/background.png";
 import { useSelector } from "react-redux";
 
 const AuthLayout = () => {
