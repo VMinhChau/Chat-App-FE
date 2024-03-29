@@ -22,7 +22,7 @@ export default function LoginPage() {
           <Typography variant="body2">New user?</Typography>
 
           <Link
-            to={"/auth/register"}
+            to={"/auth/signup"}
             component={RouterLink}
             variant="subtitle2"
             className={csscommon.a_signupbtn01}

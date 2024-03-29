@@ -125,42 +125,47 @@ export function LoginUser(formValues) {
 
     dispatch(slice.actions.updateIsLoading({ isLoading: true, error: false }));
 
-    await axios
-      .post(
-        "/api/auth/login",
-        {
-          ...formValues,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then(function (response) {
-        console.log(response);
-        dispatch(
-          slice.actions.logIn({
-            isLoggedIn: true,
-            access_token: response.data.token,
-            user_id: response.data.user_id,
-          })
-        );
-        window.localStorage.setItem("user_id", response.data.user_id);
-        dispatch(
-          showSnackbar({ severity: "success", message: response.data.message })
-        );
-        dispatch(
-          slice.actions.updateIsLoading({ isLoading: false, error: false })
-        );
+    // await axios
+    //   .post(
+    //     "/api/auth/login",
+    //     {
+    //       ...formValues,
+    //     },
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //     }
+    //   )
+    //   .then(function (response) {
+    //     console.log(response);
+    //     dispatch(
+    //       slice.actions.logIn({
+    //         isLoggedIn: true,
+    //         access_token: response.data.token,
+    //         user_id: response.data.user_id,
+    //       })
+    //     );
+    //     window.localStorage.setItem("user_id", response.data.user_id);
+    //     dispatch(
+    //       showSnackbar({ severity: "success", message: response.data.message })
+    //     );
+    //     dispatch(
+    //       slice.actions.updateIsLoading({ isLoading: false, error: false })
+    //     );
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //     dispatch(showSnackbar({ severity: "error", message: error.message }));
+    //     dispatch(
+    //       slice.actions.updateIsLoading({ isLoading: false, error: true })
+    //     );
+    //   });
+    dispatch(
+      slice.actions.logIn({
+        isLoggedIn: true,
       })
-      .catch(function (error) {
-        console.log(error);
-        dispatch(showSnackbar({ severity: "error", message: error.message }));
-        dispatch(
-          slice.actions.updateIsLoading({ isLoading: false, error: true })
-        );
-      });
+    );
   };
 }
 

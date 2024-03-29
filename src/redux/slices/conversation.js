@@ -17,20 +17,30 @@ const slice = createSlice({
   initialState,
   reducers: {
     fetchDirectConversations(state, action) {
+      console.log(action.payload.conversations)
       const list = action.payload.conversations.map((el) => {
-        const user = el.participants.find(
-          (elm) => elm._id.toString() !== user_id
-        );
+        // const user = el.participants.find(
+        //   (elm) => elm._id.toString() !== user_id
+        // );
         return {
-          id: el._id,
-          user_id: user?._id,
-          name: `${user?.firstName} ${user?.lastName}`,
-          online: user?.status === "Online",
-          msg: el.messages.slice(-1)[0].text, 
-          time: "9:36",
-          unread: 0,
-          pinned: false,
-          about: user?.about,
+        //   id: el.id,
+        //   user_id: user?.id,
+        //   name: `${user?.firstName} ${user?.lastName}`,
+        //   online: user?.status === "Online",
+        //   img: el.img,
+        //   msg: el.messages.slice(-1)[0].text, 
+        //   time: "9:36",
+        //   unread: 0,
+        //   pinned: false,
+        //   about: user?.about,
+        id: el.id,
+        img: el.img,
+        name: el.name,
+        msg: el.msg,
+        time: el.time,
+        unread: el.unread,
+        pinned: el.pinned,
+        online: el.online,
         };
       });
 
@@ -88,11 +98,15 @@ const slice = createSlice({
       const messages = action.payload.messages;
       const formatted_messages = messages.map((el) => ({
         id: el._id,
-        type: "msg",
-        subtype: el.type,
-        message: el.text,
-        incoming: el.to === user_id,
-        outgoing: el.from === user_id,
+        type: el.type,
+        subtype: el.subtype,
+        message: el.message,
+        incoming: el.incoming,
+        outgoing: el.outgoing,
+        text: el.text,
+        img: el.img,
+        review: el.review,
+        reply: el.reply,
       }));
       state.direct_chat.current_messages = formatted_messages;
     },

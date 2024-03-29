@@ -3,14 +3,14 @@ import { alpha } from '@mui/material/styles';
 // ----------------------------------------------------------------------
 
 function createGradient(color1, color2) {
-  return `linear-gradient(to bottom, ${color1}, ${color2})`;
+  return `linear-gradient(to right,${color1}, ${color2})`;
 }
 
 // SETUP COLORS
 const PRIMARY = {
-  lighter: '#C8FACD',
-  light: '#5BE584',
-  main: '#0162C4',
+  lighter: '#FFF4E9',
+  light: '#F3AB16',
+  main: '#ED711A',
   dark: '#007B55',
   darker: '#005249',
 };
@@ -52,8 +52,8 @@ const ERROR = {
 
 const GREY = {
   0: '#FFFFFF',
-  100: '#F9FAFB',
-  200: '#F4F6F8',
+  100: '#7F8487',
+  200: '#F5F5F5',
   300: '#DFE3E8',
   400: '#C4CDD5',
   500: '#919EAB',
@@ -77,6 +77,7 @@ const GRADIENTS = {
   success: createGradient(SUCCESS.light, SUCCESS.main),
   warning: createGradient(WARNING.light, WARNING.main),
   error: createGradient(ERROR.light, ERROR.main),
+  background: createGradient('#FAF9F5', '#FAF9F5')
 };
 
 const CHART_COLORS = {
