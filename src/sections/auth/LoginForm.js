@@ -20,7 +20,7 @@ export default function AuthLoginForm() {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
-  const {isLoading} = useSelector((state) => state.auth);
+  const { isLoading } = useSelector((state) => state.auth);
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -68,7 +68,11 @@ export default function AuthLoginForm() {
           <Alert severity="error">{errors.afterSubmit.message}</Alert>
         )}
 
-        <RHFTextField name="email" label="Email address" className={csscommon.input_field01} />
+        <RHFTextField
+          name="email"
+          label="Email address"
+          className={csscommon.input_field01}
+        />
 
         <RHFTextField
           name="password"
@@ -92,12 +96,20 @@ export default function AuthLoginForm() {
       </Stack>
 
       <Stack alignItems="flex-end" sx={{ my: 2 }}>
-        <Link component={RouterLink} to="/auth/reset-password" variant="body2" color="inherit" underline="always" className={csscommon.a_signupbtn01}>
+        <Link
+          component={RouterLink}
+          to="/auth/reset-password"
+          variant="body2"
+          color="inherit"
+          underline="always"
+          className={csscommon.a_signupbtn01}
+        >
           Forgot password?
         </Link>
       </Stack>
 
       <LoadingButton
+        type="submit"
         loading={isLoading}
         sx={{
           bgcolor: "text.primary",

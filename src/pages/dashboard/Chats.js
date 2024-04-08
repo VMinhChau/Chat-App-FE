@@ -17,20 +17,18 @@ import { SimpleBarStyle } from "../../components/Scrollbar";
 import { useTheme } from "@mui/material/styles";
 import useResponsive from "../../hooks/useResponsive";
 import BottomNav from "../../layouts/dashboard/BottomNav";
-import { ChatList } from "../../data";
+import { ChatList, UsersList } from "../../data";
 import ChatElement from "../../components/ChatElement";
 import {
   Search,
   SearchIconWrapper,
   StyledInputBase,
 } from "../../components/Search";
+import ReactSearchBox from "react-search-box";
 import Friends from "../../sections/Dashboard/Friends";
 // import { socket } from "../../socket";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  FetchDirectConversations,
-  SetCurrentConversation,
-} from "../../redux/slices/conversation";
+import { FetchDirectConversations } from "../../redux/slices/conversation";
 
 const user_id = window.localStorage.getItem("user_id");
 
@@ -45,11 +43,11 @@ const Chats = () => {
   );
 
   useEffect(() => {
-  //   socket.emit("get_direct_conversations", { user_id }, (data) => {
-  //     console.log(data); // this data is the list of conversations
-  //     // dispatch action
+    //   socket.emit("get_direct_conversations", { user_id }, (data) => {
+    //     console.log(data); // this data is the list of conversations
+    //     // dispatch action
 
-      dispatch(FetchDirectConversations({ conversations: ChatList }));
+    dispatch(FetchDirectConversations({ conversations: ChatList }));
     // });
   }, []);
 
@@ -68,7 +66,7 @@ const Chats = () => {
         sx={{
           position: "relative",
           // height: "100%",
-          width: isDesktop ? '21.9%' : "100vw",
+          width: isDesktop ? "21.9%" : "100vw",
           backgroundColor:
             theme.palette.mode === "light"
               ? "#FFFFFF"
@@ -106,15 +104,22 @@ const Chats = () => {
             </Stack>
           </Stack>
           <Stack sx={{ width: "100%" }}>
-            <Search>
+            {/* <Search>
               <SearchIconWrapper>
                 <MagnifyingGlass color="#709CE6" />
               </SearchIconWrapper>
               <StyledInputBase
+                type="search"
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
               />
-            </Search>
+            </Search> */}
+            <ReactSearchBox
+              placeholder="Placeholder"
+              value="Doe"
+              data={UsersList}
+              callback={(record) => console.log(record)}
+            />
           </Stack>
           {/* <Stack spacing={1}>
             <Stack direction={"row"} spacing={1.5} alignItems="center">
@@ -123,30 +128,28 @@ const Chats = () => {
             </Stack>
             <Divider />
           </Stack> */}
-          <Stack
-            sx={{ flexGrow: 1, height: "100%", overflow: "scroll"}}
-          >
+          <Stack sx={{ flexGrow: 1, height: "100%", overflow: "scroll" }}>
             {/* <SimpleBarStyle
               timeout={500}
               clickOnTrack={true}
               onClick={() => console.log("ndd")}
             > */}
-              <Stack spacing={0.8} width="100%">
-                {/* <Typography variant="subtitle2" sx={{ color: "#676667" }}>
+            <Stack spacing={0.8} width="100%">
+              {/* <Typography variant="subtitle2" sx={{ color: "#676667" }}>
                   Pinned
                 </Typography>
                 Chat List */}
-                {conversations.map((el, idx) => {
-                  return <ChatElement {...el} />;
-                })}
-                {/* <Typography variant="subtitle2" sx={{ color: "#676667" }}>
+              {conversations.map((el, idx) => {
+                return <ChatElement {...el} />;
+              })}
+              {/* <Typography variant="subtitle2" sx={{ color: "#676667" }}>
                   All Chats
                 </Typography> */}
-                {/* Chat List */}
-                {/* {conversations.filter((el) => !el.pinned).map((el, idx) => {
+              {/* Chat List */}
+              {/* {conversations.filter((el) => !el.pinned).map((el, idx) => {
                   return <ChatElement {...el} />;
                 })} */}
-              </Stack>
+            </Stack>
             {/* </SimpleBarStyle> */}
           </Stack>
         </Stack>

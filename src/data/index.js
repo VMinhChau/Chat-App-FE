@@ -9,9 +9,9 @@ import {
   Users,
 } from "phosphor-react";
 
-import {ReactComponent as Home} from "../assets/images/home/home_button.svg";
-import {ReactComponent as Phonebook} from "../assets/images/home/phonebook_button.svg";
-import {ReactComponent as Setting} from "../assets/images/home/setting_button.svg";
+import { ReactComponent as Home } from "../assets/images/home/home_button.svg";
+import { ReactComponent as Phonebook } from "../assets/images/home/phonebook_button.svg";
+import { ReactComponent as Setting } from "../assets/images/home/setting_button.svg";
 
 const Profile_Menu = [
   {
@@ -31,13 +31,13 @@ const Profile_Menu = [
 const Nav_Buttons = [
   {
     index: 0,
-    icon: <Home stroke='white'/>,
-    title: 'Home'
+    icon: <Home stroke="white" />,
+    title: "Home",
   },
   {
     index: 1,
-    icon: <Phonebook fill='white'/>,
-    title: 'Phonebook'
+    icon: <Phonebook fill="white" />,
+    title: "Phonebook",
   },
 ];
 
@@ -45,7 +45,7 @@ const Nav_Setting = [
   {
     index: 3,
     icon: <Setting />,
-    title: 'Setting',
+    title: "Setting",
   },
 ];
 
@@ -166,6 +166,7 @@ const ChatList = [
     unread: 0,
     pinned: true,
     online: true,
+    chat_type: "individual",
   },
   {
     id: 1,
@@ -176,6 +177,7 @@ const ChatList = [
     unread: 2,
     pinned: true,
     online: false,
+    chat_type: "individual",
   },
   {
     id: 2,
@@ -186,26 +188,36 @@ const ChatList = [
     unread: 3,
     pinned: false,
     online: true,
+    chat_type: "individual",
   },
   {
     id: 3,
-    img: faker.image.avatar(),
-    name: faker.person.firstName(),
+    img: [
+      faker.image.avatar(),
+      faker.image.avatar(),
+      faker.image.avatar(),
+      faker.image.avatar(),
+    ],
     msg: faker.music.songName(),
     time: "04:00",
     unread: 0,
     pinned: false,
     online: true,
+    chat_type: "group",
+    title: "Group A",
+    admin: "AD",
   },
   {
     id: 4,
-    img: faker.image.avatar(),
-    name: faker.person.firstName(),
+    img: [faker.image.avatar(), faker.image.avatar(), faker.image.avatar()],
     msg: faker.music.songName(),
     time: "08:42",
     unread: 0,
     pinned: false,
     online: false,
+    chat_type: "group",
+    title: "Group B",
+    admin: "AD",
   },
   {
     id: 5,
@@ -216,6 +228,7 @@ const ChatList = [
     unread: 0,
     pinned: false,
     online: false,
+    chat_type: "individual",
   },
   {
     id: 6,
@@ -226,6 +239,7 @@ const ChatList = [
     unread: 0,
     pinned: false,
     online: false,
+    chat_type: "individual",
   },
   {
     id: 7,
@@ -236,6 +250,7 @@ const ChatList = [
     unread: 0,
     pinned: false,
     online: false,
+    chat_type: "individual",
   },
 ];
 
@@ -442,6 +457,30 @@ const Shared_links = [
   },
 ];
 
+const MembersList = [
+  {
+    id: 0,
+    name: "AD",
+    online: true,
+  },
+  {
+    id: 1,
+    name: faker.person.firstName(),
+    online: false,
+  },
+  {
+    id: 2,
+    name: "name",
+    online: true,
+  },
+];
+
+const UsersList = [
+  { id: 1, name: "John" },
+  { id: 2, name: "Mary" },
+  { id: 2, name: "Farn" },
+];
+
 export {
   Profile_Menu,
   Nav_Setting,
@@ -452,4 +491,6 @@ export {
   Shared_links,
   Shared_docs,
   CallList,
+  MembersList,
+  UsersList
 };

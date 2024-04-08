@@ -9,7 +9,7 @@ const initialState = {
   isLoggedIn: false,
   token: "",
   isLoading: false,
-  user: null,
+  user_name: null,
   user_id: null,
   email: "",
   error: false,
@@ -164,8 +164,10 @@ export function LoginUser(formValues) {
     dispatch(
       slice.actions.logIn({
         isLoggedIn: true,
+        user_id: 0
       })
     );
+    dispatch(slice.actions.updateIsLoading({ isLoading: false, error: false }));
   };
 }
 

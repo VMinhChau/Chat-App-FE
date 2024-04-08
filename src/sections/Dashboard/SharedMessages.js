@@ -61,7 +61,7 @@ const Media = (props) => {
             alignItems={"center"}
             // spacing={9}
 
-            sx={{ height: "100%", p: 1.61 }}
+            sx={{ height: "100%", p: 1.63 }}
           >
             <IconButton
               size="medium"

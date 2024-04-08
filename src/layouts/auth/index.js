@@ -8,7 +8,7 @@ const AuthLayout = () => {
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   if (isLoggedIn) {
-    return <Navigate to={"/app"} />;
+    return <Navigate to={"/home"} />;
   }
 
   return (
