@@ -7,7 +7,8 @@ const FONT_PRIMARY = 'Be Vietnam Pro, sans-serif'; // Google Font
 
 const typography = {
   fontFamily: FONT_PRIMARY,
-  fontWeightRegular: 400,
+  fontWeightLight: 500,
+  fontWeightRegular: 550,
   fontWeightMedium: 600,
   fontWeightBold: 700,
   h1: {
@@ -70,7 +71,7 @@ const typography = {
   caption: {
     lineHeight: 1.5,
     fontSize: pxToRem(12),
-    fontWeight: 600,
+    fontWeight: 500,
   },
   overline: {
     fontWeight: 700,

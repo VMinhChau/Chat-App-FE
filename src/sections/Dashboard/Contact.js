@@ -4,7 +4,7 @@ import {
   Avatar,
   Box,
   Button,
-  Divider,
+  AvatarGroup,
   IconButton,
   Stack,
   Typography,
@@ -14,6 +14,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  styled,
+  Badge
 } from "@mui/material";
 import { faker } from "@faker-js/faker";
 import {
@@ -28,7 +30,9 @@ import useResponsive from "../../hooks/useResponsive";
 import AntSwitch from "../../components/AntSwitch";
 import { useDispatch, useSelector } from "react-redux";
 import { ToggleSidebar, UpdateSidebarType } from "../../redux/slices/app";
+import { ReactComponent as MembersIcon } from "../../assets/images/home/members_icon.svg";
 import { ReactComponent as FileIcon } from "../../assets/images/home/file_icon.svg";
+import { FetchMembersGroup } from "../../redux/slices/conversation";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -80,6 +84,35 @@ const DeleteChatDialog = ({ open, handleClose }) => {
   );
 };
 
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    backgroundColor: "#44b700",
+    color: "#44b700",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      animation: "ripple 1.2s infinite ease-in-out",
+      border: "1px solid currentColor",
+      content: '""',
+    },
+  },
+  "@keyframes ripple": {
+    "0%": {
+      transform: "scale(.8)",
+      opacity: 1,
+    },
+    "100%": {
+      transform: "scale(2.4)",
+      opacity: 0,
+    },
+  },
+}));
+
 const Contact = () => {
   const dispatch = useDispatch();
 
@@ -88,7 +121,6 @@ const Contact = () => {
   );
 
   const theme = useTheme();
-
   const isDesktop = useResponsive("up", "md");
 
   const [openBlock, setOpenBlock] = useState(false);
@@ -147,18 +179,85 @@ const Contact = () => {
         >
           <Stack direction="column" spacing={3}>
             <Stack alignItems="center" direction="column" spacing={2}>
-              <Avatar
+              {/* <Avatar
                 src={current_conversation?.img}
                 alt={current_conversation?.name}
                 sx={{ height: 64, width: 64 }}
-              />
+              /> */}
+              <StyledBadge
+                overlap="circular"
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                variant={current_conversation?.online ? "dot" : ""}
+              >
+                {current_conversation?.chat_type === "group" ? (
+                  <AvatarGroup
+                    max={2}
+                    total={2}
+                    sx={{
+                      "& .MuiAvatar-root": {
+                        width: 35,
+                        height: 35,
+                        fontSize: 12,
+                      },
+                      display: "flex",
+                      flexDirection: "column-reverse",
+                    }}
+                  >
+                    <AvatarGroup
+                      sx={{ marginBottom: "-4px" }}
+                      max={1}
+                      total={current_conversation?.img.length - 2}
+                      cascade="above"
+                      componentsProps={{
+                        additionalAvatar: {
+                          sx: {
+                            zIndex: 1,
+                          },
+                        },
+                      }}
+                    >
+                      <Avatar alt={current_conversation?.title} src={current_conversation?.img[0]} />
+                    </AvatarGroup>
+                    <AvatarGroup sx={{ marginTop: "-4px" }} max={2} total={2}>
+                      <Avatar alt={current_conversation?.title} src={current_conversation?.img[1]} />
+                      <Avatar alt={current_conversation?.title} src={current_conversation?.img[2]} />
+                    </AvatarGroup>
+                  </AvatarGroup>
+                ) : (
+                  <Avatar alt={current_conversation?.name} src={current_conversation?.img} sx={{ height: 64, width: 64 }}/>
+                )}
+              </StyledBadge>
               <Stack spacing={0.5}>
                 <Typography variant="article" fontWeight={600}>
-                  {current_conversation?.name}
+                  {current_conversation?.chat_type === "group"
+                    ? current_conversation?.title
+                    : current_conversation?.name}
                 </Typography>
               </Stack>
             </Stack>
             <Box>
+              {current_conversation?.chat_type === "group" && (
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent={"space-between"}
+                >
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <MembersIcon size={23} weight="fill" />
+                    <Typography variant="subtitle2">Members</Typography>
+                  </Stack>
+                  <IconButton
+                    onClick={() => {
+                      dispatch(UpdateSidebarType("MEMBERS"));
+                    }}
+                  >
+                    <CaretRight />
+                  </IconButton>
+                </Stack>
+              )}
               <Stack
                 direction="row"
                 alignItems="center"
@@ -182,7 +281,7 @@ const Contact = () => {
                 justifyContent={"space-between"}
               >
                 <Stack direction="row" alignItems="center" spacing={2}>
-                  <FileText size={28} weight="fill" />
+                  <FileIcon width={28} height={26} weight="fill" />
                   <Typography variant="subtitle2">Files</Typography>
                 </Stack>
                 <IconButton
