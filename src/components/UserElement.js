@@ -49,10 +49,10 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-const UserElement = ({ img, firstName, lastName, online, _id }) => {
+const UserElement = (el) => {
   const theme = useTheme();
 
-  const name = `${firstName} ${lastName}`;
+  // const name = `${el.firstName} ${el.lastName}`;
 
   return (
     <StyledChatBox
@@ -72,19 +72,20 @@ const UserElement = ({ img, firstName, lastName, online, _id }) => {
       >
         <Stack direction="row" alignItems={"center"} spacing={2}>
           {" "}
-          {online ? (
+          {el.online ? (
             <StyledBadge
               overlap="circular"
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               variant="dot"
             >
-              <Avatar alt={name} src={img} />
+              <Avatar alt={el.name} src={el.img} />
             </StyledBadge>
           ) : (
-            <Avatar alt={name} src={img} />
+            <Avatar alt={el.name} src={el.img} />
           )}
           <Stack spacing={0.3}>
-            <Typography variant="subtitle2">{name}</Typography>
+            <Typography variant="subtitle2">{el.name}</Typography>
+            <Typography variant="caption">{el.email}</Typography>
           </Stack>
         </Stack>
         <Stack direction={"row"} spacing={2} alignItems={"center"}>
@@ -95,7 +96,7 @@ const UserElement = ({ img, firstName, lastName, online, _id }) => {
               // });
             }}
           >
-            Send Request
+            Send Messages
           </Button>
         </Stack>
       </Stack>

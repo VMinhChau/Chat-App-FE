@@ -134,11 +134,11 @@ const ChatHeader = () => {
                         },
                       }}
                     >
-                      <Avatar alt={current_conversation?.title} src={current_conversation?.img[0]} />
+                      <Avatar alt={current_conversation?.name} src={current_conversation?.img[0]} />
                     </AvatarGroup>
                     <AvatarGroup sx={{ marginTop: "-4px" }} max={2} total={2}>
-                      <Avatar alt={current_conversation?.title} src={current_conversation?.img[1]} />
-                      <Avatar alt={current_conversation?.title} src={current_conversation?.img[2]} />
+                      <Avatar alt={current_conversation?.name} src={current_conversation?.img[1]} />
+                      <Avatar alt={current_conversation?.name} src={current_conversation?.img[2]} />
                     </AvatarGroup>
                   </AvatarGroup>
                 ) : (
@@ -148,7 +148,7 @@ const ChatHeader = () => {
             </Box>
             <Stack spacing={0.2}>
               <Typography variant="subtitle2">
-                {current_conversation?.chat_type === "group" ? current_conversation?.title : current_conversation?.name}
+                {current_conversation?.chat_type === "group" ? current_conversation?.name : current_conversation?.name}
               </Typography>
               <Typography variant="caption">
                 {current_conversation?.online ? "Online" : "Offline"}
