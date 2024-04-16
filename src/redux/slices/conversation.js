@@ -2,14 +2,20 @@ import { createSlice } from "@reduxjs/toolkit";
 import { faker } from "@faker-js/faker";
 import axios from "../../utils/axios";
 import { showSnackbar } from "./app";
-import { MembersList } from "../../data";
+import { Chat_History, MembersList } from "../../data";
 
 const user_id = window.localStorage.getItem("user_id");
 
 const initialState = {
   direct_chat: {
     conversations: [],
-    current_conversation: null,
+    current_conversation: [{
+      "type": "msg",
+      "subtype": "msg",
+      "message": "Hi 👋🏻, How are ya ?",
+      "incoming": "true",
+      "outgoing": "false",
+    }],
     current_messages: [],
   },
   group_chat: {
@@ -80,7 +86,7 @@ const slice = createSlice({
       state.direct_chat.current_messages = messages;
     },
     addDirectMessage(state, action) {
-      state.direct_chat.current_messages.push(action.payload.message);
+      state.direct_chat.current_messages.push(action.payload.msg);
     },
 
     fetchMembersGroup(state, action) {
@@ -124,7 +130,14 @@ export const FetchCurrentMessages = ({ messages }) => {
 
 export const AddDirectMessage = (message) => {
   return async (dispatch, getState) => {
-    dispatch(slice.actions.addDirectMessage({ message }));
+    const msg = {
+      "type": "msg",
+      "subtype": "msg",
+      "message": message,
+      "incoming": false,
+      "outgoing": true,
+    };
+    dispatch(slice.actions.addDirectMessage({ msg }));
   };
 };
 

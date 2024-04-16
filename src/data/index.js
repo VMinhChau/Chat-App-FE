@@ -204,7 +204,7 @@ const ChatList = [
     pinned: false,
     online: true,
     chat_type: "group",
-    title: "Group A",
+    name: "Group A",
     admin: "AD",
   },
   {
@@ -216,7 +216,7 @@ const ChatList = [
     pinned: false,
     online: false,
     chat_type: "group",
-    title: "Group B",
+    name: "Group B",
     admin: "AD",
   },
   {
@@ -259,8 +259,8 @@ const Chat_History = [
     type: "msg",
     subtype: "msg",
     message: "Hi 👋🏻, How are ya ?",
-    incoming: true,
-    outgoing: false,
+    incoming: "true",
+    outgoing: "false",
   },
   {
     type: "divider",
@@ -476,9 +476,9 @@ const MembersList = [
 ];
 
 const UsersList = [
-  { id: 1, name: "John" },
-  { id: 2, name: "Mary" },
-  { id: 2, name: "Farn" },
+  { id: 1, name: "John", email: "john@gmail.com", img: faker.image.avatar(), online: false },
+  { id: 2, name: "Mary", email: "mary@gmail.com", img: faker.image.avatar(), online: true },
+  { id: 3, name: "oon", email: "johnfarn@gmail.com", img: faker.image.avatar(), online: false },
 ];
 
 export {

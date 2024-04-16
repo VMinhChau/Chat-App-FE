@@ -57,7 +57,7 @@ const ChatElement = (el) => {
   const dispatch = useDispatch();
   const { room_id } = useSelector((state) => state.app);
   const selectedChatId = room_id?.toString();
-  console.log(room_id);
+  // console.log(room_id);
 
   let isSelected = +selectedChatId === el.id;
 
@@ -83,8 +83,8 @@ const ChatElement = (el) => {
               ? theme.palette.gradients.primary
               : theme.palette.gradients.primary
             : theme.palette.mode === "light"
-            ? "none"
-            : theme.palette.background.paper,
+              ? "none"
+              : theme.palette.background.paper,
         }}
         p={1.5}
       >
@@ -128,11 +128,11 @@ const ChatElement = (el) => {
                         },
                       }}
                     >
-                      <Avatar alt={el.title} src={el.img[0]} />
+                      <Avatar alt={el.name} src={el.img[0]} />
                     </AvatarGroup>
                     <AvatarGroup sx={{ marginTop: "-4px" }} max={2} total={2}>
-                      <Avatar alt={el.title} src={el.img[1]} />
-                      <Avatar alt={el.title} src={el.img[2]} />
+                      <Avatar alt={el.name} src={el.img[1]} />
+                      <Avatar alt={el.name} src={el.img[2]} />
                     </AvatarGroup>
                   </AvatarGroup>
                 ) : (
@@ -161,20 +161,19 @@ const ChatElement = (el) => {
                     },
                   }}
                 >
-                  <Avatar alt={el.title} src={el.img[0]} />
+                  <Avatar alt={el.name} src={el.img[0]} />
                 </AvatarGroup>
                 <AvatarGroup sx={{ marginTop: "-4px" }} max={2} total={2}>
-                  <Avatar alt={el.title} src={el.img[1]} />
-                  <Avatar alt={el.title} src={el.img[2]} />
+                  <Avatar alt={el.name} src={el.img[1]} />
+                  <Avatar alt={el.name} src={el.img[2]} />
                 </AvatarGroup>
               </AvatarGroup>
             ) : (
               <Avatar alt={el.name} src={el.img} />
             )}
-            
             <Stack spacing={0.3}>
               <Typography variant="subtitle2">
-                {el.chat_type === "individual" ? el.name : el.title}
+                {el.name}
               </Typography>
               <Typography variant="caption">
                 {truncateText(el.msg, 20)}
