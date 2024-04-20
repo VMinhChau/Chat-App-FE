@@ -5,6 +5,7 @@ import {
   Divider,
   IconButton,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import {
@@ -12,6 +13,8 @@ import {
   CircleDashed,
   MagnifyingGlass,
   Users,
+  X,
+  Plus
 } from "phosphor-react";
 import { SimpleBarStyle } from "../../components/Scrollbar";
 import { useTheme } from "@mui/material/styles";
@@ -24,13 +27,13 @@ import {
   SearchIconWrapper,
   StyledInputBase,
 } from "../../components/Search";
-import Friends from "../../sections/Dashboard/Friends";
+import CreateSingleChat from "../../sections/Dashboard/CreateSingleChat";
+import CreateGroupChat from "../../sections/Dashboard/CreateGroupChat";
 // import { socket } from "../../socket";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  FetchDirectConversations,
-  SetCurrentConversation,
-} from "../../redux/slices/conversation";
+import { FetchDirectConversations } from "../../redux/slices/conversation";
+import { ReactComponent as AddGroup } from "../../assets/images/home/add_group_icon.svg"
+import { ReactComponent as AddSingleChat } from "../../assets/images/home/add_single_chat_icon.svg"
 
 const user_id = window.localStorage.getItem("user_id");
 
@@ -45,21 +48,33 @@ const Chats = () => {
   );
 
   useEffect(() => {
-  //   socket.emit("get_direct_conversations", { user_id }, (data) => {
-  //     console.log(data); // this data is the list of conversations
-  //     // dispatch action
+    //   socket.emit("get_direct_conversations", { user_id }, (data) => {
+    //     console.log(data); // this data is the list of conversations
+    //     // dispatch action
 
-      dispatch(FetchDirectConversations({ conversations: ChatList }));
+    dispatch(FetchDirectConversations({ conversations: ChatList }));
+    setFilteredUsers(conversations);
     // });
   }, []);
 
-  const [openDialog, setOpenDialog] = useState(false);
+  const [openSingleChat, setOpenSingleChat] = useState(false);
+  const [openGroupChat, setOpenGroupChat] = useState(false);
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
+  const [searchItem, setSearchItem] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState([]);
+
+  const handleInputChange = (e) => {
+    const searchTerm = e.target.value;
+    setSearchItem(searchTerm);
+    const filteredItems = conversations.filter((conversation) =>
+      conversation.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredUsers(filteredItems);
   };
-  const handleOpenDialog = () => {
-    setOpenDialog(true);
+
+  const handleClear = () => {
+    setSearchItem("");
+    setFilteredUsers(conversations);
   };
 
   return (
@@ -68,7 +83,7 @@ const Chats = () => {
         sx={{
           position: "relative",
           // height: "100%",
-          width: isDesktop ? '21.9%' : "100vw",
+          width: isDesktop ? "21.9%" : "100vw",
           backgroundColor:
             theme.palette.mode === "light"
               ? "#FFFFFF"
@@ -90,69 +105,73 @@ const Chats = () => {
             direction="row"
           >
             <Typography variant="h5">Chats</Typography>
-
             <Stack direction={"row"} alignItems="center" spacing={1}>
-              <IconButton
-                onClick={() => {
-                  handleOpenDialog();
-                }}
-                sx={{ width: "max-content" }}
-              >
-                <Users />
-              </IconButton>
-              <IconButton sx={{ width: "max-content" }}>
-                <CircleDashed />
-              </IconButton>
+              <Tooltip title="New chat">
+                <IconButton
+                  onClick={() => {
+                    setOpenSingleChat(true);
+                  }}
+                  sx={{ width: "max-content" }}
+                >
+                  <AddSingleChat width={20} height={20} />
+                  {/* <Tooltip>Add</Tooltip> */}
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Create group chat">
+                <IconButton onClick={() => {
+                  setOpenGroupChat(true);
+                }}>
+                  <AddGroup width={23} height={23} />
+                </IconButton>
+              </Tooltip>
             </Stack>
           </Stack>
           <Stack sx={{ width: "100%" }}>
             <Search>
               <SearchIconWrapper>
-                <MagnifyingGlass color="#709CE6" />
+                <MagnifyingGlass color="#637381" />
               </SearchIconWrapper>
               <StyledInputBase
+                // type="search"
                 placeholder="Search…"
-                inputProps={{ "aria-label": "search" }}
+                endAdornment={
+                  <IconButton
+                    onClick={handleClear}
+                    sx={{ visibility: searchItem ? "visible" : "hidden" }}
+                  >
+                    <X fontSize={"medium"} />
+                  </IconButton>
+                }
+                onChange={handleInputChange}
+                value={searchItem}
               />
             </Search>
           </Stack>
-          {/* <Stack spacing={1}>
-            <Stack direction={"row"} spacing={1.5} alignItems="center">
-              <ArchiveBox size={24} />
-              <Button variant="text">Archive</Button>
-            </Stack>
-            <Divider />
-          </Stack> */}
-          <Stack
-            sx={{ flexGrow: 1, height: "100%", overflow: "scroll"}}
-          >
-            {/* <SimpleBarStyle
+          {filteredUsers.length === 0 ? (
+            <Box textAlign="center">No users found</Box>
+          ) : (
+            <Stack sx={{ flexGrow: 1, height: "100%", overflow: "scroll" }}>
+              {/* <SimpleBarStyle
               timeout={500}
               clickOnTrack={true}
               onClick={() => console.log("ndd")}
             > */}
+
               <Stack spacing={0.8} width="100%">
-                {/* <Typography variant="subtitle2" sx={{ color: "#676667" }}>
-                  Pinned
-                </Typography>
-                Chat List */}
-                {conversations.map((el, idx) => {
+                {filteredUsers.map((el, idx) => {
                   return <ChatElement {...el} />;
                 })}
-                {/* <Typography variant="subtitle2" sx={{ color: "#676667" }}>
-                  All Chats
-                </Typography> */}
-                {/* Chat List */}
-                {/* {conversations.filter((el) => !el.pinned).map((el, idx) => {
-                  return <ChatElement {...el} />;
-                })} */}
               </Stack>
-            {/* </SimpleBarStyle> */}
-          </Stack>
+              {/* </SimpleBarStyle> */}
+            </Stack>
+          )}
         </Stack>
       </Box>
-      {openDialog && (
-        <Friends open={openDialog} handleClose={handleCloseDialog} />
+      {openSingleChat && (
+        <CreateSingleChat open={openSingleChat} handleClose={() => { setOpenSingleChat(false) }} />
+      )}
+      {openGroupChat && (
+        <CreateGroupChat open={openGroupChat} handleClose={() => { setOpenGroupChat(false) }} />
       )}
     </>
   );

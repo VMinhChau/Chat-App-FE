@@ -32,13 +32,13 @@ const Profile_Menu = [
 const Nav_Buttons = [
   {
     index: 0,
-    icon: <Home stroke='white'/>,
-    title: 'Home'
+    icon: <Home stroke="white" />,
+    title: "Home",
   },
   {
     index: 1,
-    icon: <Phonebook fill='white'/>,
-    title: 'Phonebook'
+    icon: <Phonebook fill="white" />,
+    title: "Phonebook",
   },
 ];
 
@@ -177,6 +177,7 @@ const ChatList = [
     unread: 0,
     pinned: true,
     online: true,
+    chat_type: "individual",
   },
   {
     id: 1,
@@ -187,6 +188,7 @@ const ChatList = [
     unread: 2,
     pinned: true,
     online: false,
+    chat_type: "individual",
   },
   {
     id: 2,
@@ -197,26 +199,36 @@ const ChatList = [
     unread: 3,
     pinned: false,
     online: true,
+    chat_type: "individual",
   },
   {
     id: 3,
-    img: faker.image.avatar(),
-    name: faker.person.firstName(),
+    img: [
+      faker.image.avatar(),
+      faker.image.avatar(),
+      faker.image.avatar(),
+      faker.image.avatar(),
+    ],
     msg: faker.music.songName(),
     time: "04:00",
     unread: 0,
     pinned: false,
     online: true,
+    chat_type: "group",
+    name: "Group A",
+    admin: "AD",
   },
   {
     id: 4,
-    img: faker.image.avatar(),
-    name: faker.person.firstName(),
+    img: [faker.image.avatar(), faker.image.avatar(), faker.image.avatar()],
     msg: faker.music.songName(),
     time: "08:42",
     unread: 0,
     pinned: false,
     online: false,
+    chat_type: "group",
+    name: "Group B",
+    admin: "AD",
   },
   {
     id: 5,
@@ -227,6 +239,7 @@ const ChatList = [
     unread: 0,
     pinned: false,
     online: false,
+    chat_type: "individual",
   },
   {
     id: 6,
@@ -237,6 +250,7 @@ const ChatList = [
     unread: 0,
     pinned: false,
     online: false,
+    chat_type: "individual",
   },
   {
     id: 7,
@@ -247,6 +261,7 @@ const ChatList = [
     unread: 0,
     pinned: false,
     online: false,
+    chat_type: "individual",
   },
 ];
 
@@ -255,8 +270,8 @@ const Chat_History = [
     type: "msg",
     subtype: "msg",
     message: "Hi 👋🏻, How are ya ?",
-    incoming: true,
-    outgoing: false,
+    incoming: "true",
+    outgoing: "false",
   },
   {
     type: "divider",
@@ -453,6 +468,30 @@ const Shared_links = [
   },
 ];
 
+const MembersList = [
+  {
+    id: 0,
+    name: "AD",
+    online: true,
+  },
+  {
+    id: 1,
+    name: faker.person.firstName(),
+    online: false,
+  },
+  {
+    id: 2,
+    name: "name",
+    online: true,
+  },
+];
+
+const UsersList = [
+  { id: 1, name: "John", email: "john@gmail.com", img: faker.image.avatar(), online: false },
+  { id: 2, name: "Mary", email: "mary@gmail.com", img: faker.image.avatar(), online: true },
+  { id: 3, name: "oon", email: "johnfarn@gmail.com", img: faker.image.avatar(), online: false },
+];
+
 export {
   Profile_Menu,
   Nav_Setting,
@@ -464,4 +503,6 @@ export {
   Shared_docs,
   CallList,
   Phone_Menu,
+  MembersList,
+  UsersList
 };

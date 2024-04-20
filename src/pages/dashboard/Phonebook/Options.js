@@ -19,7 +19,7 @@ import useResponsive from "../../../hooks/useResponsive";
 import BottomNav from "../../../layouts/dashboard/BottomNav";
 import { ChatList } from "../../../data";
 import ChatElement from "../../../components/ChatElement";
-import Friends from "../../../sections/Dashboard/Friends";
+// import Friends from "../../../sections/Dashboard/Friends";
 // import { socket } from "../../socket";
 import { useDispatch, useSelector } from "react-redux";
 import {

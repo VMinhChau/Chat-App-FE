@@ -1,15 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { faker } from "@faker-js/faker";
+import axios from "../../utils/axios";
+import { showSnackbar } from "./app";
+import { Chat_History, MembersList } from "../../data";
 
 const user_id = window.localStorage.getItem("user_id");
 
 const initialState = {
   direct_chat: {
     conversations: [],
-    current_conversation: null,
+    current_conversation: [{
+      "type": "msg",
+      "subtype": "msg",
+      "message": "Hi 👋🏻, How are ya ?",
+      "incoming": "true",
+      "outgoing": "false",
+    }],
     current_messages: [],
   },
-  group_chat: {},
+  group_chat: {
+    members: [],
+    admin: null,
+  },
 };
 
 const slice = createSlice({
@@ -17,33 +29,8 @@ const slice = createSlice({
   initialState,
   reducers: {
     fetchDirectConversations(state, action) {
-      console.log(action.payload.conversations)
-      const list = action.payload.conversations.map((el) => {
-        // const user = el.participants.find(
-        //   (elm) => elm._id.toString() !== user_id
-        // );
-        return {
-        //   id: el.id,
-        //   user_id: user?.id,
-        //   name: `${user?.firstName} ${user?.lastName}`,
-        //   online: user?.status === "Online",
-        //   img: el.img,
-        //   msg: el.messages.slice(-1)[0].text, 
-        //   time: "9:36",
-        //   unread: 0,
-        //   pinned: false,
-        //   about: user?.about,
-        id: el.id,
-        img: el.img,
-        name: el.name,
-        msg: el.msg,
-        time: el.time,
-        unread: el.unread,
-        pinned: el.pinned,
-        online: el.online,
-        };
-      });
-
+      console.log(action.payload.conversations);
+      const list = action.payload.conversations;
       state.direct_chat.conversations = list;
     },
     updateDirectConversation(state, action) {
@@ -96,23 +83,15 @@ const slice = createSlice({
     },
     fetchCurrentMessages(state, action) {
       const messages = action.payload.messages;
-      const formatted_messages = messages.map((el) => ({
-        id: el._id,
-        type: el.type,
-        subtype: el.subtype,
-        message: el.message,
-        incoming: el.incoming,
-        outgoing: el.outgoing,
-        text: el.text,
-        img: el.img,
-        review: el.review,
-        reply: el.reply,
-      }));
-      state.direct_chat.current_messages = formatted_messages;
+      state.direct_chat.current_messages = messages;
     },
     addDirectMessage(state, action) {
-      state.direct_chat.current_messages.push(action.payload.message);
-    }
+      state.direct_chat.current_messages.push(action.payload.msg);
+    },
+
+    fetchMembersGroup(state, action) {
+      state.group_chat.members = MembersList;
+    },
   },
 });
 
@@ -143,15 +122,50 @@ export const SetCurrentConversation = (current_conversation) => {
   };
 };
 
-
-export const FetchCurrentMessages = ({messages}) => {
-  return async(dispatch, getState) => {
-    dispatch(slice.actions.fetchCurrentMessages({messages}));
-  }
-}
+export const FetchCurrentMessages = ({ messages }) => {
+  return async (dispatch, getState) => {
+    dispatch(slice.actions.fetchCurrentMessages({ messages }));
+  };
+};
 
 export const AddDirectMessage = (message) => {
   return async (dispatch, getState) => {
-    dispatch(slice.actions.addDirectMessage({message}));
-  }
-}
+    const msg = {
+      "type": "msg",
+      "subtype": "msg",
+      "message": message,
+      "incoming": false,
+      "outgoing": true,
+    };
+    dispatch(slice.actions.addDirectMessage({ msg }));
+  };
+};
+
+export const FetchMembersGroup = (room_id) => {
+  return async (dispatch, getState) => {
+    // await axios
+    //   .get(
+    //     "/conversation/members",
+    //     {
+    //       room_id: room_id,
+    //     },
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${getState().auth.token}`,
+    //       },
+    //     }
+    //   )
+    //   .then((response) => {
+    //     dispatch(
+    //       slice.actions.fetchMembersGroup({ requests: response.data })
+    //     );
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     dispatch(showSnackbar({ severity: "error", message: error.message }));
+    //   });
+
+    dispatch(slice.actions.fetchMembersGroup(MembersList));
+  };
+};

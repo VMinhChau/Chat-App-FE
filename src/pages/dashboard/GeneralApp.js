@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import StarredMessages from "../../sections/Dashboard/StarredMessages";
 import {Media} from "../../sections/Dashboard/SharedMessages";
 import BackgroundHome from "../../assets/images/auth/bg-auth.jpg";
+import Members from "../../sections/Dashboard/Members";
 
 const GeneralApp = () => {
   const [searchParams] = useSearchParams();
@@ -49,7 +50,7 @@ const GeneralApp = () => {
             margin: "8px 0px 8px 0px!important",
           }}
         >
-          {chat_type === "individual" && room_id !== null ? (
+          {room_id !== null ? (
             <ChatComponent />
           ) : (
             <Stack
@@ -85,6 +86,9 @@ const GeneralApp = () => {
 
               case "SHARED_FILE":
                 return <Media tab={2}/>;
+            
+              case "MEMBERS":
+                return <Members />;
 
               default:
                 break;

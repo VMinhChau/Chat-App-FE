@@ -31,11 +31,10 @@ const Conversation = ({ isMobile, menu }) => {
     (state) => state.conversation.direct_chat
   );
   const { room_id } = useSelector((state) => state.app);
-  console.log(room_id);
 
   useEffect(() => {
     const current = conversations.find((el) => el?.id === room_id);
-    console.log(room_id);
+    // console.log(room_id);
 
     // socket.emit("get_messages", { conversation_id: current?.id }, (data) => {
     //   // data => list of messages

@@ -24,7 +24,8 @@ import useResponsive from "../../hooks/useResponsive";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 // import { socket } from "../../socket";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {AddDirectMessage} from "../../redux/slices/conversation";
 
 const StyledInput = styled(TextField)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -77,31 +78,49 @@ const ChatInput = ({
   value,
   inputRef,
 }) => {
-  const [openActions, setOpenActions] = React.useState(false);
+  // const [openActions, setOpenActions] = React.useState(false);
   const theme = useTheme();
+  const dispatch = useDispatch();
+
+  const inputFileRef = useRef(null);
+  const [image, setImage] = useState("")
+  const handleClickInputFile = () => {
+    inputFileRef.current.click();
+  };
+  const handleChangeInputFile = (event) => {
+    event.preventDefault();
+    let reader = new FileReader();
+    let file = event.target.files[0];
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+    // dispatch(AddDirectMessage(file));
+  }
 
   return (
-    <StyledInput
-      inputRef={inputRef}
-      value={value}
-      onChange={(event) => {
-        setValue(event.target.value);
-      }}
-      fullWidth
-      placeholder="Write a message..."
-      variant="filled"
-      multiline
-      InputProps={{
-        disableUnderline: true,
-        startAdornment: (
-          <Stack sx={{ width: "max-content" }}>
-            <Stack
+    <>
+      <StyledInput
+        inputRef={inputRef}
+        value={value}
+        onChange={(event) => {
+          setValue(event.target.value);
+        }}
+        fullWidth
+        placeholder="Write a message..."
+        variant="filled"
+        multiline
+        InputProps={{
+          disableUnderline: true,
+          startAdornment: (
+            <Stack sx={{ width: "max-content" }}>
+              {/* <Stack
               sx={{
                 position: "relative",
                 display: openActions ? "inline-block" : "none",
               }}
-            >
-              {Actions.map((el,idx) => (
+            > */}
+              {/* {Actions.map((el, idx) => (
                 <Tooltip placement="right" title={el.title} key={el.title}>
                   <Fab
                     onClick={() => {
@@ -117,39 +136,52 @@ const ChatInput = ({
                     {el.icon}
                   </Fab>
                 </Tooltip>
-              ))}
-            </Stack>
+              ))} */}
 
-            <InputAdornment>
-              <IconButton
-                onClick={() => {
-                  setOpenActions(!openActions);
-                }}
-              >
-                <LinkSimple color={theme.palette.primary.main} weight="fill"/>
-              </IconButton>
-            </InputAdornment>
-          </Stack>
-        ),
-        endAdornment: (
-          <Stack sx={{ position: "relative" }}>
-            <InputAdornment>
-              <IconButton
-                onClick={() => {
-                  setOpenPicker(!openPicker);
-                }}
-              >
-                <Smiley
-                  color={theme.palette.primary.main}
-                  size={25}
-                  weight="fill"
-                />
-              </IconButton>
-            </InputAdornment>
-          </Stack>
-        ),
-      }}
-    />
+              {/* </Stack> */}
+
+              <InputAdornment>
+                <IconButton
+                  // onClick={() => {
+                  //   setOpenActions(!openActions);
+                  // }}
+                  onClick={handleClickInputFile}
+                >
+                  <LinkSimple
+                    color={theme.palette.primary.main}
+                    weight="fill"
+                  />
+                </IconButton>
+              </InputAdornment>
+            </Stack>
+          ),
+          endAdornment: (
+            <Stack sx={{ position: "relative" }}>
+              <InputAdornment>
+                <IconButton
+                  onClick={() => {
+                    setOpenPicker(!openPicker);
+                  }}
+                >
+                  <Smiley
+                    color={theme.palette.primary.main}
+                    size={25}
+                    weight="fill"
+                  />
+                </IconButton>
+              </InputAdornment>
+            </Stack>
+          ),
+        }}
+      />
+      <input
+        type="file"
+        id="file"
+        ref={inputFileRef}
+        onChange={handleChangeInputFile}
+        style={{ display: "none" }}
+      />
+    </>
   );
 };
 
@@ -178,6 +210,8 @@ const Footer = () => {
   const isMobile = useResponsive("between", "md", "xs", "sm");
 
   const { sideBar, room_id } = useSelector((state) => state.app);
+
+  const dispatch = useDispatch();
 
   const [openPicker, setOpenPicker] = React.useState(false);
 
@@ -264,6 +298,7 @@ const Footer = () => {
             //     type: containsUrl(value) ? "Link" : "Text",
             //   });
             // }}
+            onClick={()=>{dispatch(AddDirectMessage(value))}}
             >
               <PaperPlaneRight
                 color={theme.palette.primary.main}
