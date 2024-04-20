@@ -28,7 +28,7 @@ import useResponsive from "../../hooks/useResponsive";
 import AntSwitch from "../../components/AntSwitch";
 import { useDispatch, useSelector } from "react-redux";
 import { ToggleSidebar, UpdateSidebarType } from "../../redux/slices/app";
-import { ReactComponent as FileIcon } from "../../assets/images/home/file_icon.svg";
+// import { ReactComponent as FileIcon } from "../../assets/images/home/file_icon.svg";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;

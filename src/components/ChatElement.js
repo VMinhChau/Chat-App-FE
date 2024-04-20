@@ -12,6 +12,8 @@ import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SelectConversation } from "../redux/slices/app";
 import { DotsThree } from "phosphor-react";
+import classess from "../css/ChatElement.module.css"
+
 
 const truncateText = (string, n) => {
   return string?.length > n ? `${string?.slice(0, n)}...` : string;
@@ -67,7 +69,7 @@ const ChatElement = ({ img, name, msg, time, unread, online, id }) => {
   const theme = useTheme();
 
   return (
-    <Badge className="unread-count" color="primary" badgeContent={unread}>
+    <Badge className={classess.c_elementcustom}  color="primary" badgeContent={unread}>
       <StyledChatBox
         onClick={() => {
           dispatch(SelectConversation({ room_id: id }));

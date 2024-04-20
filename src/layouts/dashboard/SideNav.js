@@ -152,7 +152,11 @@ const SideBar = () => {
                     {el.icon}
                     {/* </IconButton> */}
                   </Box>
-                  <Typography variant="subtitle1">{el.title}</Typography>
+                  <Typography 
+                    variant="subtitle1"
+                  >
+                    {el.title}
+                    </Typography>
                 </Stack>
               );
             })}
@@ -169,7 +173,8 @@ const SideBar = () => {
                 >
                   <Box
                     sx={{
-                      backgroundColor: theme.palette.primary.lighter,
+                      // backgroundColor: theme.palette.primary.lighter,
+                      backgroundColor: theme.palette.primary.main,
                       borderRadius: "10px",
                       width: "40px",
                       height: "40px",
@@ -188,7 +193,11 @@ const SideBar = () => {
                       {el.icon}
                     {/* </IconButton> */}
                   </Box>
-                  <Typography variant="subtitle1">{el.title}</Typography>
+                  <Typography 
+                    variant="subtitle1"
+                    color={theme.palette.primary.main}
+                  >
+                    {el.title}</Typography>
                 </Stack>
               ) : (
                 <Stack

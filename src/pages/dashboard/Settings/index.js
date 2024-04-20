@@ -22,8 +22,8 @@ import {
 
 import { useTheme } from "@mui/material/styles";
 import { faker } from "@faker-js/faker";
-import ThemeDialog from "../../../sections/dashboard/Settings/ThemeDialog";
-import ShortcutDialog from "../../../sections/dashboard/Settings/ShortcutDialog";
+import BackgroundHome from "../../../assets/images/auth/bg-auth.jpg";
+import SeetingProfile from "./SettingProfile";
 
 const Settings = () => {
   const theme = useTheme();
@@ -66,30 +66,30 @@ const Settings = () => {
       title: "Security",
       onclick: () => {},
     },
-    {
-      key: 3,
-      icon: <PencilCircle size={20} />,
-      title: "Theme",
-      onclick: handleOpenTheme,
-    },
-    {
-      key: 4,
-      icon: <Image size={20} />,
-      title: "Chat Wallpaper",
-      onclick: () => {},
-    },
-    {
-      key: 5,
-      icon: <Note size={20} />,
-      title: "Request Account Info",
-      onclick: () => {},
-    },
-    {
-      key: 6,
-      icon: <Keyboard size={20} />,
-      title: "Keyboard Shortcuts",
-      onclick: handleOpenShortcuts,
-    },
+    // {
+    //   key: 3,
+    //   icon: <PencilCircle size={20} />,
+    //   title: "Theme",
+    //   onclick: handleOpenTheme,
+    // },
+    // {
+    //   key: 4,
+    //   icon: <Image size={20} />,
+    //   title: "Chat Wallpaper",
+    //   onclick: () => {},
+    // },
+    // {
+    //   key: 5,
+    //   icon: <Note size={20} />,
+    //   title: "Request Account Info",
+    //   onclick: () => {},
+    // },
+    // {
+    //   key: 6,
+    //   icon: <Keyboard size={20} />,
+    //   title: "Keyboard Shortcuts",
+    //   onclick: handleOpenShortcuts,
+    // },
     {
       key: 7,
       icon: <Info size={20} />,
@@ -97,27 +97,45 @@ const Settings = () => {
       onclick: () => {},
     },
   ];
+  
+  const avtImg  = faker.image.avatar();
+  const profileName = `${faker.name.firstName()} ${faker.name.lastName()}`;
 
   return (
     <>
-      <Stack direction="row" sx={{ width: "100%" }}>
+      <Stack 
+        direction="row" 
+        sx={{ 
+          width: "100%",
+          backgroundImage: `url(${BackgroundHome})`,
+          padding: "8px",
+          borderRadius: "35px 0 0 35px",
+        }}
+      >
         {/* LeftPane */}
         <Box
           sx={{
             overflowY: "scroll",
-     
-            height: "100vh",
+            height: "100%",
             width: 320,
+            boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
             backgroundColor:
               theme.palette.mode === "light"
                 ? "#F8FAFF"
-                : theme.palette.background,
-
-            boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+                : theme.palette.background.paper,
+            margin: "0 8px 0 0",
+            borderRadius: "35px",
           }}
         >
-          
-          <Stack p={4} spacing={5}>
+          <Stack 
+            p={4} 
+            spacing={5}
+            sx={{
+              width: "100%",
+              height: "100%",
+              borderRadius: "35px 0 0 35px",
+            }}
+          >
             {/* Header */}
             <Stack direction="row" alignItems={"center"} spacing={3}>
               <IconButton>
@@ -130,11 +148,11 @@ const Settings = () => {
             {/* Profile */}
             <Stack direction="row" spacing={3}>
               <Avatar
-                src={faker.image.avatar()}
+                src={avtImg}
                 sx={{ height: 56, width: 56 }}
               />
               <Stack spacing={0.5}>
-                <Typography variant="article">{`${faker.name.firstName()} ${faker.name.lastName()}`}</Typography>
+                <Typography variant="article">{profileName}</Typography>
                 <Typography variant="body2">{faker.random.words()}</Typography>
               </Stack>
             </Stack>
@@ -164,20 +182,18 @@ const Settings = () => {
         <Box
           sx={{
             height: "100%",
-            width: "calc(100vw - 420px )",
+            width: "calc(100% - 220px )",
             backgroundColor:
               theme.palette.mode === "light"
-                ? "#FFF"
-                : theme.palette.background.paper,
-            // borderBottom: "6px solid #0162C4",
+                ? "#F8FAFF"
+                : theme.palette.background.paper, 
+          borderRadius: "35px",
+          overflow: "hidden"
           }}
-        ></Box>
+        >
+          <SeetingProfile avtImg={avtImg} profileName={profileName} />
+        </Box>
       </Stack>
-      {openTheme && (
-        <ThemeDialog open={openTheme} handleClose={handleCloseTheme} />
-      )}
-      {openShortcuts && <ShortcutDialog open={openShortcuts} handleClose={handleCloseShortcuts} /> }
-      
     </>
   );
 };

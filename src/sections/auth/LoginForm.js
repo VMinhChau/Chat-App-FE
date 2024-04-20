@@ -98,7 +98,8 @@ export default function AuthLoginForm() {
       </Stack>
 
       <LoadingButton
-        loading={isLoading}
+        type="submit"
+        // loading={isLoading}
         sx={{
           bgcolor: "text.primary",
           color: (theme) =>

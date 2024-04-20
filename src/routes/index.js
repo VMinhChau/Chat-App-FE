@@ -38,9 +38,10 @@ export default function Router() {
     //     { element: <Navigate to={DEFAULT_PATH} replace />, index: true },
         { path: "home", element: <GeneralApp /> },
         { path: "group", element: <Group /> },
-        // { path: "settings", element: <Settings /> },
+        { path: "settings", element: <Settings /> },
         { path: "conversation", element: <Conversation /> },
         { path: "chats", element: <Chats /> },
+        { path: "phonebook", element: <Phonebook /> },
         // { path: "contact", element: <Contact /> },
     //     { path: "profile", element: <Profile /> },
 
@@ -63,6 +64,14 @@ const Conversation = Loadable(
 );
 const Chats = Loadable(lazy(() => import("../pages/dashboard/Chats")));
 const Group = Loadable(lazy(() => import("../pages/dashboard/Group")));
+
+const Phonebook = Loadable(
+  lazy(() => import("../pages/dashboard/Phonebook"))
+);
+
+const Settings = Loadable(
+  lazy(() => import("../pages/dashboard/Settings"))
+);
 // // const CallPage = Loadable(lazy(() => import("../pages/dashboard/Call")));
 // const Contact = Loadable(lazy(() => import("../sections/dashboard/Contact")));
 // const Page404 = Loadable(lazy(() => import("../pages/Page404")));

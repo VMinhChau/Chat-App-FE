@@ -12,6 +12,7 @@ import {
 import {ReactComponent as Home} from "../assets/images/home/home_button.svg";
 import {ReactComponent as Phonebook} from "../assets/images/home/phonebook_button.svg";
 import {ReactComponent as Setting} from "../assets/images/home/setting_button.svg";
+import {ReactComponent as Contact} from "../assets/images/home/contact_button.svg";
 
 const Profile_Menu = [
   {
@@ -44,10 +45,20 @@ const Nav_Buttons = [
 const Nav_Setting = [
   {
     index: 3,
-    icon: <Setting />,
+    icon: <Setting fill='white'/>,
     title: 'Setting',
   },
 ];
+
+const Phone_Menu = [
+  {
+    index: 3,
+    icon: <Contact />,
+    title: 'Setting',
+  },
+];
+
+
 
 const CallList = [
   {
@@ -452,4 +463,5 @@ export {
   Shared_links,
   Shared_docs,
   CallList,
+  Phone_Menu,
 };
