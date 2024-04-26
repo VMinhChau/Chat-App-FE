@@ -30,7 +30,7 @@ import useResponsive from "../../hooks/useResponsive";
 import AntSwitch from "../../components/AntSwitch";
 import { useDispatch, useSelector } from "react-redux";
 import { ToggleSidebar, UpdateSidebarType } from "../../redux/slices/app";
-// import { ReactComponent as FileIcon } from "../../assets/images/home/file_icon.svg";
+import { ReactComponent as FileIcon } from "../../assets/images/home/file_icon.svg";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -225,7 +225,7 @@ const Contact = () => {
                     </AvatarGroup>
                   </AvatarGroup>
                 ) : (
-                  <Avatar alt={current_conversation?.name} src={current_conversation?.img} sx={{ height: 64, width: 64 }}/>
+                  <Avatar alt={current_conversation?.name} src={current_conversation?.img} sx={{ height: 64, width: 64 }} />
                 )}
               </StyledBadge>
               <Stack spacing={0.5}>
@@ -279,7 +279,7 @@ const Contact = () => {
                 justifyContent={"space-between"}
               >
                 <Stack direction="row" alignItems="center" spacing={2}>
-                  {/* <FileIcon width={28} height={26} weight="fill" /> */}
+                  <FileIcon width={28} height={26} weight="fill" />
                   <Typography variant="subtitle2">Files</Typography>
                 </Stack>
                 <IconButton

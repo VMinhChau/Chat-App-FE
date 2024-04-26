@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import { Chat } from "phosphor-react";
+import { useDispatch, useSelector } from "react-redux";
+import { AddDirectConversation } from "../redux/slices/conversation";
 // import { socket } from "../socket";
 
 const user_id = window.localStorage.getItem("user_id");
@@ -51,19 +53,22 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 const UserElement = (el) => {
   const theme = useTheme();
+  const dispatch = useDispatch();
 
-  // const name = `${el.firstName} ${el.lastName}`;
+  const handleAddDirectConversation = (user) => {
+    const conversation = { id: user.id, title: user.name, description: "new chat" }
+    dispatch(AddDirectConversation(conversation));
+  }
 
   return (
     <StyledChatBox
       sx={{
         width: "100%",
-
         borderRadius: 1,
-
         backgroundColor: theme.palette.background.paper,
       }}
       p={2}
+      onClick={() => handleAddDirectConversation(el)}
     >
       <Stack
         direction="row"
@@ -152,10 +157,10 @@ const FriendRequestElement = ({
         </Stack>
         <Stack direction={"row"} spacing={2} alignItems={"center"}>
           <Button
-            // onClick={() => {
-              //  emit "accept_request" event
-              // socket.emit("accept_request", { request_id: id });
-            // }}
+          // onClick={() => {
+          //  emit "accept_request" event
+          // socket.emit("accept_request", { request_id: id });
+          // }}
           >
             Accept Request
           </Button>
@@ -215,10 +220,10 @@ const FriendElement = ({
         </Stack>
         <Stack direction={"row"} spacing={2} alignItems={"center"}>
           <IconButton
-            // onClick={() => {
-            //   // start a new conversation
-            //   socket.emit("start_conversation", { to: _id, from: user_id });
-            // }}
+          // onClick={() => {
+          //   // start a new conversation
+          //   socket.emit("start_conversation", { to: _id, from: user_id });
+          // }}
           >
             <Chat />
           </IconButton>

@@ -38,7 +38,7 @@ const CreateSingleChat = ({ open, handleClose }) => {
   const handleInputChange = (e) => {
     const searchTerm = e.target.value;
     setSearchItem(searchTerm);
-    if(searchTerm === "") {
+    if (searchTerm === "") {
       setFilteredUsers([]);
       return;
     }
@@ -56,6 +56,7 @@ const CreateSingleChat = ({ open, handleClose }) => {
     setSearchItem("");
     setFilteredUsers([]);
   };
+
   return (
     <Dialog
       fullWidth

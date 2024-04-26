@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 // import { StartAudioCall } from "../../redux/slices/audioCall";
 // import { StartVideoCall } from "../../redux/slices/videoCall";
 import { SetCurrentConversation } from "../../redux/slices/conversation";
-import {ReactComponent as InfoButton} from "../../assets/images/home/info_button.svg"
+import { ReactComponent as InfoButton } from "../../assets/images/home/info_button.svg"
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -69,7 +69,7 @@ const ChatHeader = () => {
   const { current_conversation } = useSelector(
     (state) => state.conversation.direct_chat
   );
-  
+
   return (
     <>
       <Box
@@ -81,7 +81,7 @@ const ChatHeader = () => {
               ? "#FFFFFF"
               : theme.palette.background,
           boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
-          borderRadius: sideBar.open? "35px 0 0 0" :"35px 35px 0px 0px",
+          borderRadius: sideBar.open ? "35px 0 0 0" : "35px 35px 0px 0px",
           borderBottom: "2px solid #ED711A",
         }}
       >
@@ -148,7 +148,7 @@ const ChatHeader = () => {
             </Box>
             <Stack spacing={0.2}>
               <Typography variant="subtitle2">
-                {current_conversation?.chat_type === "group" ? current_conversation?.name : current_conversation?.name}
+                {current_conversation?.title}
               </Typography>
               <Typography variant="caption">
                 {current_conversation?.online ? "Online" : "Offline"}
@@ -185,7 +185,7 @@ const ChatHeader = () => {
                 dispatch(ToggleSidebar());
               }}
             >
-              <Info size={26}/>
+              <Info size={26} />
             </IconButton>
           </Stack>
         </Stack>

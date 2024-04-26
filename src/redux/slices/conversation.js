@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { faker } from "@faker-js/faker";
-import axios from "../../utils/axios";
+import { axiosRoom } from "../../utils/axios";
 import { showSnackbar } from "./app";
 import { Chat_History, MembersList } from "../../data";
 
@@ -9,13 +9,7 @@ const user_id = window.localStorage.getItem("user_id");
 const initialState = {
   direct_chat: {
     conversations: [],
-    current_conversation: [{
-      "type": "msg",
-      "subtype": "msg",
-      "message": "Hi 👋🏻, How are ya ?",
-      "incoming": "true",
-      "outgoing": "false",
-    }],
+    current_conversation: [],
     current_messages: [],
   },
   group_chat: {
@@ -59,24 +53,26 @@ const slice = createSlice({
       );
     },
     addDirectConversation(state, action) {
-      const this_conversation = action.payload.conversation;
-      const user = this_conversation.participants.find(
-        (elm) => elm._id.toString() !== user_id
-      );
-      state.direct_chat.conversations = state.direct_chat.conversations.filter(
-        (el) => el?.id !== this_conversation._id
-      );
-      state.direct_chat.conversations.push({
-        id: this_conversation._id._id,
-        user_id: user?._id,
-        name: `${user?.firstName} ${user?.lastName}`,
-        online: user?.status === "Online",
-        img: faker.image.avatar(),
-        msg: faker.music.songName(),
-        time: "9:36",
-        unread: 0,
-        pinned: false,
-      });
+      // const this_conversation = action.payload;
+      // const user = this_conversation.participants.find(
+      //   (elm) => elm._id.toString() !== user_id
+      // );
+      // state.direct_chat.conversations = state.direct_chat.conversations.filter(
+      //   (el) => el?.id !== this_conversation.id
+      // );
+      // state.direct_chat.conversations.push({
+      //   id: this_conversation._id._id,
+      //   user_id: user?._id,
+      //   name: `${user?.firstName} ${user?.lastName}`,
+      //   online: user?.status === "Online",
+      //   img: faker.image.avatar(),
+      //   msg: faker.music.songName(),
+      //   time: "9:36",
+      //   unread: 0,
+      //   pinned: false,
+      // });
+      state.direct_chat.conversations.push(action.payload);
+      state.direct_chat.current_conversation = action.payload;
     },
     setCurrentConversation(state, action) {
       state.direct_chat.current_conversation = action.payload;
@@ -100,14 +96,65 @@ export default slice.reducer;
 
 // ----------------------------------------------------------------------
 
-export const FetchDirectConversations = ({ conversations }) => {
+export const FetchDirectConversations = (data) => {
   return async (dispatch, getState) => {
-    dispatch(slice.actions.fetchDirectConversations({ conversations }));
+    // dispatch(slice.actions.fetchDirectConversations({ conversations }));
+    await axiosRoom
+      .get(
+        "/v1/api/room/get",
+        // {
+        //   user_id: data.user_id,
+        // }
+        // ,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getState().auth.token}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data.data);
+        dispatch(
+          slice.actions.fetchDirectConversations({ conversations: response.data.data })
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(showSnackbar({ severity: "error", message: error.message }));
+      });
   };
 };
-export const AddDirectConversation = ({ conversation }) => {
+export const AddDirectConversation = (conversation) => {
   return async (dispatch, getState) => {
-    dispatch(slice.actions.addDirectConversation({ conversation }));
+    console.log(conversation);
+    await axiosRoom
+      .post(
+        "/v1/api/room/create",
+        conversation,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then(function (response) {
+        console.log(response);
+        dispatch(slice.actions.addDirectConversation(conversation));
+        dispatch(
+          showSnackbar({ severity: "success", message: response.data.data })
+        );
+        // dispatch(
+        //   slice.actions.updateIsLoading({ isLoading: false, error: false })
+        // );
+      })
+      .catch(function (error) {
+        console.log(error);
+        dispatch(showSnackbar({ severity: "error", message: error.message }));
+        // dispatch(
+        //   slice.actions.updateIsLoading({ isLoading: false, error: true })
+        // );
+      });
   };
 };
 export const UpdateDirectConversation = ({ conversation }) => {

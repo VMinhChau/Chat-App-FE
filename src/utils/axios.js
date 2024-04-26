@@ -1,14 +1,21 @@
 import axios from 'axios';
 // config
-import { BASE_URL } from '../config';
+import { AUTH_URL, ROOM_URL } from '../config';
 
 // ----------------------------------------------------------------------
 
-const axiosInstance = axios.create({ baseURL: BASE_URL });
+const axiosAuth = axios.create({ baseURL: AUTH_URL });
 
-axiosInstance.interceptors.response.use(
+axiosAuth.interceptors.response.use(
   (response) => response,
   (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
 );
 
-export default axiosInstance;
+const axiosRoom = axios.create({ baseURL: ROOM_URL });
+
+axiosRoom.interceptors.response.use(
+  (response) => response,
+  (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
+);
+
+export { axiosAuth, axiosRoom };
