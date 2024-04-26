@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import axios from "../../utils/axios";
+import { axiosAuth } from "../../utils/axios"
 import { showSnackbar } from "./app";
 
 // ----------------------------------------------------------------------
@@ -122,52 +122,50 @@ export default slice.reducer;
 export function LoginUser(formValues) {
   return async (dispatch, getState) => {
     // Make API call here
-
     dispatch(slice.actions.updateIsLoading({ isLoading: true, error: false }));
-
-    // await axios
-    //   .post(
-    //     "/api/auth/login",
-    //     {
-    //       ...formValues,
-    //     },
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     }
-    //   )
-    //   .then(function (response) {
-    //     console.log(response);
-    //     dispatch(
-    //       slice.actions.logIn({
-    //         isLoggedIn: true,
-    //         access_token: response.data.token,
-    //         user_id: response.data.user_id,
-    //       })
-    //     );
-    //     window.localStorage.setItem("user_id", response.data.user_id);
-    //     dispatch(
-    //       showSnackbar({ severity: "success", message: response.data.message })
-    //     );
-    //     dispatch(
-    //       slice.actions.updateIsLoading({ isLoading: false, error: false })
-    //     );
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //     dispatch(showSnackbar({ severity: "error", message: error.message }));
-    //     dispatch(
-    //       slice.actions.updateIsLoading({ isLoading: false, error: true })
-    //     );
-    //   });
-    dispatch(
-      slice.actions.logIn({
-        isLoggedIn: true,
-        user_id: 0
+    await axiosAuth
+      .post(
+        "/v1/api/auth/register/login",
+        {
+          ...formValues,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then(function (response) {
+        console.log(response);
+        dispatch(
+          slice.actions.logIn({
+            isLoggedIn: true,
+            access_token: response.data.token,
+            user_id: response.data.user_id,
+          })
+        );
+        window.localStorage.setItem("user_id", response.data.user_id);
+        dispatch(
+          showSnackbar({ severity: "success", message: response.data.message })
+        );
+        dispatch(
+          slice.actions.updateIsLoading({ isLoading: false, error: false })
+        );
       })
-    );
-    dispatch(slice.actions.updateIsLoading({ isLoading: false, error: false }));
+      .catch(function (error) {
+        console.log(error);
+        dispatch(showSnackbar({ severity: "error", message: error.message }));
+        dispatch(
+          slice.actions.updateIsLoading({ isLoading: false, error: true })
+        );
+      });
+    // dispatch(
+    //   slice.actions.logIn({
+    //     isLoggedIn: true,
+    //     user_id: 0
+    //   })
+    // );
+    // dispatch(slice.actions.updateIsLoading({ isLoading: false, error: false }));
   };
 }
 
@@ -180,17 +178,17 @@ export function LogoutUser() {
 
 export function RegisterUser(formValues) {
   return async (dispatch, getState) => {
-    dispatch(slice.actions.updateIsLoading({ isLoading: true, error: false }));
-
-    await axios
+    dispatch(slice.actions.updateIsLoading({ isLoading: false, error: false }));
+    console.log(formValues);
+    const data = {
+      email: formValues.email,
+      fullName: formValues.firstName + " " + formValues.lastName,
+      password: formValues.password,
+    }
+    await axiosAuth
       .post(
-        "/api/user/sign_up",
-        {
-          firstName: "d",
-          lastName: "d",
-          email: "demo@gmail.com",
-          password: "demo1234",
-        },
+        "/v1/api/auth/register",
+        data,
         {
           headers: {
             "Content-Type": "application/json",
@@ -217,11 +215,11 @@ export function RegisterUser(formValues) {
           slice.actions.updateIsLoading({ error: true, isLoading: false })
         );
       })
-      .finally(() => {
-        if (!getState().auth.error) {
-          window.location.href = "/auth/login";
-        }
-      });
+    // .finally(() => {
+    //   if (!getState().auth.error) {
+    //     window.location.href = "/auth/login";
+    //   }
+    // });
   };
 }
 
@@ -229,7 +227,7 @@ export function VerifyEmail(formValues) {
   return async (dispatch, getState) => {
     dispatch(slice.actions.updateIsLoading({ isLoading: true, error: false }));
 
-    await axios
+    await axiosAuth
       .post(
         "/auth/verify",
         {

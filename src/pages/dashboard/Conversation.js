@@ -52,7 +52,7 @@ const Conversation = ({ isMobile, menu }) => {
             case "divider":
               return (
                 // Timeline
-                <Timeline el={el}/>
+                <Timeline el={el} />
               );
 
             case "msg":
@@ -115,41 +115,41 @@ const ChatComponent = () => {
 
   return (
     // <Stack direction={"row"}>
-      <Stack
-        height={"100%"}
-        maxHeight={"100vh"}
-        width={isMobile ? "100vw" : "auto"}
-        // borderRadius="35px"
-        // padding="8px 8px 8px 0px!important"
+    <Stack
+      height={"100%"}
+      maxHeight={"100vh"}
+      width={isMobile ? "100vw" : "auto"}
+    // borderRadius="35px"
+    // padding="8px 8px 8px 0px!important"
+    >
+      {/*  */}
+      <ChatHeader />
+      <Box
+        ref={messageListRef}
+        width={"100%"}
+        sx={{
+          position: "relative",
+          flexGrow: 1,
+          overflow: "scroll",
+
+          backgroundColor:
+            theme.palette.mode === "light"
+              ? "#F0F4FA"
+              : theme.palette.background,
+
+          boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+        }}
       >
-        {/*  */}
-        <ChatHeader />
-        <Box
-          ref={messageListRef}
-          width={"100%"}
-          sx={{
-            position: "relative",
-            flexGrow: 1,
-            overflow: "scroll",
+        <SimpleBarStyle timeout={500} clickOnTrack={false}>
+          <Conversation menu={true} isMobile={isMobile} />
+        </SimpleBarStyle>
+      </Box>
 
-            backgroundColor:
-              theme.palette.mode === "light"
-                ? "#F0F4FA"
-                : theme.palette.background,
+      {/*  */}
+      <ChatFooter />
 
-            boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
-          }}
-        >
-          <SimpleBarStyle timeout={500} clickOnTrack={false}>
-            <Conversation menu={true} isMobile={isMobile} />
-          </SimpleBarStyle>
-        </Box>
+    </Stack>
 
-        {/*  */}
-        <ChatFooter />
-        
-      </Stack>
-      
   );
 };
 

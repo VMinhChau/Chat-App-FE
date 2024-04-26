@@ -70,7 +70,7 @@ const ChatElement = (el) => {
   const theme = useTheme();
 
   return (
-    <Badge className={classess.c_elementcustom}  color="primary" >
+    <Badge className={classess.c_elementcustom} color="primary" >
       <StyledChatBox
         onClick={() => {
           dispatch(SelectConversation({ room_id: el.id }));
@@ -175,7 +175,7 @@ const ChatElement = (el) => {
             )}
             <Stack spacing={0.3}>
               <Typography variant="subtitle2">
-                {el.name}
+                {el.title}
               </Typography>
               <Typography variant="caption">
                 {truncateText(el.msg, 20)}

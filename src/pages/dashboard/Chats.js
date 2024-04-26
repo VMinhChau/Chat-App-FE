@@ -52,7 +52,8 @@ const Chats = () => {
     //     console.log(data); // this data is the list of conversations
     //     // dispatch action
 
-    dispatch(FetchDirectConversations({ conversations: ChatList }));
+    // dispatch(FetchDirectConversations({ conversations: ChatList }));
+    dispatch(FetchDirectConversations({ user_id: user_id }))
     setFilteredUsers(conversations);
     // });
   }, []);

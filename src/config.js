@@ -4,7 +4,9 @@ import { enUS, frFR, zhCN, viVN, arSD } from '@mui/material/locale';
 // routes
 import { PATH_DASHBOARD } from "./routes/paths";
 
-export const BASE_URL = "http://localhost:8080";
+export const AUTH_URL = "http://localhost:3000";
+export const ROOM_URL = "http://localhost:3001";
+export const CHAT_URL = "http://localhost:3002";
 
 export const defaultSettings = {
   themeMode: "light",

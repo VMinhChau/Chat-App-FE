@@ -17,7 +17,7 @@ import csscommon from "../../css/authCommon.module.css";
 
 export default function AuthRegisterForm() {
   const dispatch = useDispatch();
-  const {isLoading} = useSelector((state) => state.auth);
+  const { isLoading } = useSelector((state) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
@@ -51,6 +51,7 @@ export default function AuthRegisterForm() {
   const onSubmit = async (data) => {
     try {
       // submit data to backend
+      console.log(data);
       dispatch(RegisterUser(data));
     } catch (error) {
       console.error(error);
@@ -92,10 +93,11 @@ export default function AuthRegisterForm() {
               </InputAdornment>
             ),
           }}
-          className={csscommon.input_field01} 
+          className={csscommon.input_field01}
         />
       </Stack>
       <LoadingButton
+        type="submit"
         loading={isLoading}
         sx={{
           bgcolor: "text.primary",
