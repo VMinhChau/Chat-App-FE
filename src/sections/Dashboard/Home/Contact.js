@@ -17,7 +17,6 @@ import {
   styled,
   Badge
 } from "@mui/material";
-import { faker } from "@faker-js/faker";
 import {
   CaretRight,
   Prohibit,
@@ -26,61 +25,17 @@ import {
   Image,
   FileText,
 } from "phosphor-react";
-import useResponsive from "../../hooks/useResponsive";
-import AntSwitch from "../../components/AntSwitch";
+import useResponsive from "../../../hooks/useResponsive";
+import DeleteChatDialog from "./DeleteChatDialog";
+import LeaveGroupDialog from "./LeaveGroupDialog";
 import { useDispatch, useSelector } from "react-redux";
-import { ToggleSidebar, UpdateSidebarType } from "../../redux/slices/app";
-import { ReactComponent as FileIcon } from "../../assets/images/home/file_icon.svg";
+import { ToggleSidebar, UpdateSidebarType } from "../../../redux/slices/app";
+import { ReactComponent as FileIcon } from "../../../assets/images/home/file_icon.svg";
+import { ReactComponent as MembersIcon } from "../../../assets/images/home/members_icon.svg";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
-const BlockDialog = ({ open, handleClose }) => {
-  return (
-    <Dialog
-      open={open}
-      TransitionComponent={Transition}
-      keepMounted
-      onClose={handleClose}
-      aria-describedby="alert-dialog-slide-description"
-    >
-      <DialogTitle>Block this contact</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-slide-description">
-          Are you sure you want to block this Contact?
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleClose}>Yes</Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
-
-const DeleteChatDialog = ({ open, handleClose }) => {
-  return (
-    <Dialog
-      open={open}
-      TransitionComponent={Transition}
-      keepMounted
-      onClose={handleClose}
-      aria-describedby="alert-dialog-slide-description"
-    >
-      <DialogTitle>Delete this chat</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-slide-description">
-          Are you sure you want to delete this chat?
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleClose}>Yes</Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -116,6 +71,9 @@ const Contact = () => {
 
   const { current_conversation } = useSelector(
     (state) => state.conversation.direct_chat
+  );
+  const { room_id } = useSelector(
+    (state) => state.app
   );
 
   const theme = useTheme();
@@ -166,7 +124,7 @@ const Contact = () => {
           sx={{
             height: "100%",
             position: "relative",
-            flexGrow: 1,
+            // flexGrow: 1,
             // overflowY: "scroll",
             borderRadius: "0 0 35px 35px",
             justifyContent: "space-between",
@@ -230,21 +188,21 @@ const Contact = () => {
               </StyledBadge>
               <Stack spacing={0.5}>
                 <Typography variant="article" fontWeight={600}>
-                  {current_conversation?.chat_type === "group"
+                  {!(current_conversation?.chat_type === "privatechat")
                     ? current_conversation?.title
                     : current_conversation?.name}
                 </Typography>
               </Stack>
             </Stack>
             <Box>
-              {current_conversation?.chat_type === "group" && (
+              {!(current_conversation?.chat_type === "privatechat") && (
                 <Stack
                   direction="row"
                   alignItems="center"
                   justifyContent={"space-between"}
                 >
                   <Stack direction="row" alignItems="center" spacing={2}>
-                    {/* <MembersIcon size={23} weight="fill" /> */}
+                    <MembersIcon size={23} weight="fill" />
                     <Typography variant="subtitle2">Members</Typography>
                   </Stack>
                   <IconButton
@@ -293,34 +251,36 @@ const Contact = () => {
             </Box>
           </Stack>
           <Stack direction="row" alignItems={"center"} spacing={2}>
-            <Button
-              onClick={() => {
-                setOpenBlock(true);
-              }}
-              fullWidth
-              startIcon={<Prohibit />}
-              variant="outlined"
-            >
-              Block
-            </Button>
-            <Button
-              onClick={() => {
-                setOpenDelete(true);
-              }}
-              fullWidth
-              startIcon={<Trash />}
-              variant="outlined"
-            >
-              Delete
-            </Button>
+            {!(current_conversation?.chat_type === "privatechat") ? (
+              <Button
+                onClick={() => {
+                  setOpenBlock(true);
+                }}
+                fullWidth
+                startIcon={<Prohibit />}
+                variant="outlined"
+              >
+                Leave group
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  setOpenDelete(true);
+                }}
+                fullWidth
+                startIcon={<Trash />}
+                variant="outlined"
+              >
+                Delete chat
+              </Button>)}
           </Stack>
         </Stack>
       </Stack>
       {openBlock && (
-        <BlockDialog open={openBlock} handleClose={handleCloseBlock} />
+        <LeaveGroupDialog open={openBlock} handleClose={handleCloseBlock} group_id={room_id} />
       )}
       {openDelete && (
-        <DeleteChatDialog open={openDelete} handleClose={handleCloseDelete} />
+        <DeleteChatDialog open={openDelete} handleClose={handleCloseDelete} delete_id={room_id} />
       )}
     </Box>
   );

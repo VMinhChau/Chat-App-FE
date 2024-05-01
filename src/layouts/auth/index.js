@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, Stack } from "@mui/material";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import classes from "../../css/authCommon.module.css";
 import { useSelector } from "react-redux";
 
 const AuthLayout = () => {
   const { isLoggedIn } = useSelector((state) => state.auth);
-
-  if (isLoggedIn) {
-    return <Navigate to={"/home"} />;
-  }
+  const navigate = useNavigate();
+  useEffect(() => {
+    // dispatch(FetchDirectConversations({ user_id: user_id }))
+    if (isLoggedIn) {
+      console.log("User logged in");
+      // <Navigate to={"/home"} />;
+      navigate("/home");
+    }
+  }, [isLoggedIn]);
 
   return (
     <>

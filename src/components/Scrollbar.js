@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
-// @mui
 import { alpha, styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(() => ({
-  flexGrow: 1,
+  // flexGrow: 1,
   height: '100%',
   overflow: 'scroll',
 }));
@@ -65,4 +64,4 @@ export default function Scrollbar({ children, sx, ...other }) {
   );
 }
 
-export {SimpleBarStyle};
+export { SimpleBarStyle };

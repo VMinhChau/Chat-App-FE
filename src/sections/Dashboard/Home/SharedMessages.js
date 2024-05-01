@@ -10,12 +10,12 @@ import {
   Grid,
 } from "@mui/material";
 import { ArrowLeft } from "phosphor-react";
-import useResponsive from "../../hooks/useResponsive";
+import useResponsive from "../../../hooks/useResponsive";
 import { useDispatch } from "react-redux";
-import { UpdateSidebarType } from "../../redux/slices/app";
+import { UpdateSidebarType } from "../../../redux/slices/app";
 import { faker } from "@faker-js/faker";
 import { DocMsg, LinkMsg } from "./Conversation";
-import { Shared_docs, Shared_links } from "../../data";
+import { Shared_docs, Shared_links } from "../../../data";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 
@@ -65,7 +65,6 @@ const Media = (props) => {
           >
             <IconButton
               size="medium"
-              flexGrow="1"
               onClick={() => {
                 dispatch(UpdateSidebarType("CONTACT"));
               }}

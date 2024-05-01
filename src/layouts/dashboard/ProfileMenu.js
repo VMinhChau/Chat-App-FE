@@ -10,7 +10,7 @@ import { LogoutUser } from "../../redux/slices/auth";
 import { useNavigate } from "react-router-dom";
 
 const ProfileMenu = () => {
-  const {user} = useSelector((state) => state.app);
+  const { user } = useSelector((state) => state.app);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -60,13 +60,13 @@ const ProfileMenu = () => {
         <Box p={1}>
           <Stack spacing={1}>
             {Profile_Menu.map((el, idx) => (
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={handleClose} key={idx}>
                 <Stack
                   onClick={() => {
-                    if(idx === 0) {
+                    if (idx === 0) {
                       navigate("/profile");
                     }
-                    else if(idx === 1) {
+                    else if (idx === 1) {
                       navigate("/settings");
                     }
                     else {
