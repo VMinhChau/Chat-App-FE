@@ -89,6 +89,7 @@ const SideBar = () => {
                   onClick={() => {
                     handleChangeTab(el.index);
                   }}
+                  key={el.index}
                 >
                   <Box
                     sx={{
@@ -152,11 +153,11 @@ const SideBar = () => {
                     {el.icon}
                     {/* </IconButton> */}
                   </Box>
-                  <Typography 
+                  <Typography
                     variant="subtitle1"
                   >
                     {el.title}
-                    </Typography>
+                  </Typography>
                 </Stack>
               );
             })}
@@ -170,6 +171,7 @@ const SideBar = () => {
                   onClick={() => {
                     handleChangeTab(el.index);
                   }}
+                  key={el.index}
                 >
                   <Box
                     sx={{
@@ -190,10 +192,10 @@ const SideBar = () => {
                       }}
                       sx={{ width: "max-content", color: "#ffffff" }}
                     > */}
-                      {el.icon}
+                    {el.icon}
                     {/* </IconButton> */}
                   </Box>
-                  <Typography 
+                  <Typography
                     variant="subtitle1"
                     color={theme.palette.primary.main}
                   >
@@ -234,7 +236,7 @@ const SideBar = () => {
                             : theme.palette.text.primary,
                       }}
                     > */}
-                      {el.icon}
+                    {el.icon}
                     {/* </IconButton> */}
                   </Box>
                   <Typography variant="subtitle1">{el.title}</Typography>

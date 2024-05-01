@@ -3,15 +3,15 @@ import { useTheme } from "@mui/material/styles";
 import { Box, Stack, Typography } from "@mui/material";
 
 import { Link, useSearchParams } from "react-router-dom";
-import ChatComponent from "./Conversation";
-import Chats from "./Chats";
-import Contact from "../../sections/Dashboard/Contact";
+import ChatComponent from "./Home/Conversation";
+import Chats from "./Home/Chats";
+import Contact from "../../sections/Dashboard/Home/Contact";
 import NoChat from "../../assets/Illustration/NoChat";
 import { useSelector } from "react-redux";
 import StarredMessages from "../../sections/Dashboard/StarredMessages";
-import {Media} from "../../sections/Dashboard/SharedMessages";
+import { Media } from "../../sections/Dashboard/Home/SharedMessages";
 import BackgroundHome from "../../assets/images/auth/bg-auth.jpg";
-import Members from "../../sections/Dashboard/Members";
+import Members from "../../sections/Dashboard/Home/Members";
 
 const GeneralApp = () => {
   const [searchParams] = useSearchParams();
@@ -29,8 +29,8 @@ const GeneralApp = () => {
           backgroundImage: `url(${BackgroundHome})`,
           borderRadius: "35px 0 0 35px",
         }}
-        // spacing="8px"
-        // alignItems={"center"}
+      // spacing="8px"
+      // alignItems={"center"}
       >
         <Chats />
         <Box
@@ -41,7 +41,7 @@ const GeneralApp = () => {
               theme.palette.mode === "light"
                 ? "none"
                 : theme.palette.background.paper,
-            borderRadius: sideBar.open?"35px 0 0 35px":"35px 35px 35px 35px",
+            borderRadius: sideBar.open ? "35px 0 0 35px" : "35px 35px 35px 35px",
             // borderBottom:
             //   searchParams.get("type") === "individual-chat" &&
             //   searchParams.get("id")
@@ -75,18 +75,18 @@ const GeneralApp = () => {
             </Stack>
           )}
         </Box>
-        {sideBar.open &&
+        {(room_id !== null && sideBar.open) &&
           (() => {
             switch (sideBar.type) {
               case "CONTACT":
                 return <Contact />;
 
               case "SHARED_IMAGE":
-                return <Media tab={0}/>;
+                return <Media tab={0} />;
 
               case "SHARED_FILE":
-                return <Media tab={2}/>;
-            
+                return <Media tab={2} />;
+
               case "MEMBERS":
                 return <Members />;
 

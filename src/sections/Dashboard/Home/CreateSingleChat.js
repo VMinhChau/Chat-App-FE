@@ -9,13 +9,13 @@ import {
   Box,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { FetchAllUsers } from "../../redux/slices/app";
-import { UserElement } from "../../components/UserElement";
+import { FetchAllUsers } from "../../../redux/slices/app";
+import { UserElement } from "../../../components/UserElement";
 import {
   Search,
   SearchIconWrapper,
   StyledInputBase,
-} from "../../components/Search";
+} from "../../../components/Search";
 import { MagnifyingGlass, X } from "phosphor-react";
 import _ from "lodash";
 

@@ -58,14 +58,10 @@ const ChatHeader = () => {
   const isMobile = useResponsive("between", "md", "xs", "sm");
   const theme = useTheme();
 
-  const { conversations } = useSelector(
-    (state) => state.conversation.direct_chat
-  );
+  // const { conversations } = useSelector(
+  //   (state) => state.conversation.direct_chat
+  // );
   const { room_id, sideBar } = useSelector((state) => state.app);
-  useEffect(() => {
-    const current = conversations.find((el) => el?.id === room_id);
-    dispatch(SetCurrentConversation(current));
-  });
   const { current_conversation } = useSelector(
     (state) => state.conversation.direct_chat
   );
@@ -107,7 +103,7 @@ const ChatHeader = () => {
                 }}
                 variant={current_conversation?.online ? "dot" : ""}
               >
-                {current_conversation?.chat_type === "group" ? (
+                {!(current_conversation?.chat_type === "privatechat") ? (
                   <AvatarGroup
                     max={2}
                     total={2}
@@ -124,7 +120,7 @@ const ChatHeader = () => {
                     <AvatarGroup
                       sx={{ marginBottom: "-4px" }}
                       max={1}
-                      total={current_conversation?.img.length - 2}
+                      total={current_conversation?.img?.length - 2}
                       cascade="above"
                       componentsProps={{
                         additionalAvatar: {
@@ -134,11 +130,11 @@ const ChatHeader = () => {
                         },
                       }}
                     >
-                      <Avatar alt={current_conversation?.name} src={current_conversation?.img[0]} />
+                      <Avatar alt={current_conversation?.name} src={current_conversation?.img?.[0]} />
                     </AvatarGroup>
                     <AvatarGroup sx={{ marginTop: "-4px" }} max={2} total={2}>
-                      <Avatar alt={current_conversation?.name} src={current_conversation?.img[1]} />
-                      <Avatar alt={current_conversation?.name} src={current_conversation?.img[2]} />
+                      <Avatar alt={current_conversation?.name} src={current_conversation?.img?.[1]} />
+                      <Avatar alt={current_conversation?.name} src={current_conversation?.img?.[2]} />
                     </AvatarGroup>
                   </AvatarGroup>
                 ) : (
@@ -148,6 +144,9 @@ const ChatHeader = () => {
             </Box>
             <Stack spacing={0.2}>
               <Typography variant="subtitle2">
+                {/* {!(current_conversation?.chat_type === "privatechat")
+                  ? current_conversation?.title
+                  : current_conversation?.name} */}
                 {current_conversation?.title}
               </Typography>
               <Typography variant="caption">

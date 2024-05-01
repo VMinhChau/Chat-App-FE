@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { axiosAuth } from "../../utils/axios"
-import { showSnackbar } from "./app";
+import { showSnackbar, SelectConversation } from "./app";
 
 // ----------------------------------------------------------------------
 
@@ -32,6 +32,7 @@ const slice = createSlice({
       state.isLoggedIn = false;
       state.token = "";
       state.user_id = null;
+      state = undefined;
     },
     updateRegisterEmail(state, action) {
       state.email = action.payload.email;
@@ -125,7 +126,7 @@ export function LoginUser(formValues) {
     dispatch(slice.actions.updateIsLoading({ isLoading: true, error: false }));
     await axiosAuth
       .post(
-        "/v1/api/auth/register/login",
+        "/v1/api/auth/login",
         {
           ...formValues,
         },
@@ -136,21 +137,31 @@ export function LoginUser(formValues) {
         }
       )
       .then(function (response) {
-        console.log(response);
-        dispatch(
-          slice.actions.logIn({
-            isLoggedIn: true,
-            access_token: response.data.token,
-            user_id: response.data.user_id,
-          })
-        );
-        window.localStorage.setItem("user_id", response.data.user_id);
-        dispatch(
-          showSnackbar({ severity: "success", message: response.data.message })
-        );
-        dispatch(
-          slice.actions.updateIsLoading({ isLoading: false, error: false })
-        );
+        console.log(response.data.data);
+        if (response.data.code === 1) {
+          dispatch(showSnackbar({ severity: "error", message: response.data.data }));
+          dispatch(
+            slice.actions.updateIsLoading({ isLoading: false, error: true })
+          );
+        }
+        else {
+          dispatch(
+            slice.actions.logIn({
+              isLoggedIn: true,
+              access_token: response.data.data.accessToken,
+              user_id: response.data.data.userId,
+            })
+          );
+
+          window.localStorage.setItem("user_id", response.data.data.userId);
+          console.log(window.localStorage.getItem("user_id"))
+          dispatch(
+            showSnackbar({ severity: "success", message: "Login successfully" })
+          );
+          dispatch(
+            slice.actions.updateIsLoading({ isLoading: false, error: false })
+          );
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -171,6 +182,7 @@ export function LoginUser(formValues) {
 
 export function LogoutUser() {
   return async (dispatch, getState) => {
+    dispatch(SelectConversation({ room_id: null }));
     window.localStorage.removeItem("user_id");
     dispatch(slice.actions.signOut());
   };
@@ -215,11 +227,11 @@ export function RegisterUser(formValues) {
           slice.actions.updateIsLoading({ error: true, isLoading: false })
         );
       })
-    // .finally(() => {
-    //   if (!getState().auth.error) {
-    //     window.location.href = "/auth/login";
-    //   }
-    // });
+      .finally(() => {
+        if (!getState().auth.error) {
+          window.location.href = "/auth/login";
+        }
+      });
   };
 }
 
@@ -263,6 +275,32 @@ export function VerifyEmail(formValues) {
         dispatch(
           slice.actions.updateIsLoading({ error: true, isLoading: false })
         );
+      });
+  };
+}
+
+
+export function FindUserByEmail(email) {
+  return async (dispatch, getState) => {
+    await axiosAuth
+      .get("/v1/api/auth/find-user-by-email",
+        {
+          params: { email }
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+      .then(function (response) {
+        console.log(response.data);
+        dispatch(
+          showSnackbar({ severity: "success", message: response.data })
+        );
+      })
+      .catch(function (error) {
+        console.log(error);
+        dispatch(showSnackbar({ severity: "error", message: error.message }));
       });
   };
 }

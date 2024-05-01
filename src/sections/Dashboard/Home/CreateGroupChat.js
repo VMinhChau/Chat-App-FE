@@ -18,11 +18,12 @@ import {
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import FormProvider from "../../components/hook-form/FormProvider";
-import { RHFTextField } from "../../components/hook-form";
-import RHFAutocomplete from "../../components/hook-form/RHFAutocomplete";
+import FormProvider from "../../../components/hook-form/FormProvider";
+import { RHFTextField } from "../../../components/hook-form";
+import RHFAutocomplete from "../../../components/hook-form/RHFAutocomplete";
 import { useDispatch, useSelector } from "react-redux";
-import { FetchAllUsers } from "../../redux/slices/app";
+import { FetchAllUsers } from "../../../redux/slices/app";
+import { AddGroupConversation } from "../../../redux/slices/conversation";
 import _ from "lodash";
 import { createFilterOptions } from '@mui/material/Autocomplete';
 
@@ -70,12 +71,14 @@ const CreateGroupForm = ({ handleClose }) => {
 
   const NewGroupSchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
-    members: Yup.array().min(2, "Must have at least 2 members"),
+    description: Yup.string().required("Description is required"),
+    // members: Yup.array().min(2, "Must have at least 2 members"),
   });
 
   const defaultValues = {
     title: "",
-    members: [],
+    description: "",
+    // members: [],
   };
 
   const methods = useForm({
@@ -86,12 +89,15 @@ const CreateGroupForm = ({ handleClose }) => {
   const {
     handleSubmit,
     formState: { isSubmitting, isValid },
+    reset,
   } = methods;
 
   const onSubmit = async (data) => {
     try {
       //  API Call
       console.log("DATA", data);
+      dispatch(AddGroupConversation(data));
+      handleClose();
     } catch (error) {
       console.error(error);
     }
@@ -101,6 +107,7 @@ const CreateGroupForm = ({ handleClose }) => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const handleInputChange = (e) => {
     const searchTerm = e.target.value;
+    console.log("change")
     setSearchItem(searchTerm);
     if (searchTerm === "") {
       setFilteredUsers([]);
@@ -114,18 +121,21 @@ const CreateGroupForm = ({ handleClose }) => {
     );
     const filteredItems = _.union(filteredEmail, filteredName);
     setFilteredUsers(filteredItems);
+    console.log(filteredItems);
   };
 
   const [value, setValue] = useState([]);
   const onDelete = (id) => () => {
     setValue((value) => value.filter((v) => v.id !== id));
   };
+  // console.log(value);
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
         <RHFTextField size="10" name="title" label="Title" />
-        <RHFAutocomplete
+        <RHFTextField size="10" name="description" label="Description" />
+        {/* <RHFAutocomplete
           size="medium"
           name="members"
           label="Type name or email"
@@ -134,18 +144,20 @@ const CreateGroupForm = ({ handleClose }) => {
           options={filteredUsers}
           ChipProps={{ size: "medium" }}
           getOptionLabel={(option) => option.name + option.email}
-          value={value}
-          onChange={(e, newValue) => setValue(newValue)}
-          renderTags={() => null}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              name="members"
-              label="Type name or email"
-              onChange={handleInputChange}
-              value={searchItem}
-            />
-          )}
+          // value={value}
+          // onChange={(e, newValue) => setValue(newValue)}
+          onChange={handleInputChange}
+          value={searchItem}
+          // renderTags={() => null}
+          // renderInput={(params) => (
+          //   <TextField
+          //     {...params}
+          //     name="members"
+          //     label="Type name or email"
+          //     onChange={handleInputChange}
+          //     value={searchItem}
+          //   />
+          // )}
           renderOption={(props, option) => (
             <Stack direction="row" alignItems={"center"} spacing={2} {...props}>
               {" "}
@@ -177,7 +189,7 @@ const CreateGroupForm = ({ handleClose }) => {
           {value.map((v) => (
             <Chip key={v.id} label={v.name} onDelete={onDelete(v.id)} />
           ))}
-        </Box>
+        </Box> */}
         <Stack
           spacing={2}
           direction={"row"}

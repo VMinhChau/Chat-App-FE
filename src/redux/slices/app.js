@@ -21,7 +21,7 @@ const initialState = {
     message: null,
   },
   all_users: [], // all users of app
-  chat_type: null,
+  chat_type: "group",
   room_id: null,
 };
 
@@ -91,7 +91,7 @@ export const showSnackbar =
 
       setTimeout(() => {
         dispatch(slice.actions.closeSnackBar());
-      }, 4000);
+      }, 6000);
     };
 
 export function ToggleSidebar() {

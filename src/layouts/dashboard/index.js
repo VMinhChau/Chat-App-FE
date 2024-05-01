@@ -25,7 +25,7 @@ import {
 const DashboardLayout = () => {
   const isDesktop = useResponsive("up", "md");
   const dispatch = useDispatch();
-  const {user_id} = useSelector((state) => state.auth);
+  const { user_id } = useSelector((state) => state.auth);
   const theme = useTheme();
   // const { open_audio_notification_dialog, open_audio_dialog } = useSelector(
   //   (state) => state.audioCall
@@ -38,10 +38,11 @@ const DashboardLayout = () => {
     (state) => state.conversation.direct_chat
   );
 
+
   // useEffect(() => {
   //   dispatch(FetchUserProfile());
   // }, []);
-  
+
 
   // const handleCloseAudioDialog = () => {
   //   dispatch(UpdateAudioCallDialog({ state: false }));
@@ -52,24 +53,34 @@ const DashboardLayout = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      window.onload = function () {
-        if (!window.location.hash) {
-          window.location = window.location + "#loaded";
-          window.location.reload();
-        }
-      };
+      // window.onload = function () {
+      //   if (!window.location.hash) {
+      //     window.location = window.location + "#loaded";
+      //     window.location.reload();
+      //   }
+      // };
 
-      window.onload();
+      // window.onload();
 
-      // if (!socket) {
-      //   connectSocket(user_id);
+      // const ws = new WebSocket("ws://localhost:8000/api/v1/websocket/privatechat/1/1");
+      // ws.onopen = (event) => {
+      //   ws.send("Connect");
+      //   console.log("Connected");
+      // }
+      // if (socket) {
+      const ws = connectSocket();
+      // ws.onopen = (event) => {
+      //   ws.send("Connect");
+      //   console.log("Connected");
+      // }
       // }
 
-      // socket.on("audio_call_notification", (data) => {
+      // socket.on("/privatechat/all-recipients/1", (data) => {
       //   // TODO => dispatch an action to add this in call_queue
-      //   dispatch(PushToAudioCallQueue(data));
+      //   // dispatch(PushToAudioCallQueue(data));
+      //   console.log("fef")
       // });
-      
+
       // socket.on("video_call_notification", (data) => {
       //   // TODO => dispatch an action to add this in call_queue
       //   dispatch(PushToVideoCallQueue(data));
@@ -150,7 +161,7 @@ const DashboardLayout = () => {
   return (
     <>
       <Stack direction="row" backgroundColor={theme.palette.mode === "light" ? "#FAF9F570" : theme.palette.background.paper}>
-      
+
         {isDesktop && (
           // SideBar
           <SideNav />
