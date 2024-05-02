@@ -20,7 +20,7 @@ import { styled, useTheme, alpha } from "@mui/material/styles";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SelectConversation } from "../redux/slices/app";
-import { FetchMembersGroup, FetchCurrentGroupConversation } from "../redux/slices/conversation";
+import { FetchMembersGroup, FetchCurrentGroupConversation, FetchCurrentMessages } from "../redux/slices/conversation";
 import { DotsThree } from "phosphor-react";
 import DeleteChatDialog from "../sections/Dashboard/Home/DeleteChatDialog";
 import classess from "../css/ChatElement.module.css"
@@ -65,7 +65,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-const ChatElement = (el) => {
+const GroupChatElement = (el) => {
   const dispatch = useDispatch();
   const { room_id } = useSelector((state) => state.app);
   const selectedChatId = room_id?.toString();
@@ -104,7 +104,7 @@ const ChatElement = (el) => {
       <StyledChatBox
         onClick={(e) => {
           console.log("par")
-          dispatch(SelectConversation({ room_id: el.roomId }));
+          dispatch(SelectConversation({ room_id: el.roomId, chat_type: "groupchat" }));
           dispatch(FetchCurrentGroupConversation(el.roomId));
           dispatch(FetchMembersGroup(el.roomId));
         }}
@@ -262,4 +262,4 @@ const ChatElement = (el) => {
   );
 };
 
-export default ChatElement;
+export default GroupChatElement;

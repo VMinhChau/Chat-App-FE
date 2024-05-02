@@ -8,11 +8,12 @@ const user_id = window.localStorage.getItem("user_id");
 
 const initialState = {
   direct_chat: {
-    conversations: [],
+    private_conversations: [],
     current_conversation: {},
     current_messages: [],
   },
   group_chat: {
+    group_conversations: [],
     members: [],
     admin: null,
   },
@@ -22,11 +23,7 @@ const slice = createSlice({
   name: "conversation",
   initialState,
   reducers: {
-    fetchDirectConversations(state, action) {
-      console.log(action.payload.conversations);
-      const list = action.payload.conversations;
-      state.direct_chat.conversations = list;
-    },
+
     updateDirectConversation(state, action) {
       const this_conversation = action.payload.conversation;
       // state.direct_chat.conversations = state.direct_chat.conversations.map(
@@ -76,13 +73,26 @@ const slice = createSlice({
     },
 
     fetchCurrentMessages(state, action) {
-      const messages = action.payload.messages;
+      const messages = action.payload;
       state.direct_chat.current_messages = messages;
     },
     addDirectMessage(state, action) {
       state.direct_chat.current_messages.push(action.payload.msg);
     },
+    fetchPrivateConversations(state, action) {
+      console.log(action.payload.private_conversations);
+      const list = action.payload.private_conversations;
+      state.direct_chat.private_conversations = list;
+    },
+    fetchCurrentPrivateConversation(state, action) {
+      state.direct_chat.current_conversation = action.payload;
+    },
 
+    fetchGroupConversations(state, action) {
+      console.log(action.payload.group_conversations);
+      const list = action.payload.group_conversations;
+      state.group_chat.group_conversations = list;
+    },
     fetchCurrentGroupConversation(state, action) {
       state.direct_chat.current_conversation = action.payload;
     },
@@ -97,7 +107,115 @@ export default slice.reducer;
 
 // ----------------------------------------------------------------------
 
-export const FetchDirectConversations = (data) => {
+export const FetchPrivateConversations = ({ user_id }) => {
+  return async (dispatch, getState) => {
+    let private_conversations_ids;
+    let private_conversations;
+    await axiosPrivateChat
+      .get(
+        `/api/v1/chat/privatechat/all-recipients/${user_id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        private_conversations_ids = response.data.map(e => e.recipient_id);
+        private_conversations = response.data;
+        console.log(private_conversations_ids);
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(showSnackbar({ severity: "error", message: error.message }));
+      });
+
+    console.log(private_conversations_ids);
+    await axiosAuth
+      .post(
+        `/v1/api/auth/user-infor`,
+        {
+          ids: private_conversations_ids
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        const users = response.data.data;
+        const result = private_conversations.map((obj, i) => ({ ...obj, ...users[i] }));
+        console.log(result);
+        dispatch(
+          slice.actions.fetchPrivateConversations({ private_conversations: result })
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(showSnackbar({ severity: "error", message: error.message }));
+      });
+  };
+};
+
+export const AddPrivateConversation = (user_id, recipient_id) => {
+  return async (dispatch, getState) => {
+    await axiosPrivateChat
+      .get(
+        `/api/v1/chat/privatechat/create/${user_id}/${recipient_id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        dispatch(FetchPrivateConversations({ user_id }))
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(showSnackbar({ severity: "error", message: error.message }));
+      });
+  };
+};
+
+export const FetchCurrentPrivateConversation = (data) => {
+  console.log(data);
+  return async (dispatch, getState) => {
+    dispatch(slice.actions.fetchCurrentPrivateConversation(data));
+  }
+};
+
+export const FetchCurrentMessages = ({ chat_id }) => {
+  return async (dispatch, getState) => {
+    await axiosPrivateChat
+      .get(
+        `/api/v1/chat/privatechat/get-messages/${chat_id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        dispatch(slice.actions.fetchCurrentMessages(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+        dispatch(showSnackbar({ severity: "error", message: error.message }));
+      });
+  };
+};
+
+export const UpdateDirectConversation = ({ conversation }) => {
+  return async (dispatch, getState) => {
+    dispatch(slice.actions.updateDirectConversation({ conversation }));
+  };
+};
+
+export const FetchGroupConversations = (data) => {
   return async (dispatch, getState) => {
     const userId = data.user_id;
     console.log(userId);
@@ -117,90 +235,14 @@ export const FetchDirectConversations = (data) => {
       .then((response) => {
         console.log(response.data.data);
         dispatch(
-          slice.actions.fetchDirectConversations({ conversations: response.data.data })
+          slice.actions.fetchGroupConversations({ group_conversations: response.data.data })
         );
       })
       .catch((error) => {
         console.log(error);
         dispatch(showSnackbar({ severity: "error", message: error.message }));
       });
-    // await axiosPrivateChat
-    //   .get(
-    //     `/api/v1/chat/privatechat/all-recipients/1`,
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     }
-    //   )
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     dispatch(
-    //       slice.actions.fetchDirectConversations({ conversations: response.data })
-    //     );
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     dispatch(showSnackbar({ severity: "error", message: error.message }));
-    //   });
-  };
-};
-export const AddDirectConversation = (conversation) => {
-  return async (dispatch, getState) => {
-    console.log(conversation);
-    await axiosRoom
-      .post(
-        "/v1/api/room/create",
-        conversation,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then(function (response) {
-        console.log(response);
-        dispatch(slice.actions.addDirectConversation(conversation));
-        dispatch(
-          showSnackbar({ severity: "success", message: response.data.data })
-        );
-        // dispatch(
-        //   slice.actions.updateIsLoading({ isLoading: false, error: false })
-        // );
-      })
-      .catch(function (error) {
-        console.log(error);
-        dispatch(showSnackbar({ severity: "error", message: error.message }));
-        // dispatch(
-        //   slice.actions.updateIsLoading({ isLoading: false, error: true })
-        // );
-      });
-  };
-};
-export const UpdateDirectConversation = ({ conversation }) => {
-  return async (dispatch, getState) => {
-    dispatch(slice.actions.updateDirectConversation({ conversation }));
-  };
-};
-
-
-export const FetchCurrentMessages = ({ messages }) => {
-  return async (dispatch, getState) => {
-    dispatch(slice.actions.fetchCurrentMessages({ messages }));
-  };
-};
-
-export const AddDirectMessage = (message) => {
-  return async (dispatch, getState) => {
-    const msg = {
-      "type": "msg",
-      "subtype": "msg",
-      "message": message,
-      "incoming": false,
-      "outgoing": true,
-    };
-    dispatch(slice.actions.addDirectMessage({ msg }));
-  };
+  }
 };
 
 export const FetchCurrentGroupConversation = (room_id) => {
@@ -248,7 +290,7 @@ export const AddGroupConversation = (formValues) => {
         dispatch(
           showSnackbar({ severity: "success", message: response.data.data })
         );
-        dispatch(FetchDirectConversations({ user_id: user_id }))
+        dispatch(FetchGroupConversations({ user_id: user_id }))
       })
       .catch(function (error) {
         console.log(error);
@@ -273,7 +315,7 @@ export const DeleteGroupConversation = (delete_id) => {
         dispatch(
           showSnackbar({ severity: "success", message: response.data.data })
         );
-        dispatch(FetchDirectConversations({ user_id: user_id }))
+        dispatch(FetchGroupConversations({ user_id: user_id }))
       })
       .catch(function (error) {
         console.log(error);
@@ -303,7 +345,7 @@ export const LeaveGroup = (group_id) => {
         dispatch(
           showSnackbar({ severity: "success", message: response.data.data })
         );
-        dispatch(FetchDirectConversations({ user_id: user_id }))
+        dispatch(FetchGroupConversations({ user_id: user_id }))
       })
       .catch(function (error) {
         console.log(error);

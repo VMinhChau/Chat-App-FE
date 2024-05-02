@@ -72,18 +72,18 @@ const Contact = () => {
   const { current_conversation } = useSelector(
     (state) => state.conversation.direct_chat
   );
-  const { room_id } = useSelector(
+  const { room_id, chat_type } = useSelector(
     (state) => state.app
   );
 
   const theme = useTheme();
   const isDesktop = useResponsive("up", "md");
 
-  const [openBlock, setOpenBlock] = useState(false);
+  const [openLeave, setOpenLeave] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
 
-  const handleCloseBlock = () => {
-    setOpenBlock(false);
+  const handleCloseLeave = () => {
+    setOpenLeave(false);
   };
   const handleCloseDelete = () => {
     setOpenDelete(false);
@@ -113,7 +113,7 @@ const Contact = () => {
           }}
         >
           <Stack
-            sx={{ height: "100%", p: 2.38 }}
+            sx={{ height: "100%", p: 2 }}
             spacing={3}
             textAlign="center"
           >
@@ -148,7 +148,7 @@ const Contact = () => {
                 }}
                 variant={current_conversation?.online ? "dot" : ""}
               >
-                {current_conversation?.chat_type === "group" ? (
+                {!(chat_type === "privatechat") ? (
                   <AvatarGroup
                     max={2}
                     total={2}
@@ -165,7 +165,7 @@ const Contact = () => {
                     <AvatarGroup
                       sx={{ marginBottom: "-4px" }}
                       max={1}
-                      total={current_conversation?.img.length - 2}
+                      total={current_conversation?.img?.length - 2}
                       cascade="above"
                       componentsProps={{
                         additionalAvatar: {
@@ -175,11 +175,11 @@ const Contact = () => {
                         },
                       }}
                     >
-                      <Avatar alt={current_conversation?.title} src={current_conversation?.img[0]} />
+                      <Avatar alt={current_conversation?.title} src={current_conversation?.img?.[0]} />
                     </AvatarGroup>
                     <AvatarGroup sx={{ marginTop: "-4px" }} max={2} total={2}>
-                      <Avatar alt={current_conversation?.title} src={current_conversation?.img[1]} />
-                      <Avatar alt={current_conversation?.title} src={current_conversation?.img[2]} />
+                      <Avatar alt={current_conversation?.title} src={current_conversation?.img?.[1]} />
+                      <Avatar alt={current_conversation?.title} src={current_conversation?.img?.[2]} />
                     </AvatarGroup>
                   </AvatarGroup>
                 ) : (
@@ -188,14 +188,14 @@ const Contact = () => {
               </StyledBadge>
               <Stack spacing={0.5}>
                 <Typography variant="article" fontWeight={600}>
-                  {!(current_conversation?.chat_type === "privatechat")
+                  {!(chat_type === "privatechat")
                     ? current_conversation?.title
-                    : current_conversation?.name}
+                    : current_conversation?.fullName}
                 </Typography>
               </Stack>
             </Stack>
             <Box>
-              {!(current_conversation?.chat_type === "privatechat") && (
+              {!(chat_type === "privatechat") && (
                 <Stack
                   direction="row"
                   alignItems="center"
@@ -251,17 +251,29 @@ const Contact = () => {
             </Box>
           </Stack>
           <Stack direction="row" alignItems={"center"} spacing={2}>
-            {!(current_conversation?.chat_type === "privatechat") ? (
-              <Button
-                onClick={() => {
-                  setOpenBlock(true);
-                }}
-                fullWidth
-                startIcon={<Prohibit />}
-                variant="outlined"
-              >
-                Leave group
-              </Button>
+            {!(chat_type === "privatechat") ? (
+              <>
+                <Button
+                  onClick={() => {
+                    setOpenLeave(true);
+                  }}
+                  fullWidth
+                  startIcon={<Prohibit />}
+                  variant="outlined"
+                >
+                  Leave
+                </Button>
+                <Button
+                  onClick={() => {
+                    setOpenDelete(true);
+                  }}
+                  fullWidth
+                  startIcon={<Trash />}
+                  variant="outlined"
+                >
+                  Delete
+                </Button>
+              </>
             ) : (
               <Button
                 onClick={() => {
@@ -276,8 +288,8 @@ const Contact = () => {
           </Stack>
         </Stack>
       </Stack>
-      {openBlock && (
-        <LeaveGroupDialog open={openBlock} handleClose={handleCloseBlock} group_id={room_id} />
+      {openLeave && (
+        <LeaveGroupDialog open={openLeave} handleClose={handleCloseLeave} group_id={room_id} />
       )}
       {openDelete && (
         <DeleteChatDialog open={openDelete} handleClose={handleCloseDelete} delete_id={room_id} />

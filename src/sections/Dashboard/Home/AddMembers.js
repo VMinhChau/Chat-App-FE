@@ -101,8 +101,8 @@ const AddMembersForm = ({ handleClose }) => {
     const [searchItem, setSearchItem] = useState("");
     const [filteredUsers, setFilteredUsers] = useState([]);
     const handleInputChange = async (e) => {
-        const email = e.target.value;
         if (e.key === "Enter") {
+            const email = e.target.value;
             console.log("Enter");
             // setFilteredUsers([]);
             await axiosAuth

@@ -11,10 +11,8 @@ import {
 import { styled, useTheme } from "@mui/material/styles";
 import { Chat } from "phosphor-react";
 import { useDispatch, useSelector } from "react-redux";
-import { AddDirectConversation } from "../redux/slices/conversation";
+import { AddPrivateConversation } from "../redux/slices/conversation";
 // import { socket } from "../socket";
-
-const user_id = window.localStorage.getItem("user_id");
 
 const StyledChatBox = styled(Box)(({ theme }) => ({
   "&:hover": {
@@ -55,9 +53,11 @@ const UserElement = (el) => {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const handleAddDirectConversation = (user) => {
-    const conversation = { id: user.id, title: user.name, description: "new chat" }
-    dispatch(AddDirectConversation(conversation));
+  const handleAddDirectConversation = (el) => {
+    console.log(el)
+    const user_id = window.localStorage.getItem("user_id");
+    console.log(user_id, el.id);
+    dispatch(AddPrivateConversation(user_id, el.id));
   }
 
   return (
@@ -89,7 +89,7 @@ const UserElement = (el) => {
             <Avatar alt={el.name} src={el.img} />
           )}
           <Stack spacing={0.3}>
-            <Typography variant="subtitle2">{el.name}</Typography>
+            <Typography variant="subtitle2">{el.fullName}</Typography>
             <Typography variant="caption">{el.email}</Typography>
           </Stack>
         </Stack>

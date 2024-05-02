@@ -61,15 +61,16 @@ const ChatHeader = () => {
   // const { conversations } = useSelector(
   //   (state) => state.conversation.direct_chat
   // );
-  const { room_id, sideBar } = useSelector((state) => state.app);
+  const { sideBar, chat_type } = useSelector((state) => state.app);
   const { current_conversation } = useSelector(
     (state) => state.conversation.direct_chat
   );
+  console.log(chat_type);
 
   return (
     <>
       <Box
-        p={1.5}
+        p={1.1}
         width={"100%"}
         sx={{
           backgroundColor:
@@ -79,6 +80,7 @@ const ChatHeader = () => {
           boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
           borderRadius: sideBar.open ? "35px 0 0 0" : "35px 35px 0px 0px",
           borderBottom: "2px solid #ED711A",
+          marginTop: "8px"
         }}
       >
         <Stack
@@ -103,7 +105,7 @@ const ChatHeader = () => {
                 }}
                 variant={current_conversation?.online ? "dot" : ""}
               >
-                {!(current_conversation?.chat_type === "privatechat") ? (
+                {!(chat_type === "privatechat") ? (
                   <AvatarGroup
                     max={2}
                     total={2}
@@ -144,10 +146,9 @@ const ChatHeader = () => {
             </Box>
             <Stack spacing={0.2}>
               <Typography variant="subtitle2">
-                {/* {!(current_conversation?.chat_type === "privatechat")
+                {!(chat_type === "privatechat")
                   ? current_conversation?.title
-                  : current_conversation?.name} */}
-                {current_conversation?.title}
+                  : current_conversation?.fullName}
               </Typography>
               <Typography variant="caption">
                 {current_conversation?.online ? "Online" : "Offline"}
