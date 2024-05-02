@@ -47,7 +47,7 @@ const GeneralApp = () => {
             //   searchParams.get("id")
             //     ? "0px"
             //     : "6px solid #0162C4",
-            margin: "8px 0px 8px 0px!important",
+            // margin: "8px 0px 8px 0px!important",
           }}
         >
           {room_id !== null ? (

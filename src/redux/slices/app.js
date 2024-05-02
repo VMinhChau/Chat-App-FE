@@ -21,7 +21,7 @@ const initialState = {
     message: null,
   },
   all_users: [], // all users of app
-  chat_type: "group",
+  chat_type: null,
   room_id: null,
 };
 
@@ -202,9 +202,9 @@ export function FetchAllUsers() {
 //   };
 // }
 
-export const SelectConversation = ({ room_id }) => {
+export const SelectConversation = ({ room_id, chat_type }) => {
   return async (dispatch, getState) => {
-    dispatch(slice.actions.selectConversation({ room_id }));
+    dispatch(slice.actions.selectConversation({ room_id, chat_type }));
   };
 };
 

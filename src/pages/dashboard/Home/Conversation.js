@@ -30,65 +30,69 @@ const Conversation = ({ isMobile, menu }) => {
   const { conversations, current_messages } = useSelector(
     (state) => state.conversation.direct_chat
   );
-  const { room_id } = useSelector((state) => state.app);
+  const { room_id, chat_type } = useSelector((state) => state.app);
 
   useEffect(() => {
-    // const current = conversations.find((el) => el?.id === room_id);
-    // console.log(room_id);
-
-    // socket.emit("get_messages", { conversation_id: current?.id }, (data) => {
-    //   // data => list of messages
-    //   console.log(data, "List of messages");
-    dispatch(FetchCurrentMessages({ messages: Chat_History }));
-    // });
-
-    // dispatch(SetCurrentConversation(current));
+    console.log(room_id);
+    dispatch(FetchCurrentMessages({ chat_id: room_id }));
   }, []);
+
   return (
     <Box p={isMobile ? 1 : 3}>
       <Stack spacing={3}>
-        {current_messages.map((el, idx) => {
-          switch (el.type) {
-            case "divider":
-              return (
-                // Timeline
-                <Timeline el={el} key={idx} />
-              );
+        {chat_type === "privatechat" && current_messages?.map((el, idx) => {
+          // switch (el.type) {
+          //   case "divider":
+          //     return (
+          //       // Timeline
+          //       <Timeline el={el} key={idx} />
+          //     );
 
-            case "msg":
-              switch (el.subtype) {
-                case "img":
-                  return (
-                    // Media Message
-                    <MediaMsg el={el} menu={menu} key={idx} />
-                  );
+          //   case "msg":
+          //     switch (el.subtype) {
+          //       case "img":
+          //         return (
+          //           // Media Message
+          //           <MediaMsg el={el} menu={menu} key={idx} />
+          //         );
 
-                case "doc":
-                  return (
-                    // Doc Message
-                    <DocMsg el={el} menu={menu} key={idx} />
-                  );
-                case "Link":
-                  return (
-                    //  Link Message
-                    <LinkMsg el={el} menu={menu} key={idx} />
-                  );
+          //       case "doc":
+          //         return (
+          //           // Doc Message
+          //           <DocMsg el={el} menu={menu} key={idx} />
+          //         );
+          //       case "Link":
+          //         return (
+          //           //  Link Message
+          //           <LinkMsg el={el} menu={menu} key={idx} />
+          //         );
 
-                case "reply":
-                  return (
-                    //  ReplyMessage
-                    <ReplyMsg el={el} menu={menu} key={idx} />
-                  );
+          //       case "reply":
+          //         return (
+          //           //  ReplyMessage
+          //           <ReplyMsg el={el} menu={menu} key={idx} />
+          //         );
 
-                default:
-                  return (
-                    // Text Message
-                    <TextMsg el={el} menu={menu} key={idx} />
-                  );
-              }
+          //       default:
+          //         return (
+          //           // Text Message
+          //           <TextMsg el={el} menu={menu} key={idx} />
+          //         );
+          //     }
 
-            default:
-              return <></>;
+          //   default:
+          //     return <TextMsg el={el} menu={menu} key={idx} />;
+          if (el.message.startsWith('data:image')) {
+            return (
+              // Media Message
+              <MediaMsg el={el} menu={menu} key={idx} />
+            );
+          }
+          else {
+            return (
+              // Text Message
+              <TextMsg el={el} menu={menu} key={idx} />
+            );
           }
         })}
       </Stack>
@@ -122,7 +126,6 @@ const ChatComponent = () => {
     // borderRadius="35px"
     // padding="8px 8px 8px 0px!important"
     >
-      {/*  */}
       <ChatHeader />
       <Box
         ref={messageListRef}
@@ -138,16 +141,14 @@ const ChatComponent = () => {
               : theme.palette.background,
 
           boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
+          height: "80%"
         }}
       >
         <SimpleBarStyle timeout={500} clickOnTrack={false}>
           <Conversation menu={true} isMobile={isMobile} />
         </SimpleBarStyle>
       </Box>
-
-      {/*  */}
       <ChatFooter />
-
     </Stack>
 
   );

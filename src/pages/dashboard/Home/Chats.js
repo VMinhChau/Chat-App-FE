@@ -21,7 +21,7 @@ import { useTheme } from "@mui/material/styles";
 import useResponsive from "../../../hooks/useResponsive";
 import BottomNav from "../../../layouts/dashboard/BottomNav";
 import { ChatList } from "../../../data";
-import ChatElement from "../../../components/ChatElement";
+import ChatElement from "../../../components/GroupChatElement";
 import {
   Search,
   SearchIconWrapper,
@@ -31,7 +31,7 @@ import CreateSingleChat from "../../../sections/Dashboard/Home/CreateSingleChat"
 import CreateGroupChat from "../../../sections/Dashboard/Home/CreateGroupChat";
 import { socket } from "../../../socket";
 import { useDispatch, useSelector } from "react-redux";
-import { FetchDirectConversations } from "../../../redux/slices/conversation";
+import { FetchGroupConversations, FetchPrivateConversations } from "../../../redux/slices/conversation";
 import { ReactComponent as AddGroup } from "../../../assets/images/home/add_group_icon.svg"
 import { ReactComponent as AddSingleChat } from "../../../assets/images/home/add_single_chat_icon.svg"
 import SearchChat from "../../../sections/Dashboard/Home/SearchChat";
@@ -42,14 +42,12 @@ const Chats = () => {
 
   const dispatch = useDispatch();
 
-  const { conversations } = useSelector(
+  const { group_conversations } = useSelector(
+    (state) => state.conversation.group_chat
+  );
+  const { private_conversations } = useSelector(
     (state) => state.conversation.direct_chat
   );
-
-  // const { isLoggedIn } = useSelector(
-  //   (state) => state.auth
-  // );
-  // console.log(isLoggedIn)
 
   useEffect(() => {
     // socket.emit("get_direct_conversations", { user_id }, (data) => {
@@ -57,7 +55,8 @@ const Chats = () => {
     //   // dispatch action
 
     const user_id = window.localStorage.getItem("user_id");
-    dispatch(FetchDirectConversations({ user_id: user_id }))
+    dispatch(FetchGroupConversations({ user_id: user_id }))
+    dispatch(FetchPrivateConversations({ user_id: user_id }))
     // setFilteredUsers(conversations);
     // });
   }, []);
@@ -131,7 +130,7 @@ const Chats = () => {
               </Tooltip>
             </Stack>
           </Stack>
-          <SearchChat conversations={conversations} />
+          <SearchChat group_conversations={group_conversations} private_conversations={private_conversations} />
         </Stack>
       </Box>
       {openSingleChat && (

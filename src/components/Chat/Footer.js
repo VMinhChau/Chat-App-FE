@@ -18,14 +18,14 @@ import {
   User,
 } from "phosphor-react";
 import { useTheme, styled } from "@mui/material/styles";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import useResponsive from "../../hooks/useResponsive";
 
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-// import { socket } from "../../socket";
+import { connectSocket, ws } from "../../socket";
 import { useDispatch, useSelector } from "react-redux";
-import {AddDirectMessage} from "../../redux/slices/conversation";
+import { AddDirectMessage, FetchCurrentMessages } from "../../redux/slices/conversation";
 
 const StyledInput = styled(TextField)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -82,6 +82,8 @@ const ChatInput = ({
   const theme = useTheme();
   const dispatch = useDispatch();
 
+  const { room_id } = useSelector((state) => state.app);
+
   const inputFileRef = useRef(null);
   const [image, setImage] = useState("")
   const handleClickInputFile = () => {
@@ -93,9 +95,11 @@ const ChatInput = ({
     let file = event.target.files[0];
     reader.onloadend = () => {
       setImage(reader.result);
+      const base64String = reader.result;
+      ws.send(base64String);
     };
     reader.readAsDataURL(file);
-    // dispatch(AddDirectMessage(file));
+    dispatch(FetchCurrentMessages({ chat_id: room_id }));
   }
 
   return (
@@ -204,6 +208,7 @@ const Footer = () => {
   const { current_conversation } = useSelector(
     (state) => state.conversation.direct_chat
   );
+  const { isLoggedIn } = useSelector((state) => state.app)
 
   const user_id = window.localStorage.getItem("user_id");
 
@@ -227,12 +232,24 @@ const Footer = () => {
 
       setValue(
         value.substring(0, selectionStart) +
-          emoji +
-          value.substring(selectionEnd)
+        emoji +
+        value.substring(selectionEnd)
       );
 
       // Move the cursor to the end of the inserted emoji
       input.selectionStart = input.selectionEnd = selectionStart + 1;
+    }
+  }
+
+  if (isLoggedIn) {
+    connectSocket(room_id, user_id);
+    // ws.onopen = e => {
+    //   console.log("Connected established");
+    // }
+    ws.onmessage = e => {
+      const data = JSON.parse(e.data);
+      dispatch(FetchCurrentMessages({ chat_id: room_id }));
+      console.log("Message received", data);
     }
   }
 
@@ -244,7 +261,7 @@ const Footer = () => {
       }}
     >
       <Box
-        p={isMobile ? 1 : 1.5}
+        p={isMobile ? 1 : 1.1}
         width={"100%"}
         sx={{
           backgroundColor:
@@ -253,6 +270,7 @@ const Footer = () => {
               : theme.palette.background,
           boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
           borderRadius: sideBar.open ? "0 0 0 35px" : "0px 0px 35px 35px",
+          marginBottom: "8px"
         }}
       >
         <Stack direction="row" alignItems={"center"} spacing={isMobile ? 1 : 1}>
@@ -289,16 +307,20 @@ const Footer = () => {
             justifyContent="center"
           >
             <IconButton
-            // onClick={() => {
-            //   socket.emit("text_message", {
-            //     message: linkify(value),
-            //     conversation_id: room_id,
-            //     from: user_id,
-            //     to: current_conversation.user_id,
-            //     type: containsUrl(value) ? "Link" : "Text",
-            //   });
-            // }}
-            onClick={()=>{dispatch(AddDirectMessage(value))}}
+              // onClick={() => {
+              //   socket.emit("text_message", {
+              //     message: linkify(value),
+              //     conversation_id: room_id,
+              //     from: user_id,
+              //     to: current_conversation.user_id,
+              //     type: containsUrl(value) ? "Link" : "Text",
+              //   });
+              // }}
+              onClick={() => {
+                // dispatch(AddDirectMessage(value))
+                ws.send(value);
+                dispatch(FetchCurrentMessages({ chat_id: room_id }));
+              }}
             >
               <PaperPlaneRight
                 color={theme.palette.primary.main}
@@ -308,7 +330,7 @@ const Footer = () => {
           </Stack>
         </Stack>
       </Box>
-    </Box>
+    </Box >
   );
 };
 
