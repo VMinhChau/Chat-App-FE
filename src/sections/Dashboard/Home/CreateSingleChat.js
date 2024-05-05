@@ -9,15 +9,17 @@ import {
   Box,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { FetchAllUsers } from "../../redux/slices/app";
-import { UserElement } from "../../components/UserElement";
+import { FetchAllUsers } from "../../../redux/slices/app";
+import { UserElement } from "../../../components/UserElement";
 import {
   Search,
   SearchIconWrapper,
   StyledInputBase,
-} from "../../components/Search";
+} from "../../../components/Search";
 import { MagnifyingGlass, X } from "phosphor-react";
 import _ from "lodash";
+import { axiosAuth } from "../../../utils/axios";
+import { showSnackbar } from "../../../redux/slices/app";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -35,27 +37,41 @@ const CreateSingleChat = ({ open, handleClose }) => {
   const [searchItem, setSearchItem] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
 
-  const handleInputChange = (e) => {
-    const searchTerm = e.target.value;
-    setSearchItem(searchTerm);
-    if(searchTerm === "") {
-      setFilteredUsers([]);
-      return;
+  const handleInputChange = async (e) => {
+    console.log("Changing");
+    if (e.key === "Enter") {
+      console.log("Enter");
+      const email = e.target.value;
+      console.log(email);
+      setSearchItem(email);
+      await axiosAuth
+        .get("/v1/api/auth/find-user-by-email",
+          {
+            params: { email }
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+        .then(function (response) {
+          if (response.data.data !== "User not found") {
+            setFilteredUsers(response.data.data);
+          }
+          console.log(filteredUsers);
+        })
+        .catch(function (error) {
+          console.log(error);
+          dispatch(showSnackbar({ severity: "error", message: error.message }));
+        });
     }
-    const filteredEmail = all_users.filter((user) =>
-      user.email?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    const filteredName = all_users.filter((user) =>
-      user.name?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    const filteredItems = _.union(filteredEmail, filteredName);
-    setFilteredUsers(filteredItems);
   };
 
   const handleClear = () => {
     setSearchItem("");
     setFilteredUsers([]);
   };
+
   return (
     <Dialog
       fullWidth
@@ -75,7 +91,6 @@ const CreateSingleChat = ({ open, handleClose }) => {
               <MagnifyingGlass color="#637381" />
             </SearchIconWrapper>
             <StyledInputBase
-              // type="search"
               placeholder="Search user by name or email"
               endAdornment={
                 <IconButton
@@ -85,8 +100,8 @@ const CreateSingleChat = ({ open, handleClose }) => {
                   <X fontSize={"medium"} />
                 </IconButton>
               }
-              onChange={handleInputChange}
-              value={searchItem}
+              onKeyDown={handleInputChange}
+            // value={searchItem}
             />
           </Search>
         </Stack>

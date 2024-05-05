@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "../../utils/axios";
+import { axiosRoom } from "../../utils/axios";
 import { UsersList } from "../../data";
 // import S3 from "../../utils/s3";
 // import {v4} from 'uuid';
@@ -81,18 +81,18 @@ export const closeSnackBar = () => async (dispatch, getState) => {
 
 export const showSnackbar =
   ({ severity, message }) =>
-  async (dispatch, getState) => {
-    dispatch(
-      slice.actions.openSnackBar({
-        message,
-        severity,
-      })
-    );
+    async (dispatch, getState) => {
+      dispatch(
+        slice.actions.openSnackBar({
+          message,
+          severity,
+        })
+      );
 
-    setTimeout(() => {
-      dispatch(slice.actions.closeSnackBar());
-    }, 4000);
-  };
+      setTimeout(() => {
+        dispatch(slice.actions.closeSnackBar());
+      }, 6000);
+    };
 
 export function ToggleSidebar() {
   return async (dispatch, getState) => {
@@ -134,7 +134,7 @@ export function UpdateTab(tab) {
 // }
 export function FetchAllUsers() {
   return async (dispatch, getState) => {
-    // await axios
+    // await axiosRoom
     //   .get(
     //     "/user/get-all-verified-users",
 
@@ -152,7 +152,7 @@ export function FetchAllUsers() {
     //   .catch((err) => {
     //     console.log(err);
     //   });
-    dispatch(slice.actions.fetchAllUsers({ all_users: UsersList}))
+    dispatch(slice.actions.fetchAllUsers({ all_users: UsersList }))
   };
 }
 // export function FetchFriends() {
@@ -202,9 +202,9 @@ export function FetchAllUsers() {
 //   };
 // }
 
-export const SelectConversation = ({ room_id }) => {
+export const SelectConversation = ({ room_id, chat_type }) => {
   return async (dispatch, getState) => {
-    dispatch(slice.actions.selectConversation({ room_id }));
+    dispatch(slice.actions.selectConversation({ room_id, chat_type }));
   };
 };
 
@@ -226,21 +226,21 @@ export const SelectConversation = ({ room_id }) => {
 //       });
 //   };
 // };
-export const FetchUserProfile = () => {
-  return async (dispatch, getState) => {
-    axios
-      .get("/user/get-me", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getState().auth.token}`,
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        dispatch(slice.actions.fetchUser({ user: response.data.data }));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-};
+// export const FetchUserProfile = () => {
+//   return async (dispatch, getState) => {
+//     axios
+//       .get("/user/get-me", {
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer ${getState().auth.token}`,
+//         },
+//       })
+//       .then((response) => {
+//         console.log(response);
+//         dispatch(slice.actions.fetchUser({ user: response.data.data }));
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   };
+// };

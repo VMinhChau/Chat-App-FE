@@ -7,14 +7,17 @@ import {
   MenuItem,
   IconButton,
   Divider,
+  Avatar,
+  Tooltip
 } from "@mui/material";
 import { useTheme, alpha } from "@mui/material/styles";
 import { DotsThreeVertical, DownloadSimple, Image } from "phosphor-react";
-import { Message_options } from "../../data";
+import { Message_options } from "../../../data";
 import { Link } from "react-router-dom";
-import truncateString from "../../utils/truncate";
+import truncateString from "../../../utils/truncate";
 // import { LinkPreview } from "@dhaiwat10/react-link-preview";
 import Embed from "react-embed";
+import moment from 'moment';
 
 const MessageOption = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -56,59 +59,67 @@ const MessageOption = () => {
 
 const TextMsg = ({ el, menu }) => {
   const theme = useTheme();
+  const user_id = window.localStorage.getItem("user_id");
   return (
-    <Stack direction="row" justifyContent={el.incoming ? "start" : "end"}>
-      <Box
-        px={1.5}
-        py={1.5}
-        sx={{
-          backgroundColor: el.incoming
-            ? alpha(theme.palette.background.default, 1)
-            : theme.palette.primary.main,
-          borderRadius: 1.5,
-          width: "max-content",
-        }}
-      >
-        <Typography
-          variant="body2"
-          color={el.incoming ? theme.palette.text : "#fff"}
+    <Stack direction="row" gap={1} justifyContent={el.created_by !== user_id ? "start" : "end"}>
+      {el.created_by !== user_id && <Avatar alt={el.fullName} src={el.img} sx={{ width: "30px", height: "30px" }} />}
+      <Tooltip title={moment(moment.utc(el.created_at)).local().format("ddd hh:mm A")}>
+        <Box
+          px={1.5}
+          py={0.75}
+          sx={{
+            backgroundColor: el.created_by !== user_id
+              ? alpha(theme.palette.background.default, 1)
+              : theme.palette.primary.main,
+            borderRadius: 1.5,
+            width: "max-content",
+            flexDirection: "row",
+            maxWidth: "350px"
+          }}
         >
-          {el.message}
-        </Typography>
-      </Box>
+          <Typography
+            variant="body2"
+            color={el.created_by !== user_id ? theme.palette.text : "#fff"}
+            sx={{
+              flexWrap: 'wrap',
+              wordWrap: 'break-word'
+            }}
+          >
+            {el.message}
+          </Typography>
+        </Box>
+      </Tooltip>
       {menu && <MessageOption />}
     </Stack>
   );
 };
+
 const MediaMsg = ({ el, menu }) => {
   const theme = useTheme();
+  const user_id = window.localStorage.getItem("user_id");
   return (
-    <Stack direction="row" justifyContent={el.incoming ? "start" : "end"}>
-      <Box
-        px={1.5}
-        py={1.5}
-        sx={{
-          backgroundColor: el.incoming
-            ? alpha(theme.palette.background.default, 1)
-            : theme.palette.primary.main,
-          borderRadius: 1.5,
-          width: "max-content",
-        }}
-      >
-        <Stack spacing={1}>
-          <img
-            src={el.img}
-            alt={el.message}
-            style={{ maxHeight: 210, borderRadius: "10px" }}
-          />
-          <Typography
-            variant="body2"
-            color={el.incoming ? theme.palette.text : "#fff"}
-          >
-            {el.message}
-          </Typography>
-        </Stack>
-      </Box>
+    <Stack direction="row" justifyContent={el.created_by !== user_id ? "start" : "end"}>
+      {el.created_by !== user_id && <Avatar alt={el.fullName} src={el.img} sx={{ width: "30px", height: "30px" }} />}
+      <Tooltip title={moment(moment.utc(el.created_at)).local().format("ddd hh:mm A")}>
+        <Box
+          px={0.75}
+          py={0.75}
+          sx={{
+            backgroundColor: el.created_by !== user_id
+              ? alpha(theme.palette.background.default, 1)
+              : theme.palette.primary.main,
+            borderRadius: 1.5,
+            width: "max-content",
+          }}
+        >
+          <Stack spacing={1}>
+            <img
+              src={el.message}
+              style={{ maxHeight: 210, borderRadius: "10px" }}
+            />
+          </Stack>
+        </Box>
+      </Tooltip>
       {menu && <MessageOption />}
     </Stack>
   );

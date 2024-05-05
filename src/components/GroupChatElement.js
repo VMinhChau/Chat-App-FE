@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Badge,
@@ -7,12 +7,22 @@ import {
   Typography,
   IconButton,
   AvatarGroup,
+  Menu,
+  MenuItem,
+  ListItemText,
+  ListItemIcon,
+  Button,
 } from "@mui/material";
+import {
+  Trash,
+} from "phosphor-react";
 import { styled, useTheme, alpha } from "@mui/material/styles";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SelectConversation } from "../redux/slices/app";
+import { FetchMembersGroup, FetchCurrentGroupConversation, FetchCurrentMessages } from "../redux/slices/conversation";
 import { DotsThree } from "phosphor-react";
+import DeleteChatDialog from "../sections/Dashboard/Home/DeleteChatDialog";
 import classess from "../css/ChatElement.module.css"
 
 
@@ -55,25 +65,48 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-const ChatElement = (el) => {
+const GroupChatElement = (el) => {
   const dispatch = useDispatch();
   const { room_id } = useSelector((state) => state.app);
   const selectedChatId = room_id?.toString();
-  // console.log(room_id);
+  // console.log(el);
 
-  let isSelected = +selectedChatId === el.id;
+  let isSelected = +selectedChatId === el.roomId;
 
   if (!selectedChatId) {
     isSelected = false;
   }
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event, delete_id) => {
+    console.log("child")
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+    // setOpen(member_id);
+    setDeleteId(delete_id);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+    // setOpen(null);
+  };
+
+  const [openDelete, setOpenDelete] = useState(false);
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
+  const [delete_id, setDeleteId] = useState(null);
+
   const theme = useTheme();
 
   return (
-    <Badge className={classess.c_elementcustom}  color="primary" >
+    <Badge className={classess.c_elementcustom} color="primary" >
       <StyledChatBox
-        onClick={() => {
-          dispatch(SelectConversation({ room_id: el.id }));
+        onClick={(e) => {
+          console.log("par")
+          dispatch(SelectConversation({ room_id: el.roomId, chat_type: "groupchat" }));
+          dispatch(FetchCurrentGroupConversation(el.roomId));
+          dispatch(FetchMembersGroup(el.roomId));
         }}
         sx={{
           width: "100%",
@@ -175,25 +208,58 @@ const ChatElement = (el) => {
             )}
             <Stack spacing={0.3}>
               <Typography variant="subtitle2">
-                {el.name}
+                {el.title}
               </Typography>
               <Typography variant="caption">
-                {truncateText(el.msg, 20)}
+                {truncateText(el.description, 20)}
               </Typography>
             </Stack>
           </Stack>
           <Stack alignItems={"end"}>
-            <IconButton size="small" p={1}>
+            <IconButton size="small" p={1} onClick={(e) => {
+              handleClick(e, el.roomId);
+            }}>
               <DotsThree fontSize="medium" />
             </IconButton>
             <Typography sx={{ fontWeight: 600 }} variant="caption">
               {el.time}
             </Typography>
           </Stack>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+          >
+            <Button
+              onClick={() => {
+                setOpenDelete(true);
+              }}
+              fullWidth
+              startIcon={<Trash />}
+            >
+              Delete
+            </Button>
+          </Menu>
+          {openDelete && (
+            <DeleteChatDialog open={openDelete} handleClose={handleCloseDelete} delete_id={delete_id} />
+          )}
         </Stack>
-      </StyledChatBox>
-    </Badge>
+      </StyledChatBox >
+    </Badge >
+
   );
 };
 
-export default ChatElement;
+export default GroupChatElement;

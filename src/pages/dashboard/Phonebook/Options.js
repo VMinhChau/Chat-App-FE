@@ -18,41 +18,41 @@ import { useTheme } from "@mui/material/styles";
 import useResponsive from "../../../hooks/useResponsive";
 import BottomNav from "../../../layouts/dashboard/BottomNav";
 import { ChatList } from "../../../data";
-import ChatElement from "../../../components/ChatElement";
+import GroupChatElement from "../../../components/GroupChatElement";
 // import Friends from "../../../sections/Dashboard/Friends";
 // import { socket } from "../../socket";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  FetchDirectConversations,
+  FetchGroupConversations,
   SetCurrentConversation,
 } from "../../../redux/slices/conversation";
 import { UpdateTab } from "../../../redux/slices/app";
 import { useNavigate } from "react-router-dom";
 
 import {
-    Search,
-    SearchIconWrapper,
-    StyledInputBase,
-  } from "../../../components/Search";
+  Search,
+  SearchIconWrapper,
+  StyledInputBase,
+} from "../../../components/Search";
 
-import { Phone_Menu } from "../../../data";  
+import { Phone_Menu } from "../../../data";
 
 
 
 const user_id = window.localStorage.getItem("user_id");
 
 const getPath = (index) => {
-    switch (index) {
-      case 0:
-        return "/phonebook/contact/";
-  
-      case 1:
-        return "/phonebook/group/";
-  
-      default:
-        break;
-    }
-  };
+  switch (index) {
+    case 0:
+      return "/phonebook/contact/";
+
+    case 1:
+      return "/phonebook/group/";
+
+    default:
+      break;
+  }
+};
 
 const Options = () => {
   const theme = useTheme();
@@ -65,11 +65,11 @@ const Options = () => {
   );
 
   useEffect(() => {
-  //   socket.emit("get_direct_conversations", { user_id }, (data) => {
-  //     console.log(data); // this data is the list of conversations
-  //     // dispatch action
+    //   socket.emit("get_direct_conversations", { user_id }, (data) => {
+    //     console.log(data); // this data is the list of conversations
+    //     // dispatch action
 
-      dispatch(FetchDirectConversations({ conversations: ChatList }));
+    dispatch(FetchGroupConversations({ conversations: ChatList }));
     // });
   }, []);
 
@@ -81,14 +81,14 @@ const Options = () => {
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
-  
+
   const handleChangeTab = (index) => {
     dispatch(UpdateTab({ tab: index }));
     navigate(getPath(index));
   };
 
   const navigate = useNavigate();
-  
+
 
   return (
     <>
@@ -107,69 +107,69 @@ const Options = () => {
         }}
       >
         <Stack p={1.3} spacing={2} sx={{ maxHeight: "97vh" }}>
-            <Stack sx={{ width: "100%" }}>
-                <Search>
-                    <SearchIconWrapper>
-                    <MagnifyingGlass color="#709CE6" />
-                    </SearchIconWrapper>
-                    <StyledInputBase
-                    placeholder="Search…"
-                    inputProps={{ "aria-label": "search" }}
-                    />
-                </Search>
-            </Stack>
+          <Stack sx={{ width: "100%" }}>
+            <Search>
+              <SearchIconWrapper>
+                <MagnifyingGlass color="#709CE6" />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ "aria-label": "search" }}
+              />
+            </Search>
+          </Stack>
         </Stack>
         <Stack
-            direction="row"
-            alignItems="center"
-            spacing={1}
-            onClick={() => {
+          direction="row"
+          alignItems="center"
+          spacing={1}
+          onClick={() => {
             // handleChangeTab(el.index);
-            }}
+          }}
         >
-            <Box
-                sx={{
-                    width: "40px",
-                    height: "40px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}
-                >
-                {Phone_Menu[0].icon}
-                </Box>
-            <Typography
+          <Box
+            sx={{
+              width: "40px",
+              height: "40px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {Phone_Menu[0].icon}
+          </Box>
+          <Typography
             variant="subtitle1"
             color={theme.palette.primary.main}
-            >
+          >
             Contact list
-            </Typography>
+          </Typography>
         </Stack>
         <Stack
-            direction="row"
-            alignItems="center"
-            spacing={1}
-            onClick={() => {
+          direction="row"
+          alignItems="center"
+          spacing={1}
+          onClick={() => {
             // handleChangeTab(el.index);
-            }}
+          }}
         >
-            <Box
-                sx={{
-                    width: "40px",
-                    height: "40px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}
-                >
-                {Phone_Menu[0].icon}
-                </Box>
-            <Typography
+          <Box
+            sx={{
+              width: "40px",
+              height: "40px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {Phone_Menu[0].icon}
+          </Box>
+          <Typography
             variant="subtitle1"
             color={theme.palette.primary.main}
-            >
+          >
             Group list
-            </Typography>
+          </Typography>
         </Stack>
       </Box>
     </>

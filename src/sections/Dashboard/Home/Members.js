@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import {
   Box,
@@ -14,14 +14,15 @@ import {
   styled,
 } from "@mui/material";
 import { ArrowLeft, DotsThree } from "phosphor-react";
-import useResponsive from "../../hooks/useResponsive";
+import useResponsive from "../../../hooks/useResponsive";
 import { useDispatch, useSelector } from "react-redux";
-import { UpdateSidebarType } from "../../redux/slices/app";
-import { ReactComponent as AddIcon } from "../../assets/images/home/add_icon.svg";
-import { ReactComponent as LeaveIcon } from "../../assets/images/home/leave_icon.svg";
-import { ReactComponent as ChatIcon } from "../../assets/images/home/chat_icon.svg";
-import { FetchMembersGroup } from "../../redux/slices/conversation";
-import { MembersList } from "../../data";
+import { UpdateSidebarType } from "../../../redux/slices/app";
+import { ReactComponent as AddIcon } from "../../../assets/images/home/add_icon.svg";
+import { ReactComponent as LeaveIcon } from "../../../assets/images/home/leave_icon.svg";
+import { ReactComponent as ChatIcon } from "../../../assets/images/home/chat_icon.svg";
+import { FetchMembersGroup } from "../../../redux/slices/conversation";
+import AddMembers from "./AddMembers";
+import { MembersList } from "../../../data";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -81,10 +82,11 @@ const Members = (props) => {
 
   useEffect(() => {
     dispatch(FetchMembersGroup(room_id));
-  });
+  }, []);
 
   const { members } = useSelector((state) => state.conversation.group_chat);
-  console.log(members);
+
+  const [openAddMembers, setOpenAddMembers] = useState(false);
 
   return (
     <Box
@@ -116,7 +118,6 @@ const Members = (props) => {
           >
             <IconButton
               size="medium"
-              flexGrow="1"
               onClick={() => {
                 dispatch(UpdateSidebarType("CONTACT"));
               }}
@@ -141,18 +142,17 @@ const Members = (props) => {
             </Typography>
             <IconButton
               size="medium"
-              flexGrow="1"
               sx={{
                 backgroundColor: `${theme.palette.primary.main}!important`,
               }}
               onClick={() => {
-                dispatch(UpdateSidebarType("CONTACT"));
+                setOpenAddMembers(true);
               }}
             >
               <AddIcon />
             </IconButton>
           </Stack>
-          {members.map((member, idx) => {
+          {members && members?.map((member, idx) => {
             return (
               <Stack
                 direction="row"
@@ -161,7 +161,7 @@ const Members = (props) => {
                 key={idx}
               >
                 <Stack direction="row" alignItems="center" gap={1.5}>
-                  {member.online ? (
+                  {member.isActive ? (
                     <StyledBadge
                       overlap="circular"
                       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -172,7 +172,7 @@ const Members = (props) => {
                   ) : (
                     <Avatar></Avatar>
                   )}
-                  <Typography variant="body1">{member.name}</Typography>
+                  <Typography variant="body1">{member.fullName}</Typography>
                 </Stack>
                 <DotsThree
                   size={20}
@@ -209,12 +209,12 @@ const Members = (props) => {
                       <ListItemText>Leave group</ListItemText>
                     </MenuItem>
                   ) : (
-                  <MenuItem p={1}>
-                    <ListItemIcon sx={{ minWidth: "30px!important" }}>
-                      <ChatIcon />
-                    </ListItemIcon>
-                    <ListItemText>Chat</ListItemText>
-                  </MenuItem>
+                    <MenuItem p={1}>
+                      <ListItemIcon sx={{ minWidth: "30px!important" }}>
+                        <ChatIcon />
+                      </ListItemIcon>
+                      <ListItemText>Chat</ListItemText>
+                    </MenuItem>
                   )}
                 </Menu>
               </Stack>
@@ -222,6 +222,9 @@ const Members = (props) => {
           })}
         </Stack>
       </Stack>
+      {openAddMembers && (
+        <AddMembers open={openAddMembers} handleClose={() => { setOpenAddMembers(false) }} />
+      )}
     </Box>
   );
 };

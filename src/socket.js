@@ -1,12 +1,14 @@
-import io from "socket.io-client"; // Add this
+import io from "socket.io-client";
 
-let socket;
+let ws;
 
-// const connectSocket = (user_id) => {
-//   socket = io("http://locahost:3001", {
-//     query: `user_id=${user_id}`,
-//   });
-// } // Add this -- our server will run on port 4000, so we connect to it from here
-// console.log(connectSocket);
+const connectSocket = (chat_id, user_id) => {
+  // socket = new WebSocket("ws://127.0.0.1:8000/api/v1/websocket/");
+  // socket = io({
+  //     // transports: ["websocket"],
+  //     path: "http://localhost:8000/api/v1/chat/"
+  //    });
+  ws = new WebSocket(`ws://localhost:8000/api/v1/websocket/privatechat/${chat_id}/${user_id}`);
+}
 
-// export {socket, connectSocket};
+export { ws, connectSocket };

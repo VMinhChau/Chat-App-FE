@@ -5,7 +5,7 @@ import { ArrowLeft } from "phosphor-react";
 import useResponsive from "../../hooks/useResponsive";
 import { useDispatch } from "react-redux";
 import { UpdateSidebarType } from "../../redux/slices/app";
-import { Conversation } from "../../pages/dashboard/Conversation";
+import { Conversation } from "../../pages/dashboard/Home/Conversation";
 
 const StarredMessages = () => {
   const dispatch = useDispatch();
@@ -47,7 +47,7 @@ const StarredMessages = () => {
           sx={{
             height: "100%",
             position: "relative",
-            flexGrow: 1,
+            // flexGrow: 1,
             overflow: "scroll",
           }}
           spacing={3}

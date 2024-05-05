@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 // import { StartAudioCall } from "../../redux/slices/audioCall";
 // import { StartVideoCall } from "../../redux/slices/videoCall";
 import { SetCurrentConversation } from "../../redux/slices/conversation";
-import {ReactComponent as InfoButton} from "../../assets/images/home/info_button.svg"
+import { ReactComponent as InfoButton } from "../../assets/images/home/info_button.svg"
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -58,22 +58,19 @@ const ChatHeader = () => {
   const isMobile = useResponsive("between", "md", "xs", "sm");
   const theme = useTheme();
 
-  const { conversations } = useSelector(
-    (state) => state.conversation.direct_chat
-  );
-  const { room_id, sideBar } = useSelector((state) => state.app);
-  useEffect(() => {
-    const current = conversations.find((el) => el?.id === room_id);
-    dispatch(SetCurrentConversation(current));
-  });
+  // const { conversations } = useSelector(
+  //   (state) => state.conversation.direct_chat
+  // );
+  const { sideBar, chat_type } = useSelector((state) => state.app);
   const { current_conversation } = useSelector(
     (state) => state.conversation.direct_chat
   );
-  
+  console.log(chat_type);
+
   return (
     <>
       <Box
-        p={1.5}
+        p={1.1}
         width={"100%"}
         sx={{
           backgroundColor:
@@ -81,8 +78,9 @@ const ChatHeader = () => {
               ? "#FFFFFF"
               : theme.palette.background,
           boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
-          borderRadius: sideBar.open? "35px 0 0 0" :"35px 35px 0px 0px",
+          borderRadius: sideBar.open ? "35px 0 0 0" : "35px 35px 0px 0px",
           borderBottom: "2px solid #ED711A",
+          marginTop: "8px"
         }}
       >
         <Stack
@@ -107,7 +105,7 @@ const ChatHeader = () => {
                 }}
                 variant={current_conversation?.online ? "dot" : ""}
               >
-                {current_conversation?.chat_type === "group" ? (
+                {!(chat_type === "privatechat") ? (
                   <AvatarGroup
                     max={2}
                     total={2}
@@ -124,7 +122,7 @@ const ChatHeader = () => {
                     <AvatarGroup
                       sx={{ marginBottom: "-4px" }}
                       max={1}
-                      total={current_conversation?.img.length - 2}
+                      total={current_conversation?.img?.length - 2}
                       cascade="above"
                       componentsProps={{
                         additionalAvatar: {
@@ -134,11 +132,11 @@ const ChatHeader = () => {
                         },
                       }}
                     >
-                      <Avatar alt={current_conversation?.name} src={current_conversation?.img[0]} />
+                      <Avatar alt={current_conversation?.name} src={current_conversation?.img?.[0]} />
                     </AvatarGroup>
                     <AvatarGroup sx={{ marginTop: "-4px" }} max={2} total={2}>
-                      <Avatar alt={current_conversation?.name} src={current_conversation?.img[1]} />
-                      <Avatar alt={current_conversation?.name} src={current_conversation?.img[2]} />
+                      <Avatar alt={current_conversation?.name} src={current_conversation?.img?.[1]} />
+                      <Avatar alt={current_conversation?.name} src={current_conversation?.img?.[2]} />
                     </AvatarGroup>
                   </AvatarGroup>
                 ) : (
@@ -148,7 +146,9 @@ const ChatHeader = () => {
             </Box>
             <Stack spacing={0.2}>
               <Typography variant="subtitle2">
-                {current_conversation?.chat_type === "group" ? current_conversation?.name : current_conversation?.name}
+                {!(chat_type === "privatechat")
+                  ? current_conversation?.title
+                  : current_conversation?.fullName}
               </Typography>
               <Typography variant="caption">
                 {current_conversation?.online ? "Online" : "Offline"}
@@ -185,7 +185,7 @@ const ChatHeader = () => {
                 dispatch(ToggleSidebar());
               }}
             >
-              <Info size={26}/>
+              <Info size={26} />
             </IconButton>
           </Stack>
         </Stack>

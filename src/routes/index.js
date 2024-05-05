@@ -23,7 +23,7 @@ export default function Router() {
       path: "/auth",
       element: <AuthLayout />,
       children: [
-        {path: "", element: <TopPage />},
+        { path: "", element: <TopPage /> },
         { path: "login", element: <LoginPage /> },
         { path: "signup", element: <SignUpPage /> },
         { path: "reset-password", element: <ResetPasswordPage /> },
@@ -33,9 +33,9 @@ export default function Router() {
     },
     {
       path: "/",
-      element: <DashboardLayout/>,
+      element: <DashboardLayout />,
       children: [
-    //     { element: <Navigate to={DEFAULT_PATH} replace />, index: true },
+        //     { element: <Navigate to={DEFAULT_PATH} replace />, index: true },
         { path: "home", element: <GeneralApp /> },
         // { path: "group", element: <Group /> },
         { path: "settings", element: <Settings /> },
@@ -44,12 +44,12 @@ export default function Router() {
         { path: "chats", element: <Chats /> },
         { path: "phonebook", element: <Phonebook /> },
         // { path: "contact", element: <Contact /> },
-    //     { path: "profile", element: <Profile /> },
+        //     { path: "profile", element: <Profile /> },
 
-    //     // {path: "call", element: <CallPage />},
-        
-    //     { path: "404", element: <Page404 /> },
-    //     { path: "*", element: <Navigate to="/404" replace /> },
+        //     // {path: "call", element: <CallPage />},
+
+        //     { path: "404", element: <Page404 /> },
+        //     { path: "*", element: <Navigate to="/404" replace /> },
       ],
     },
 
@@ -61,9 +61,9 @@ const GeneralApp = Loadable(
   lazy(() => import("../pages/dashboard/GeneralApp"))
 );
 const Conversation = Loadable(
-  lazy(() => import("../pages/dashboard/Conversation"))
+  lazy(() => import("../pages/dashboard/Home/Conversation"))
 );
-const Chats = Loadable(lazy(() => import("../pages/dashboard/Chats")));
+const Chats = Loadable(lazy(() => import("../pages/dashboard/Home/Chats")));
 // const Group = Loadable(lazy(() => import("../pages/dashboard/Group")));
 
 const Phonebook = Loadable(
