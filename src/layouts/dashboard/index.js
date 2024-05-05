@@ -36,24 +36,6 @@ const DashboardLayout = () => {
         )}
         <Outlet />
       </Stack>
-      {/* {open_audio_notification_dialog && (
-        <AudioCallNotification open={open_audio_notification_dialog} />
-      )}
-      {open_audio_dialog && (
-        <AudioCallDialog
-          open={open_audio_dialog}
-          handleClose={handleCloseAudioDialog}
-        />
-      )}
-      {open_video_notification_dialog && (
-        <VideoCallNotification open={open_video_notification_dialog} />
-      )}
-      {open_video_dialog && (
-        <VideoCallDialog
-          open={open_video_dialog}
-          handleClose={handleCloseVideoDialog}
-        />
-      )} */}
     </>
   );
 };

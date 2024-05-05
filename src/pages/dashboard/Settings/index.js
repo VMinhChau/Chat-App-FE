@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -13,10 +13,6 @@ import {
   Bell,
   Lock,
   Key,
-  PencilCircle,
-  Image,
-  Note,
-  Keyboard,
   Info,
 } from "phosphor-react";
 
@@ -24,47 +20,36 @@ import { useTheme } from "@mui/material/styles";
 import { faker } from "@faker-js/faker";
 import BackgroundHome from "../../../assets/images/auth/bg-auth.jpg";
 import SeetingProfile from "./SettingProfile";
+import { useDispatch, useSelector } from "react-redux";
+import { FetchUserProfile } from "../../../redux/slices/app";
+
+const truncateText = (string, n) => {
+  return string?.length > n ? `${string?.slice(0, n)}...` : string;
+};
 
 const Settings = () => {
   const theme = useTheme();
-
-  const [openTheme, setOpenTheme] = useState(false);
-
-  const handleOpenTheme = () => {
-    setOpenTheme(true);
-  };
-
-  const handleCloseTheme = () => {
-    setOpenTheme(false);
-  };
-  const [openShortcuts, setOpenShortcuts] = useState(false);
-
-  const handleOpenShortcuts = () => {
-    setOpenShortcuts(true);
-  };
-
-  const handleCloseShortcuts = () => {
-    setOpenShortcuts(false);
-  };
-
+  const dispatch = useDispatch();
+  const { user_id } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.app);
   const list = [
     {
       key: 0,
       icon: <Bell size={20} />,
       title: "Notifications",
-      onclick: () => {},
+      onclick: () => { },
     },
     {
       key: 1,
       icon: <Lock size={20} />,
       title: "Privacy",
-      onclick: () => {},
+      onclick: () => { },
     },
     {
       key: 2,
       icon: <Key size={20} />,
       title: "Security",
-      onclick: () => {},
+      onclick: () => { },
     },
     // {
     //   key: 3,
@@ -94,18 +79,19 @@ const Settings = () => {
       key: 7,
       icon: <Info size={20} />,
       title: "Help",
-      onclick: () => {},
+      onclick: () => { },
     },
   ];
-  
-  const avtImg  = faker.image.avatar();
-  const profileName = `${faker.name.firstName()} ${faker.name.lastName()}`;
+
+  useEffect(() => {
+    dispatch(FetchUserProfile(user_id));
+  }, []);
 
   return (
     <>
-      <Stack 
-        direction="row" 
-        sx={{ 
+      <Stack
+        direction="row"
+        sx={{
           width: "100%",
           backgroundImage: `url(${BackgroundHome})`,
           padding: "8px",
@@ -115,7 +101,6 @@ const Settings = () => {
         {/* LeftPane */}
         <Box
           sx={{
-            overflowY: "scroll",
             height: "100%",
             width: 320,
             boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
@@ -127,8 +112,8 @@ const Settings = () => {
             borderRadius: "35px",
           }}
         >
-          <Stack 
-            p={4} 
+          <Stack
+            p={4}
             spacing={5}
             sx={{
               width: "100%",
@@ -148,12 +133,12 @@ const Settings = () => {
             {/* Profile */}
             <Stack direction="row" spacing={3}>
               <Avatar
-                src={avtImg}
+                src={user?.img}
                 sx={{ height: 56, width: 56 }}
               />
               <Stack spacing={0.5}>
-                <Typography variant="article">{profileName}</Typography>
-                <Typography variant="body2">{faker.random.words()}</Typography>
+                <Typography variant="article">{user.fullName}</Typography>
+                <Typography variant="body2">{truncateText(user.email, 30)}</Typography>
               </Stack>
             </Stack>
             {/* List */}
@@ -186,12 +171,12 @@ const Settings = () => {
             backgroundColor:
               theme.palette.mode === "light"
                 ? "#F8FAFF"
-                : theme.palette.background.paper, 
-          borderRadius: "35px",
-          overflow: "hidden"
+                : theme.palette.background.paper,
+            borderRadius: "35px",
+            overflow: "hidden"
           }}
         >
-          <SeetingProfile avtImg={avtImg} profileName={profileName} />
+          <SeetingProfile avtImg={user?.img} profileName={user.fullName} email={user.email} />
         </Box>
       </Stack>
     </>

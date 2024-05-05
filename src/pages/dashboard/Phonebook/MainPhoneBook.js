@@ -5,20 +5,24 @@ import {
     IconButton,
     Stack,
     Typography,
-  } from "@mui/material";
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 import useResponsive from "../../../hooks/useResponsive";
 import classCss from "../../../css/PhoneBook/commonPhoneBook.module.css"
 import { useTheme } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
-import PhoneBookElement from "../../../components/PhoneBookElement.js";
+import PhoneBookContactElement from "../../../components/PhoneBookContactElement.js";
+import PhoneBookGroupElement from "../../../components/PhoneBookGroupElement.js";
 
-function MainPhoneBook() {
+function MainPhoneBook({ index }) {
     const isDesktop = useResponsive("up", "md");
     const theme = useTheme();
-    const { conversations } = useSelector(
+    const { private_conversations } = useSelector(
         (state) => state.conversation.direct_chat
+    );
+    const { group_conversations } = useSelector(
+        (state) => state.conversation.group_chat
     );
     return (
         <>
@@ -35,7 +39,9 @@ function MainPhoneBook() {
                 }}
             >
                 <div className={classCss.phoneBook_ttl}>
-                    <p className={classCss.txt}>Contact list (2)</p>
+                    {index === 0 ? (
+                        <div className={classCss.txt}>Contact list ({private_conversations?.length})</div>
+                    ) : (< div className={classCss.txt}>Group list ({group_conversations?.length})</div>)}
                 </div>
                 <div className={classCss.phoneBook_ctn}>
                     <div className={classCss.item_avt}>
@@ -43,16 +49,18 @@ function MainPhoneBook() {
                             sx={{ flexGrow: 1, height: "100%", overflow: "scroll" }}
                         >
                             <Stack spacing={0.8} width="100%">
-                                {conversations.map((el, idx) => {
-                                    return <PhoneBookElement {...el} />;
-                                })}
+                                {index === 0 ? (
+                                    private_conversations?.map((el, idx) => {
+                                        return <PhoneBookContactElement {...el} />;
+                                    })
+                                ) : (group_conversations?.map((el, idx) => {
+                                    return <PhoneBookGroupElement {...el} />;
+                                }))}
                             </Stack>
-                            {/* </SimpleBarStyle> */}
                         </Stack>
                     </div>
                 </div>
-
-            </Box>
+            </Box >
         </>
     );
 }

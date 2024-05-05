@@ -26,7 +26,10 @@ export default function AuthLoginForm() {
     email: Yup.string()
       .required("Email is required")
       .email("Email must be a valid email address"),
-    password: Yup.string().required("Password is required"),
+    password: Yup.string()
+      // .min(6, 'Password must be at least 6 characters')
+      // .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})/, 'Your password must be at least 6 characters and should include a combination of numbers, letters and special characters')
+      .required("Password is required"),
   });
 
   const defaultValues = {

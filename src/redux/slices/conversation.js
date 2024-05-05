@@ -145,7 +145,7 @@ export const FetchPrivateConversations = ({ user_id }) => {
       )
       .then((response) => {
         const users = response.data.data;
-        const result = private_conversations.map((obj, i) => ({ ...obj, ...users[i] }));
+        const result = private_conversations?.map((obj, i) => ({ ...obj, ...users[i] }));
         console.log(result);
         dispatch(
           slice.actions.fetchPrivateConversations({ private_conversations: result })

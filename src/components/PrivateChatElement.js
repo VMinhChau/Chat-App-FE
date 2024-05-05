@@ -17,7 +17,6 @@ import {
   Trash,
 } from "phosphor-react";
 import { styled, useTheme, alpha } from "@mui/material/styles";
-import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SelectConversation } from "../redux/slices/app";
 import { FetchCurrentMessages, FetchCurrentPrivateConversation } from "../redux/slices/conversation";

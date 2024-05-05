@@ -1,11 +1,11 @@
 .phoneBook_ttl {
     border-bottom: solid 2px #ED711A;
-    padding: 10px 20px;
+    padding: 15px 15px 15px 15px; 
     .txt {
-        font-size: 18px;
-        font-weight: 800;
+        font-size: 1.25rem;
+        font-weight: 700;
     }
-}
+} 
 .phoneBook_ctn {
-    padding: 10px 20px;
+    padding: 1px 20px;
 }

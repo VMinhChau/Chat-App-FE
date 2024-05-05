@@ -26,9 +26,11 @@ export default function Router() {
         { path: "", element: <TopPage /> },
         { path: "login", element: <LoginPage /> },
         { path: "signup", element: <SignUpPage /> },
+        { path: "verification-notice", element: <VerificationNotice /> },
+        { path: "verify/:token", element: <EmailVerify /> },
         { path: "reset-password", element: <ResetPasswordPage /> },
         { path: "new-password", element: <NewPasswordPage /> },
-        {path: "verify", element: <VerifyPage /> },
+        { path: "verify", element: <VerifyPage /> },
       ],
     },
     {
@@ -37,17 +39,12 @@ export default function Router() {
       children: [
         //     { element: <Navigate to={DEFAULT_PATH} replace />, index: true },
         { path: "home", element: <GeneralApp /> },
-        // { path: "group", element: <Group /> },
         { path: "settings", element: <Settings /> },
-
         { path: "conversation", element: <Conversation /> },
         { path: "chats", element: <Chats /> },
         { path: "phonebook", element: <Phonebook /> },
         // { path: "contact", element: <Contact /> },
-        //     { path: "profile", element: <Profile /> },
-
-        //     // {path: "call", element: <CallPage />},
-
+        { path: "profile", element: <Profile /> },
         //     { path: "404", element: <Page404 /> },
         //     { path: "*", element: <Navigate to="/404" replace /> },
       ],
@@ -64,23 +61,18 @@ const Conversation = Loadable(
   lazy(() => import("../pages/dashboard/Home/Conversation"))
 );
 const Chats = Loadable(lazy(() => import("../pages/dashboard/Home/Chats")));
-// const Group = Loadable(lazy(() => import("../pages/dashboard/Group")));
 
 const Phonebook = Loadable(
   lazy(() => import("../pages/dashboard/Phonebook"))
 );
-
-const Settings = Loadable(
-  lazy(() => import("../pages/dashboard/Settings"))
-);
-// // const CallPage = Loadable(lazy(() => import("../pages/dashboard/Call")));
-// const Contact = Loadable(lazy(() => import("../sections/dashboard/Contact")));
 // const Page404 = Loadable(lazy(() => import("../pages/Page404")));
 
 const LoginPage = Loadable(lazy(() => import("../pages/auth/Login")));
 const VerifyPage = Loadable(lazy(() => import("../pages/auth/Verify")));
 const SignUpPage = Loadable(lazy(() => import("../pages/auth/SignUp")));
 const TopPage = Loadable(lazy(() => import("../pages/auth/Top")));
+const EmailVerify = Loadable(lazy(() => import("../pages/auth/EmailVerify")))
+const VerificationNotice = Loadable(lazy(() => import("../pages/auth/VerificationNotice")))
 const ResetPasswordPage = Loadable(
   lazy(() => import("../pages/auth/ResetPassword"))
 );
@@ -90,6 +82,9 @@ const NewPasswordPage = Loadable(
 
 // Settings
 // const Settings = Loadable(lazy(() => import("../pages/dashboard/Settings")));
-// const Profile = Loadable(
-//   lazy(() => import("../pages/dashboard/Settings/Profile"))
-// );
+const Settings = Loadable(
+  lazy(() => import("../pages/dashboard/Settings"))
+);
+const Profile = Loadable(
+  lazy(() => import("../pages/dashboard/Settings/Profile"))
+);

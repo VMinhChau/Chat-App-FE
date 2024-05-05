@@ -76,7 +76,7 @@ const ChatHeader = () => {
           backgroundColor:
             theme.palette.mode === "light"
               ? "#FFFFFF"
-              : theme.palette.background,
+              : theme.palette.background.paper,
           boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
           borderRadius: sideBar.open ? "35px 0 0 0" : "35px 35px 0px 0px",
           borderBottom: "2px solid #ED711A",

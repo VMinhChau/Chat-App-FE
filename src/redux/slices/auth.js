@@ -35,6 +35,7 @@ const slice = createSlice({
       state = undefined;
     },
     updateRegisterEmail(state, action) {
+      console.log(action.payload.email);
       state.email = action.payload.email;
     },
   },
@@ -47,7 +48,7 @@ export function NewPassword(formValues) {
   return async (dispatch, getState) => {
     dispatch(slice.actions.updateIsLoading({ isLoading: true, error: false }));
 
-    await axios
+    await axiosAuth
       .post(
         "/auth/reset-password",
         {
@@ -62,11 +63,11 @@ export function NewPassword(formValues) {
       .then(function (response) {
         console.log(response);
         dispatch(
-            slice.actions.logIn({
-              isLoggedIn: true,
-              token: response.data.token,
-            })
-          );
+          slice.actions.logIn({
+            isLoggedIn: true,
+            token: response.data.token,
+          })
+        );
         dispatch(
           showSnackbar({ severity: "success", message: response.data.message })
         );
@@ -88,7 +89,7 @@ export function ForgotPassword(formValues) {
   return async (dispatch, getState) => {
     dispatch(slice.actions.updateIsLoading({ isLoading: true, error: false }));
 
-    await axios
+    await axiosAuth
       .post(
         "/auth/forgot-password",
         {
@@ -156,7 +157,7 @@ export function LoginUser(formValues) {
           window.localStorage.setItem("user_id", response.data.data.userId);
           console.log(window.localStorage.getItem("user_id"))
           dispatch(
-            showSnackbar({ severity: "success", message: "Login successfully" })
+            showSnackbar({ severity: "success", message: "Đăng nhập thành công" })
           );
           dispatch(
             slice.actions.updateIsLoading({ isLoading: false, error: false })
@@ -170,13 +171,6 @@ export function LoginUser(formValues) {
           slice.actions.updateIsLoading({ isLoading: false, error: true })
         );
       });
-    // dispatch(
-    //   slice.actions.logIn({
-    //     isLoggedIn: true,
-    //     user_id: 0
-    //   })
-    // );
-    // dispatch(slice.actions.updateIsLoading({ isLoading: false, error: false }));
   };
 }
 
@@ -190,7 +184,7 @@ export function LogoutUser() {
 
 export function RegisterUser(formValues) {
   return async (dispatch, getState) => {
-    dispatch(slice.actions.updateIsLoading({ isLoading: false, error: false }));
+    dispatch(slice.actions.updateIsLoading({ isLoading: true, error: false }));
     console.log(formValues);
     const data = {
       email: formValues.email,
@@ -208,14 +202,16 @@ export function RegisterUser(formValues) {
         }
       )
       .then(function (response) {
-        console.log(response);
-        dispatch(
-          slice.actions.updateRegisterEmail({ email: formValues.email })
-        );
-
-        dispatch(
-          showSnackbar({ severity: "success", message: response.data.message })
-        );
+        console.log(response.data.data);
+        dispatch(slice.actions.updateRegisterEmail({ email: formValues.email }));
+        if (response.data.data === "I send you email to verify your email") {
+          window.setTimeout(function () {
+            window.location.href = "/auth/verification-notice"
+          }, 4000);
+        }
+        // dispatch(
+        //   showSnackbar({ severity: "success", message: response.data.data })
+        // );
         dispatch(
           slice.actions.updateIsLoading({ isLoading: false, error: false })
         );
@@ -227,11 +223,11 @@ export function RegisterUser(formValues) {
           slice.actions.updateIsLoading({ error: true, isLoading: false })
         );
       })
-      .finally(() => {
-        if (!getState().auth.error) {
-          window.location.href = "/auth/login";
-        }
-      });
+    // .finally(() => {
+    //   if (!getState().auth.error) {
+    //     window.location.href = "/auth/login";
+    //   }
+    // });
   };
 }
 

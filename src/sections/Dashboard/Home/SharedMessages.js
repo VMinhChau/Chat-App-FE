@@ -36,7 +36,7 @@ const Media = (props) => {
     <Box
       sx={{
         width: !isDesktop ? "100vw" : 300,
-        maxHeight: "100vh",
+        maxHeight: "97.7vh",
         margin: "8px 0 8px 0",
         borderLeft: "2px solid #ED711A",
         backgroundColor:
@@ -60,8 +60,7 @@ const Media = (props) => {
             direction="row"
             alignItems={"center"}
             // spacing={9}
-
-            sx={{ height: "100%", p: 1.63 }}
+            sx={{ height: "100%", p: 1.25 }}
           >
             <IconButton
               size="medium"

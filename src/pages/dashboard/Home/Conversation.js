@@ -82,7 +82,7 @@ const Conversation = ({ isMobile, menu }) => {
 
           //   default:
           //     return <TextMsg el={el} menu={menu} key={idx} />;
-          if (el.message.startsWith('data:image')) {
+          if (el.message?.startsWith('data:image')) {
             return (
               // Media Message
               <MediaMsg el={el} menu={menu} key={idx} />
@@ -118,7 +118,6 @@ const ChatComponent = () => {
   }, [current_messages]);
 
   return (
-    // <Stack direction={"row"}>
     <Stack
       height={"100%"}
       maxHeight={"100vh"}
@@ -138,10 +137,10 @@ const ChatComponent = () => {
           backgroundColor:
             theme.palette.mode === "light"
               ? "#F0F4FA"
-              : theme.palette.background,
+              : theme.palette.background.paper,
 
           boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
-          height: "80%"
+          height: "90%"
         }}
       >
         <SimpleBarStyle timeout={500} clickOnTrack={false}>

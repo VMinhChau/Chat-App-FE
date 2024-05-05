@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { axiosRoom } from "../../utils/axios";
+import { axiosAuth } from "../../utils/axios";
 import { UsersList } from "../../data";
 // import S3 from "../../utils/s3";
 // import {v4} from 'uuid';
@@ -29,9 +29,6 @@ const slice = createSlice({
   name: "app",
   initialState,
   reducers: {
-    fetchCallLogs(state, action) {
-      state.call_logs = action.payload.call_logs;
-    },
     fetchUser(state, action) {
       state.user = action.payload.user;
     },
@@ -155,52 +152,6 @@ export function FetchAllUsers() {
     dispatch(slice.actions.fetchAllUsers({ all_users: UsersList }))
   };
 }
-// export function FetchFriends() {
-//   return async (dispatch, getState) => {
-//     await axios
-//       .get(
-//         "/user/get-friends",
-
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//             Authorization: `Bearer ${getState().auth.token}`,
-//           },
-//         }
-//       )
-//       .then((response) => {
-//         console.log(response);
-//         dispatch(slice.actions.updateFriends({ friends: response.data.data }));
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   };
-// }
-// export function FetchFriendRequests() {
-//   return async (dispatch, getState) => {
-//     await axios
-//       .get(
-//         "/user/get-requests",
-
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//             Authorization: `Bearer ${getState().auth.token}`,
-//           },
-//         }
-//       )
-//       .then((response) => {
-//         console.log(response);
-//         dispatch(
-//           slice.actions.updateFriendRequests({ requests: response.data.data })
-//         );
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   };
-// }
 
 export const SelectConversation = ({ room_id, chat_type }) => {
   return async (dispatch, getState) => {
@@ -208,39 +159,23 @@ export const SelectConversation = ({ room_id, chat_type }) => {
   };
 };
 
-// export const FetchCallLogs = () => {
-//   return async (dispatch, getState) => {
-//     axios
-//       .get("/user/get-call-logs", {
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${getState().auth.token}`,
-//         },
-//       })
-//       .then((response) => {
-//         console.log(response);
-//         dispatch(slice.actions.fetchCallLogs({ call_logs: response.data.data }));
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   };
-// };
-// export const FetchUserProfile = () => {
-//   return async (dispatch, getState) => {
-//     axios
-//       .get("/user/get-me", {
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${getState().auth.token}`,
-//         },
-//       })
-//       .then((response) => {
-//         console.log(response);
-//         dispatch(slice.actions.fetchUser({ user: response.data.data }));
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   };
-// };
+export const FetchUserProfile = (user_id) => {
+  return async (dispatch, getState) => {
+    axiosAuth
+      .post("/v1/api/auth/user-infor", {
+        ids: [user_id]
+      },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getState().auth.token}`,
+          },
+        })
+      .then((response) => {
+        dispatch(slice.actions.fetchUser({ user: response.data.data[0] }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};

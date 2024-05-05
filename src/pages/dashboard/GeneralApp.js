@@ -37,17 +37,6 @@ const GeneralApp = () => {
           sx={{
             maxHeight: "100%",
             width: sideBar.open ? `54.5%` : "76.5%",
-            backgroundColor:
-              theme.palette.mode === "light"
-                ? "none"
-                : theme.palette.background.paper,
-            borderRadius: sideBar.open ? "35px 0 0 35px" : "35px 35px 35px 35px",
-            // borderBottom:
-            //   searchParams.get("type") === "individual-chat" &&
-            //   searchParams.get("id")
-            //     ? "0px"
-            //     : "6px solid #0162C4",
-            // margin: "8px 0px 8px 0px!important",
           }}
         >
           {room_id !== null ? (
