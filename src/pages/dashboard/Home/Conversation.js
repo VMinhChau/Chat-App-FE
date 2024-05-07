@@ -20,7 +20,6 @@ import {
   SetCurrentConversation,
 } from "../../../redux/slices/conversation";
 import Contact from "../../../sections/Dashboard/Home/Contact";
-import StarredMessages from "../../../sections/Dashboard/StarredMessages";
 import Media from "../../../sections/Dashboard/Home/SharedMessages";
 // import { socket } from "../../socket";
 
@@ -131,9 +130,7 @@ const ChatComponent = () => {
         width={"100%"}
         sx={{
           position: "relative",
-          // flexGrow: 1,
           overflow: "scroll",
-
           backgroundColor:
             theme.palette.mode === "light"
               ? "#F0F4FA"

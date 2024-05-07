@@ -38,6 +38,7 @@ const SideBar = () => {
   const dispatch = useDispatch();
 
   const { tab } = useSelector((state) => state.app);
+  console.log(tab);
 
   const navigate = useNavigate();
 
