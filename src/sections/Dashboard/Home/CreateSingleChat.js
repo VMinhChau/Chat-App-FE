@@ -38,7 +38,6 @@ const CreateSingleChat = ({ open, handleClose }) => {
   const [filteredUsers, setFilteredUsers] = useState([]);
 
   const handleInputChange = async (e) => {
-    console.log("Changing");
     if (e.key === "Enter") {
       console.log("Enter");
       const email = e.target.value;
@@ -105,12 +104,12 @@ const CreateSingleChat = ({ open, handleClose }) => {
             />
           </Search>
         </Stack>
-        {filteredUsers.length === 0 && searchItem ? (
+        {filteredUsers?.length === 0 && searchItem ? (
           <Box textAlign="center" p={2}>
             No users found
           </Box>
         ) : (
-          filteredUsers.map((el, idx) => {
+          filteredUsers?.map((el, idx) => {
             return <UserElement key={idx} {...el} />;
           })
         )}

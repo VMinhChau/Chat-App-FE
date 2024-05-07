@@ -26,10 +26,10 @@ const slice = createSlice({
     // updateDirectConversation(state, action) {
     //   const this_conversation = action.payload.conversation;
     // },
-    addDirectConversation(state, action) {
-      state.direct_chat.conversations.push(action.payload);
-      state.direct_chat.current_conversation = action.payload;
-    },
+    // addDirectConversation(state, action) {
+    //   state.direct_chat.conversations.push(action.payload);
+    //   state.direct_chat.current_conversation = action.payload;
+    // },
 
     fetchCurrentMessages(state, action) {
       const messages = action.payload;
@@ -254,6 +254,37 @@ export const AddGroupConversation = (formValues) => {
           showSnackbar({ severity: "success", message: response.data.data })
         );
         dispatch(FetchGroupConversations({ user_id: user_id }))
+      })
+      .catch(function (error) {
+        console.log(error);
+        dispatch(showSnackbar({ severity: "error", message: error.message }));
+      });
+  };
+}
+
+export const EditGroupConversation = (formValues, group_id) => {
+  const data = {
+    title: formValues.title,
+    description: formValues.description,
+  }
+  return async (dispatch, getState) => {
+    await axiosRoom
+      .put(
+        `/v1/api/room/update/${group_id}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then(function (response) {
+        console.log(response);
+        dispatch(
+          showSnackbar({ severity: "success", message: response.data.data })
+        );
+        dispatch(FetchGroupConversations({ user_id: user_id }));
+        dispatch(FetchCurrentGroupConversation(group_id));
       })
       .catch(function (error) {
         console.log(error);
