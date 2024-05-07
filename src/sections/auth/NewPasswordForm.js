@@ -22,17 +22,20 @@ export default function NewPasswordForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const VerifyCodeSchema = Yup.object().shape({
-    
-    password: Yup.string()
+    oldPassword: Yup.string()
+      .min(6, 'Password must be at least 6 characters')
+      .required('Current password is required'),
+    newPassword: Yup.string()
       .min(6, 'Password must be at least 6 characters')
       .required('Password is required'),
     passwordConfirm: Yup.string()
       .required('Confirm password is required')
-      .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+      .oneOf([Yup.ref('newPassword'), null], 'Passwords must match'),
   });
 
   const defaultValues = {
-    password: '',
+    oldPassword: '',
+    newPassword: '',
     passwordConfirm: '',
   };
 
@@ -48,52 +51,67 @@ export default function NewPasswordForm() {
 
   const onSubmit = async (data) => {
     try {
-    //   Send API Request
-    dispatch(NewPassword({...data, token: queryParameters.get('token')}));
+      //   Send API Request
+      dispatch(NewPassword(data));
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={3}>
-        
-
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} sx={{ display: "flex", alignItems: "center" }}>
+      <Stack spacing={3} sx={{ width: "50%", alignItems: "center" }} alignItems="center">
         <RHFTextField
-          name="password"
-          label="Password"
+          name="oldPassword"
+          label="Current Password"
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowPassword(!showPassword)}
-                    edge="end"
-                  >
-                    {showPassword ? <Eye /> : <EyeSlash />}
-                  </IconButton>
-                </InputAdornment>
-              ),
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => setShowPassword(!showPassword)}
+                  edge="end"
+                >
+                  {showPassword ? <Eye /> : <EyeSlash />}
+                </IconButton>
+              </InputAdornment>
+            ),
           }}
           className={csscommon.input_field01}
         />
-
+        <RHFTextField
+          name="newPassword"
+          label="New Password"
+          type={showPassword ? 'text' : 'password'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => setShowPassword(!showPassword)}
+                  edge="end"
+                >
+                  {showPassword ? <Eye /> : <EyeSlash />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          className={csscommon.input_field01}
+        />
         <RHFTextField
           name="passwordConfirm"
           label="Confirm New Password"
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowPassword(!showPassword)}
-                    edge="end"
-                  >
-                    {showPassword ? <Eye /> : <EyeSlash />}
-                  </IconButton>
-                </InputAdornment>
-              ),
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => setShowPassword(!showPassword)}
+                  edge="end"
+                >
+                  {showPassword ? <Eye /> : <EyeSlash />}
+                </IconButton>
+              </InputAdornment>
+            ),
           }}
           className={csscommon.input_field01}
         />
@@ -103,7 +121,7 @@ export default function NewPasswordForm() {
           size="large"
           type="submit"
           variant="contained"
-          
+
           sx={{
             mt: 3,
             bgcolor: "text.primary",
@@ -117,12 +135,7 @@ export default function NewPasswordForm() {
           }}
           className={csscommon.a_signupbtn + ' ' + csscommon.is_margin}
         >
-          <Link
-            component={RouterLink}
-            to={"/auth/login/"}
-          >
-            <span className={csscommon.a_backbtn01_txt}>Update Password</span>
-          </Link>
+          <span className={csscommon.a_backbtn01_txt}>Update Password</span>
         </Button>
       </Stack>
     </FormProvider>

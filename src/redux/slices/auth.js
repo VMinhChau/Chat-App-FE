@@ -44,14 +44,15 @@ export default slice.reducer;
 
 export function NewPassword(formValues) {
   return async (dispatch, getState) => {
+    const data = {
+      ...formValues,
+      email: getState().app.user.email
+    }
     dispatch(slice.actions.updateIsLoading({ isLoading: true, error: false }));
-
     await axiosAuth
       .post(
-        "/auth/reset-password",
-        {
-          ...formValues,
-        },
+        "/v1/api/auth/change-password",
+        data,
         {
           headers: {
             "Content-Type": "application/json",
@@ -59,16 +60,15 @@ export function NewPassword(formValues) {
         }
       )
       .then(function (response) {
-        console.log(response);
-        dispatch(
-          slice.actions.logIn({
-            isLoggedIn: true,
-            token: response.data.token,
-          })
-        );
-        dispatch(
-          showSnackbar({ severity: "success", message: response.data.message })
-        );
+        console.log(response.data.code);
+        if (response.data.code === 1) {
+          dispatch(showSnackbar({ severity: "error", message: response.data.data }));
+        }
+        else {
+          dispatch(
+            showSnackbar({ severity: "success", message: response.data.data })
+          );
+        }
         dispatch(
           slice.actions.updateIsLoading({ isLoading: false, error: false })
         );

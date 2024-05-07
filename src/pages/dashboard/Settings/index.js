@@ -22,6 +22,7 @@ import BackgroundHome from "../../../assets/images/auth/bg-auth.jpg";
 import SeetingProfile from "./SettingProfile";
 import { useDispatch, useSelector } from "react-redux";
 import { FetchUserProfile } from "../../../redux/slices/app";
+import ChangePassword from "../../../pages/auth/ChangePassword";
 
 const truncateText = (string, n) => {
   return string?.length > n ? `${string?.slice(0, n)}...` : string;
@@ -34,22 +35,19 @@ const Settings = () => {
   const { user } = useSelector((state) => state.app);
   const list = [
     {
-      key: 0,
+      key: 1,
       icon: <Bell size={20} />,
       title: "Notifications",
-      onclick: () => { },
-    },
-    {
-      key: 1,
-      icon: <Lock size={20} />,
-      title: "Privacy",
-      onclick: () => { },
     },
     {
       key: 2,
+      icon: <Lock size={20} />,
+      title: "Privacy",
+    },
+    {
+      key: 3,
       icon: <Key size={20} />,
       title: "Security",
-      onclick: () => { },
     },
     // {
     //   key: 3,
@@ -76,16 +74,17 @@ const Settings = () => {
     //   onclick: handleOpenShortcuts,
     // },
     {
-      key: 7,
+      key: 4,
       icon: <Info size={20} />,
       title: "Help",
-      onclick: () => { },
     },
   ];
 
   useEffect(() => {
     dispatch(FetchUserProfile(user_id));
   }, []);
+
+  const [selectedTab, setSelectedTab] = useState(0);
 
   return (
     <>
@@ -106,14 +105,14 @@ const Settings = () => {
             boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
             backgroundColor:
               theme.palette.mode === "light"
-                ? "#F8FAFF"
+                ? "#FFFFFF"
                 : theme.palette.background.paper,
             margin: "0 8px 0 0",
             borderRadius: "35px",
           }}
         >
           <Stack
-            p={4}
+            p={2}
             spacing={5}
             sx={{
               width: "100%",
@@ -131,7 +130,7 @@ const Settings = () => {
             </Stack>
 
             {/* Profile */}
-            <Stack direction="row" spacing={3}>
+            <Stack direction="row" spacing={2} onClick={() => { setSelectedTab(0) }}>
               <Avatar
                 src={user?.img}
                 sx={{ height: 56, width: 56 }}
@@ -144,12 +143,30 @@ const Settings = () => {
             {/* List */}
             <Stack spacing={4}>
               {list.map(({ key, icon, title, onclick }) => {
-                return (
+                return key == selectedTab ? (
                   <>
                     <Stack
-                      onClick={onclick}
+                      onClick={() => setSelectedTab(key)}
                       sx={{ cursor: "pointer" }}
                       spacing={2}
+                      key={key}
+                      color={theme.palette.primary.main}
+                    >
+                      <Stack alignItems={"center"} direction="row" spacing={2}>
+                        {icon}
+                        <Typography variant="body2">{title}</Typography>
+                      </Stack>
+                      {key !== 7 && <Divider color={theme.palette.primary.main} />}
+                    </Stack>
+                  </>
+
+                ) : (
+                  <>
+                    <Stack
+                      onClick={() => setSelectedTab(key)}
+                      sx={{ cursor: "pointer" }}
+                      spacing={2}
+                      key={key}
                     >
                       <Stack alignItems={"center"} direction="row" spacing={2}>
                         {icon}
@@ -157,8 +174,7 @@ const Settings = () => {
                       </Stack>
                       {key !== 7 && <Divider />}
                     </Stack>
-                  </>
-                );
+                  </>)
               })}
             </Stack>
           </Stack>
@@ -170,13 +186,24 @@ const Settings = () => {
             width: "calc(100% - 220px )",
             backgroundColor:
               theme.palette.mode === "light"
-                ? "#F8FAFF"
+                ? "#FFFFFF"
                 : theme.palette.background.paper,
             borderRadius: "35px",
             overflow: "hidden"
           }}
         >
-          <SeetingProfile avtImg={user?.img} profileName={user.fullName} email={user.email} />
+          {(() => {
+            switch (selectedTab) {
+              case 0:
+                return <SeetingProfile avtImg={user?.img} profileName={user.fullName} email={user.email} />
+
+              case 2:
+                return <ChangePassword />;
+
+              default:
+                break
+            }
+          })()}
         </Box>
       </Stack>
     </>

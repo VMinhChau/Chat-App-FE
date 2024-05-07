@@ -25,10 +25,10 @@ const SearchChat = ({ group_conversations, private_conversations }) => {
     const handleInputChange = (e) => {
         const searchTerm = e.target.value;
         setSearchItem(searchTerm);
-        const filteredGroupChat = group_conversations.filter((conversation) =>
+        const filteredGroupChat = group_conversations?.filter((conversation) =>
             conversation.title?.toLowerCase().includes(searchTerm.toLowerCase())
         );
-        const filteredPrivateChat = private_conversations.filter((conversation) =>
+        const filteredPrivateChat = private_conversations?.filter((conversation) =>
             conversation.fullName?.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setFilteredPrivateChat(filteredPrivateChat);
@@ -66,7 +66,7 @@ const SearchChat = ({ group_conversations, private_conversations }) => {
 
             <Typography variant="subtitle1">Private chat</Typography>
             {searchItem ? (
-                filteredPrivateChat.length === 0 ? (
+                filteredPrivateChat?.length === 0 ? (
                     <Box textAlign="center">No chats found</Box>
                 ) : (
                     <Stack sx={{ flexGrow: 1, height: "100%", overflow: "scroll" }}>
@@ -88,7 +88,7 @@ const SearchChat = ({ group_conversations, private_conversations }) => {
 
             <Typography variant="subtitle1">Group chat</Typography>
             {searchItem ? (
-                filteredGroupChat.length === 0 ? (
+                filteredGroupChat?.length === 0 ? (
                     <Box textAlign="center">No chats found</Box>
                 ) : (
                     <Stack sx={{ flexGrow: 1, height: "100%", overflow: "scroll" }}>
