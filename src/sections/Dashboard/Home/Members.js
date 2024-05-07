@@ -114,7 +114,7 @@ const Members = (props) => {
           <Stack
             direction="row"
             alignItems={"center"}
-            sx={{ height: "100%", p: 1.63 }}
+            sx={{ height: "100%", p: '10px' }}
           >
             <IconButton
               size="medium"

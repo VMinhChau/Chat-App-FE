@@ -36,7 +36,7 @@ const GeneralApp = () => {
         <Box
           sx={{
             maxHeight: "100%",
-            width: sideBar.open ? `54.5%` : "76.5%",
+            width: sideBar.open ? `calc(100% - 300px - 21.9% - 20px)` : "76.5%",
           }}
         >
           {room_id !== null ? (

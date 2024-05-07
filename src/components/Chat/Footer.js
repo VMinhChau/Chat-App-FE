@@ -318,8 +318,10 @@ const Footer = () => {
               // }}
               onClick={() => {
                 // dispatch(AddDirectMessage(value))
-                ws.send(value);
-                dispatch(FetchCurrentMessages({ chat_id: room_id }));
+                if (value) {
+                  ws.send(value);
+                  dispatch(FetchCurrentMessages({ chat_id: room_id }));
+                }
               }}
             >
               <PaperPlaneRight

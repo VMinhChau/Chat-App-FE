@@ -121,7 +121,7 @@ const ChatComponent = () => {
     <Stack
       height={"100%"}
       maxHeight={"100vh"}
-      width={isMobile ? "100vw" : "auto"}
+      width={isMobile ? "100%" : "auto"}
     // borderRadius="35px"
     // padding="8px 8px 8px 0px!important"
     >
