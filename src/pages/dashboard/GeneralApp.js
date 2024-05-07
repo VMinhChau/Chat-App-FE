@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import { Box, Stack, Typography } from "@mui/material";
 
@@ -8,17 +8,16 @@ import Chats from "./Home/Chats";
 import Contact from "../../sections/Dashboard/Home/Contact";
 import NoChat from "../../assets/Illustration/NoChat";
 import { useSelector } from "react-redux";
-import StarredMessages from "../../sections/Dashboard/StarredMessages";
 import { Media } from "../../sections/Dashboard/Home/SharedMessages";
 import BackgroundHome from "../../assets/images/auth/bg-auth.jpg";
 import Members from "../../sections/Dashboard/Home/Members";
+import CreateSingleChat from "../../sections/Dashboard/Home/CreateSingleChat";
 
 const GeneralApp = () => {
-  const [searchParams] = useSearchParams();
-
   const theme = useTheme();
-
   const { sideBar, room_id, chat_type } = useSelector((state) => state.app);
+
+  const [openSingleChat, setOpenSingleChat] = useState(false);
 
   return (
     <>
@@ -56,7 +55,9 @@ const GeneralApp = () => {
                     color: theme.palette.primary.main,
                     textDecoration: "none",
                   }}
-                  to="/"
+                  onClick={() => {
+                    setOpenSingleChat(true);
+                  }}
                 >
                   new one
                 </Link>
@@ -83,6 +84,9 @@ const GeneralApp = () => {
                 break;
             }
           })()}
+        {openSingleChat && (
+          <CreateSingleChat open={openSingleChat} handleClose={() => { setOpenSingleChat(false) }} />
+        )}
       </Stack>
     </>
   );

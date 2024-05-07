@@ -5,12 +5,12 @@ import { CaretLeft } from "phosphor-react";
 import NewPasswordForm from "../../sections/auth/NewPasswordForm";
 import csscommon from "../../css/authCommon.module.css";
 
-const NewPassword = () => {
+const ChangePassword = () => {
   return (
     <>
-      <Stack spacing={2} sx={{ mb: 5, position: "relative" }}>
+      <Stack spacing={2} sx={{ mb: 5, position: "relative", p: 5 }} alignItems="center">
         <Typography variant="h3" paragraph>
-          Reset Password
+          Change Password
         </Typography>
 
         <Typography sx={{ color: "text.secondary", mb: 5 }}>
@@ -58,4 +58,4 @@ const NewPassword = () => {
   );
 };
 
-export default NewPassword;
+export default ChangePassword;

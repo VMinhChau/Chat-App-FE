@@ -23,54 +23,13 @@ const slice = createSlice({
   name: "conversation",
   initialState,
   reducers: {
-
-    updateDirectConversation(state, action) {
-      const this_conversation = action.payload.conversation;
-      // state.direct_chat.conversations = state.direct_chat.conversations.map(
-      //   (el) => {
-      //     if (el?.id !== this_conversation._id) {
-      //       return el;
-      //     } else {
-      //       const user = this_conversation.participants.find(
-      //         (elm) => elm._id.toString() !== user_id
-      //       );
-      //       return {
-      //         id: this_conversation._id._id,
-      //         user_id: user?._id,
-      //         name: `${user?.firstName} ${user?.lastName}`,
-      //         online: user?.status === "Online",
-      //         img: faker.image.avatar(),
-      //         msg: faker.music.songName(),
-      //         time: "9:36",
-      //         unread: 0,
-      //         pinned: false,
-      //       };
-      //     }
-      //   }
-      // );
-    },
-    addDirectConversation(state, action) {
-      // const this_conversation = action.payload;
-      // const user = this_conversation.participants.find(
-      //   (elm) => elm._id.toString() !== user_id
-      // );
-      // state.direct_chat.conversations = state.direct_chat.conversations.filter(
-      //   (el) => el?.id !== this_conversation.id
-      // );
-      // state.direct_chat.conversations.push({
-      //   id: this_conversation._id._id,
-      //   user_id: user?._id,
-      //   name: `${user?.firstName} ${user?.lastName}`,
-      //   online: user?.status === "Online",
-      //   img: faker.image.avatar(),
-      //   msg: faker.music.songName(),
-      //   time: "9:36",
-      //   unread: 0,
-      //   pinned: false,
-      // });
-      state.direct_chat.conversations.push(action.payload);
-      state.direct_chat.current_conversation = action.payload;
-    },
+    // updateDirectConversation(state, action) {
+    //   const this_conversation = action.payload.conversation;
+    // },
+    // addDirectConversation(state, action) {
+    //   state.direct_chat.conversations.push(action.payload);
+    //   state.direct_chat.current_conversation = action.payload;
+    // },
 
     fetchCurrentMessages(state, action) {
       const messages = action.payload;
@@ -99,6 +58,10 @@ const slice = createSlice({
     fetchMembersGroup(state, action) {
       state.group_chat.members = action.payload;
     },
+
+    resetReducer(state, action) {
+      Object.assign(state, initialState);
+    }
   },
 });
 
@@ -299,6 +262,37 @@ export const AddGroupConversation = (formValues) => {
   };
 }
 
+export const EditGroupConversation = (formValues, group_id) => {
+  const data = {
+    title: formValues.title,
+    description: formValues.description,
+  }
+  return async (dispatch, getState) => {
+    await axiosRoom
+      .put(
+        `/v1/api/room/update/${group_id}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then(function (response) {
+        console.log(response);
+        dispatch(
+          showSnackbar({ severity: "success", message: response.data.data })
+        );
+        dispatch(FetchGroupConversations({ user_id: user_id }));
+        dispatch(FetchCurrentGroupConversation(group_id));
+      })
+      .catch(function (error) {
+        console.log(error);
+        dispatch(showSnackbar({ severity: "error", message: error.message }));
+      });
+  };
+}
+
 export const DeleteGroupConversation = (delete_id) => {
   return async (dispatch, getState) => {
     await axiosRoom
@@ -407,5 +401,11 @@ export const FetchMembersGroup = (room_id) => {
         console.log(error);
         dispatch(showSnackbar({ severity: "error", message: error.message }));
       });
+  };
+};
+
+export const ResetConversationReducer = () => {
+  return async (dispatch, getState) => {
+    dispatch(slice.actions.resetReducer());
   };
 };

@@ -29,8 +29,7 @@ export default function Router() {
         { path: "verification-notice", element: <VerificationNotice /> },
         { path: "verify/:token", element: <EmailVerify /> },
         { path: "reset-password", element: <ResetPasswordPage /> },
-        { path: "new-password", element: <NewPasswordPage /> },
-        { path: "verify", element: <VerifyPage /> },
+        { path: "new-password", element: <ChangePasswordPage /> },
       ],
     },
     {
@@ -68,7 +67,6 @@ const Phonebook = Loadable(
 // const Page404 = Loadable(lazy(() => import("../pages/Page404")));
 
 const LoginPage = Loadable(lazy(() => import("../pages/auth/Login")));
-const VerifyPage = Loadable(lazy(() => import("../pages/auth/Verify")));
 const SignUpPage = Loadable(lazy(() => import("../pages/auth/SignUp")));
 const TopPage = Loadable(lazy(() => import("../pages/auth/Top")));
 const EmailVerify = Loadable(lazy(() => import("../pages/auth/EmailVerify")))
@@ -76,8 +74,8 @@ const VerificationNotice = Loadable(lazy(() => import("../pages/auth/Verificatio
 const ResetPasswordPage = Loadable(
   lazy(() => import("../pages/auth/ResetPassword"))
 );
-const NewPasswordPage = Loadable(
-  lazy(() => import("../pages/auth/NewPassword"))
+const ChangePasswordPage = Loadable(
+  lazy(() => import("../pages/auth/ChangePassword"))
 );
 
 // Settings

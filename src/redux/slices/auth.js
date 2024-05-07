@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { axiosAuth } from "../../utils/axios"
-import { showSnackbar, SelectConversation } from "./app";
+import { showSnackbar, SelectConversation, ResetAppReducer } from "./app";
+import { ResetConversationReducer } from "./conversation";
 
 // ----------------------------------------------------------------------
 
@@ -29,10 +30,7 @@ const slice = createSlice({
       state.user_id = action.payload.user_id;
     },
     signOut(state, action) {
-      state.isLoggedIn = false;
-      state.token = "";
-      state.user_id = null;
-      state = undefined;
+      Object.assign(state, initialState)
     },
     updateRegisterEmail(state, action) {
       console.log(action.payload.email);
@@ -46,14 +44,15 @@ export default slice.reducer;
 
 export function NewPassword(formValues) {
   return async (dispatch, getState) => {
+    const data = {
+      ...formValues,
+      email: getState().app.user.email
+    }
     dispatch(slice.actions.updateIsLoading({ isLoading: true, error: false }));
-
     await axiosAuth
       .post(
-        "/auth/reset-password",
-        {
-          ...formValues,
-        },
+        "/v1/api/auth/change-password",
+        data,
         {
           headers: {
             "Content-Type": "application/json",
@@ -61,16 +60,15 @@ export function NewPassword(formValues) {
         }
       )
       .then(function (response) {
-        console.log(response);
-        dispatch(
-          slice.actions.logIn({
-            isLoggedIn: true,
-            token: response.data.token,
-          })
-        );
-        dispatch(
-          showSnackbar({ severity: "success", message: response.data.message })
-        );
+        console.log(response.data.code);
+        if (response.data.code === 1) {
+          dispatch(showSnackbar({ severity: "error", message: response.data.data }));
+        }
+        else {
+          dispatch(
+            showSnackbar({ severity: "success", message: response.data.data })
+          );
+        }
         dispatch(
           slice.actions.updateIsLoading({ isLoading: false, error: false })
         );
@@ -88,10 +86,9 @@ export function NewPassword(formValues) {
 export function ForgotPassword(formValues) {
   return async (dispatch, getState) => {
     dispatch(slice.actions.updateIsLoading({ isLoading: true, error: false }));
-
     await axiosAuth
       .post(
-        "/auth/forgot-password",
+        "/v1/api/auth/forgot-password",
         {
           ...formValues,
         },
@@ -102,11 +99,15 @@ export function ForgotPassword(formValues) {
         }
       )
       .then(function (response) {
-        console.log(response);
-
-        dispatch(
-          showSnackbar({ severity: "success", message: response.data.message })
-        );
+        console.log(response.data.data);
+        if (response.data.code === 1) {
+          dispatch(showSnackbar({ severity: "error", message: response.data.data }));
+        }
+        else {
+          dispatch(
+            showSnackbar({ severity: "success", message: response.data.data })
+          );
+        }
         dispatch(
           slice.actions.updateIsLoading({ isLoading: false, error: false })
         );
@@ -176,9 +177,10 @@ export function LoginUser(formValues) {
 
 export function LogoutUser() {
   return async (dispatch, getState) => {
-    dispatch(SelectConversation({ room_id: null }));
     window.localStorage.removeItem("user_id");
     dispatch(slice.actions.signOut());
+    dispatch(ResetAppReducer());
+    dispatch(ResetConversationReducer());
   };
 }
 
@@ -203,15 +205,15 @@ export function RegisterUser(formValues) {
       )
       .then(function (response) {
         console.log(response.data.data);
-        dispatch(slice.actions.updateRegisterEmail({ email: formValues.email }));
-        if (response.data.data === "I send you email to verify your email") {
+        if (response.data.code === 1) {
+          dispatch(showSnackbar({ severity: "error", message: response.data.data }));
+        }
+        else {
+          dispatch(slice.actions.updateRegisterEmail({ email: formValues.email }));
           window.setTimeout(function () {
             window.location.href = "/auth/verification-notice"
           }, 4000);
         }
-        // dispatch(
-        //   showSnackbar({ severity: "success", message: response.data.data })
-        // );
         dispatch(
           slice.actions.updateIsLoading({ isLoading: false, error: false })
         );
@@ -230,51 +232,6 @@ export function RegisterUser(formValues) {
     // });
   };
 }
-
-export function VerifyEmail(formValues) {
-  return async (dispatch, getState) => {
-    dispatch(slice.actions.updateIsLoading({ isLoading: true, error: false }));
-
-    await axiosAuth
-      .post(
-        "/auth/verify",
-        {
-          ...formValues,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then(function (response) {
-        console.log(response);
-        dispatch(slice.actions.updateRegisterEmail({ email: "" }));
-        window.localStorage.setItem("user_id", response.data.user_id);
-        dispatch(
-          slice.actions.logIn({
-            isLoggedIn: true,
-            token: response.data.token,
-          })
-        );
-
-        dispatch(
-          showSnackbar({ severity: "success", message: response.data.message })
-        );
-        dispatch(
-          slice.actions.updateIsLoading({ isLoading: false, error: false })
-        );
-      })
-      .catch(function (error) {
-        console.log(error);
-        dispatch(showSnackbar({ severity: "error", message: error.message }));
-        dispatch(
-          slice.actions.updateIsLoading({ error: true, isLoading: false })
-        );
-      });
-  };
-}
-
 
 export function FindUserByEmail(email) {
   return async (dispatch, getState) => {

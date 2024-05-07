@@ -22,6 +22,7 @@ import { ReactComponent as LeaveIcon } from "../../../assets/images/home/leave_i
 import { ReactComponent as ChatIcon } from "../../../assets/images/home/chat_icon.svg";
 import { FetchMembersGroup } from "../../../redux/slices/conversation";
 import AddMembers from "./AddMembers";
+import LeaveGroupDialog from "./LeaveGroupDialog";
 import { MembersList } from "../../../data";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -85,8 +86,13 @@ const Members = (props) => {
   }, []);
 
   const { members } = useSelector((state) => state.conversation.group_chat);
-
   const [openAddMembers, setOpenAddMembers] = useState(false);
+
+  const [openLeave, setOpenLeave] = useState(false);
+
+  const handleCloseLeave = () => {
+    setOpenLeave(false);
+  };
 
   return (
     <Box
@@ -161,7 +167,7 @@ const Members = (props) => {
                 key={idx}
               >
                 <Stack direction="row" alignItems="center" gap={1.5}>
-                  {member.isActive ? (
+                  {member.isOnline ? (
                     <StyledBadge
                       overlap="circular"
                       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -202,7 +208,9 @@ const Members = (props) => {
                   }}
                 >
                   {member.id === user_id ? (
-                    <MenuItem p={1}>
+                    <MenuItem p={1} onClick={() => {
+                      setOpenLeave(true);
+                    }}>
                       <ListItemIcon sx={{ minWidth: "30px!important" }}>
                         <LeaveIcon />
                       </ListItemIcon>
@@ -217,6 +225,9 @@ const Members = (props) => {
                     </MenuItem>
                   )}
                 </Menu>
+                {openLeave && (
+                  <LeaveGroupDialog open={openLeave} handleClose={handleCloseLeave} group_id={room_id} />
+                )}
               </Stack>
             );
           })}

@@ -9,11 +9,11 @@ const ResetPassword = () => {
   return (
     <>
       <Stack spacing={2} sx={{ mb: 5, position: "relative" }}>
-      <Typography variant="h1" style={{textAlign: 'center'}} className={csscommon.s_ttl01}>My <span className={csscommon.is_orange}>Crystal</span></Typography>
+        <Typography variant="h1" style={{ textAlign: 'center' }} className={csscommon.s_ttl01}>My <span className={csscommon.is_orange}>Crystal</span></Typography>
 
         <Typography sx={{ color: "text.secondary", mb: 5 }}>
-          Please enter the email address associated with your account and We
-          will email you a link to reset your password.
+          Please enter the email address associated with your account. We
+          will email you new password to reset your password.
         </Typography>
       </Stack>
 
