@@ -23,7 +23,7 @@ import { RHFTextField } from "../../../components/hook-form";
 import RHFAutocomplete from "../../../components/hook-form/RHFAutocomplete";
 import { useDispatch, useSelector } from "react-redux";
 import { FetchAllUsers } from "../../../redux/slices/app";
-import { AddGroupConversation } from "../../../redux/slices/conversation";
+import { EditGroupConversation } from "../../../redux/slices/conversation";
 import _ from "lodash";
 import { createFilterOptions } from '@mui/material/Autocomplete';
 
@@ -60,10 +60,13 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-const CreateGroupForm = ({ handleClose }) => {
+const EditGroupForm = ({ handleClose, group_id }) => {
   const dispatch = useDispatch();
 
   const { all_users } = useSelector((state) => state.app);
+  const { current_conversation } = useSelector(
+    (state) => state.conversation.direct_chat
+  );
 
   useEffect(() => {
     dispatch(FetchAllUsers());
@@ -76,8 +79,8 @@ const CreateGroupForm = ({ handleClose }) => {
   });
 
   const defaultValues = {
-    title: "",
-    description: "",
+    title: current_conversation.title,
+    description: current_conversation.description,
     // members: [],
   };
 
@@ -95,8 +98,7 @@ const CreateGroupForm = ({ handleClose }) => {
   const onSubmit = async (data) => {
     try {
       //  API Call
-      console.log("DATA", data);
-      dispatch(AddGroupConversation(data));
+      dispatch(EditGroupConversation(data, group_id));
       handleClose();
     } catch (error) {
       console.error(error);
@@ -116,7 +118,7 @@ const CreateGroupForm = ({ handleClose }) => {
         >
           <Button onClick={handleClose}>Cancel</Button>
           <Button type="submit" variant="contained">
-            Create
+            Edit
           </Button>
         </Stack>
       </Stack>
@@ -124,7 +126,7 @@ const CreateGroupForm = ({ handleClose }) => {
   );
 };
 
-const CreateGroupChat = ({ open, handleClose }) => {
+const EditGroupChat = ({ open, handleClose, group_id }) => {
   return (
     <Dialog
       fullWidth
@@ -136,13 +138,14 @@ const CreateGroupChat = ({ open, handleClose }) => {
       aria-describedby="alert-dialog-slide-description"
       sx={{ p: 2 }}
     >
-      <DialogTitle>{"Create New Group"}</DialogTitle>
+      <DialogTitle>{"Edit Group Chat"}</DialogTitle>
       <DialogContent sx={{ mt: 2 }}>
         {/* Create Group Form */}
-        <CreateGroupForm handleClose={handleClose} />
+        <EditGroupForm handleClose={handleClose} group_id={group_id} />
       </DialogContent>
     </Dialog>
   );
 };
 
-export default CreateGroupChat;
+export default EditGroupChat;
+

@@ -24,6 +24,7 @@ import {
   X,
   Image,
   FileText,
+  PencilSimple
 } from "phosphor-react";
 import useResponsive from "../../../hooks/useResponsive";
 import DeleteChatDialog from "./DeleteChatDialog";
@@ -32,6 +33,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToggleSidebar, UpdateSidebarType } from "../../../redux/slices/app";
 import { ReactComponent as FileIcon } from "../../../assets/images/home/file_icon.svg";
 import { ReactComponent as MembersIcon } from "../../../assets/images/home/members_icon.svg";
+import EditGroupChat from "./EditGroupChat";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -81,12 +83,16 @@ const Contact = () => {
 
   const [openLeave, setOpenLeave] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openEditGroupChat, setOpenEditGroupChat] = useState(false);
 
   const handleCloseLeave = () => {
     setOpenLeave(false);
   };
   const handleCloseDelete = () => {
     setOpenDelete(false);
+  };
+  const handleCloseEdit = () => {
+    setOpenEditGroupChat(false);
   };
 
   return (
@@ -186,12 +192,15 @@ const Contact = () => {
                   <Avatar alt={current_conversation?.name} src={current_conversation?.img} sx={{ height: 64, width: 64 }} />
                 )}
               </StyledBadge>
-              <Stack spacing={0.5}>
-                <Typography variant="article" fontWeight={600}>
+              <Stack direction="row" spacing={0.5}>
+                <Typography variant="h6" fontWeight={600}>
                   {!(chat_type === "privatechat")
                     ? current_conversation?.title
                     : current_conversation?.fullName}
                 </Typography>
+                <IconButton onClick={() => setOpenEditGroupChat(true)}>
+                  <PencilSimple size="14px" />
+                </IconButton>
               </Stack>
             </Stack>
             <Box>
@@ -293,6 +302,9 @@ const Contact = () => {
       )}
       {openDelete && (
         <DeleteChatDialog open={openDelete} handleClose={handleCloseDelete} delete_id={room_id} />
+      )}
+      {openEditGroupChat && (
+        <EditGroupChat open={openEditGroupChat} handleClose={handleCloseEdit} group_id={room_id} />
       )}
     </Box>
   );
