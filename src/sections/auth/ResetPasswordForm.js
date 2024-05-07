@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 // components
 import FormProvider, { RHFTextField } from "../../components/hook-form";
-import { Button } from "@mui/material";
+import { Button, Alert, AlertTitle } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { ForgotPassword } from "../../redux/slices/auth";
 import { LoadingButton } from "@mui/lab";
@@ -62,12 +62,12 @@ export default function AuthResetPasswordForm() {
         }}
         className={csscommon.a_signupbtn + ' ' + csscommon.is_margin}
       >
-        <Link
+        {/* <Link
           component={RouterLink}
           to={"/auth/verify/"}
-        >
-          <span className={csscommon.a_backbtn01_txt}>Send Request</span>
-        </Link>
+        > */}
+        <span className={csscommon.a_backbtn01_txt}>Send Request</span>
+        {/* </Link> */}
       </LoadingButton>
     </FormProvider>
   );

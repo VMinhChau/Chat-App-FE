@@ -1,10 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { axiosAuth } from "../../utils/axios";
 import { UsersList } from "../../data";
-// import S3 from "../../utils/s3";
-// import {v4} from 'uuid';
-// import S3 from "../../utils/s3";
-// import { S3_BUCKET_NAME } from "../../config";
+
 // ----------------------------------------------------------------------
 
 const initialState = {
@@ -64,6 +61,11 @@ const slice = createSlice({
       state.chat_type = action.payload.chat_type;
       state.room_id = action.payload.room_id;
     },
+
+    resetReducer(state, action) {
+      // state = initialState;
+      Object.assign(state, initialState)
+    }
   },
 });
 
@@ -107,28 +109,6 @@ export function UpdateTab(tab) {
   };
 }
 
-// export function FetchUsers() {
-//   return async (dispatch, getState) => {
-//     await axios
-//       .get(
-//         "/user/get-users",
-
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//             Authorization: `Bearer ${getState().auth.token}`,
-//           },
-//         }
-//       )
-//       .then((response) => {
-//         console.log(response);
-//         dispatch(slice.actions.updateUsers({ users: response.data.data }));
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   };
-// }
 export function FetchAllUsers() {
   return async (dispatch, getState) => {
     // await axiosRoom
@@ -177,5 +157,11 @@ export const FetchUserProfile = (user_id) => {
       .catch((err) => {
         console.log(err);
       });
+  };
+};
+
+export const ResetAppReducer = () => {
+  return async (dispatch, getState) => {
+    dispatch(slice.actions.resetReducer());
   };
 };
