@@ -206,3 +206,8 @@ body {
         }
     }
 }
+.box_flexcolumn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

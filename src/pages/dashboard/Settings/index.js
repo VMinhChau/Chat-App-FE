@@ -180,18 +180,7 @@ const Settings = () => {
           </Stack>
         </Box>
         {/* Right Pane */}
-        <Box
-          sx={{
-            height: "100%",
-            width: "calc(100% - 220px )",
-            backgroundColor:
-              theme.palette.mode === "light"
-                ? "#FFFFFF"
-                : theme.palette.background.paper,
-            borderRadius: "35px",
-            overflow: "hidden"
-          }}
-        >
+        
           {(() => {
             switch (selectedTab) {
               case 0:
@@ -204,7 +193,6 @@ const Settings = () => {
                 break
             }
           })()}
-        </Box>
       </Stack>
     </>
   );

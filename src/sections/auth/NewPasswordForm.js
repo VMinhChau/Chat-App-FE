@@ -60,7 +60,7 @@ export default function NewPasswordForm() {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} sx={{ display: "flex", alignItems: "center" }}>
-      <Stack spacing={3} sx={{ width: "50%", alignItems: "center" }} alignItems="center">
+      <Stack spacing={3} sx={{ width: "50%", margin: "0 auto" }} alignItems="center">
         <RHFTextField
           name="oldPassword"
           label="Current Password"
