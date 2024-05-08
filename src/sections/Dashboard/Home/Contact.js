@@ -201,9 +201,11 @@ const Contact = () => {
                     ? current_conversation?.title
                     : current_conversation?.fullName}
                 </Typography>
-                <IconButton onClick={() => setOpenEditGroupChat(true)}>
-                  <PencilSimple size="14px" />
-                </IconButton>
+                {chat_type !== "privatechat" &&
+                  < IconButton onClick={() => setOpenEditGroupChat(true)}>
+                    <PencilSimple size="14px" />
+                  </IconButton>
+                }
               </Stack>
             </Stack>
             <Box>
@@ -300,16 +302,22 @@ const Contact = () => {
           </Stack>
         </Stack>
       </Stack>
-      {openLeave && (
-        <LeaveGroupDialog open={openLeave} handleClose={handleCloseLeave} group_id={room_id} />
-      )}
-      {openDelete && (
-        <DeleteChatDialog open={openDelete} handleClose={handleCloseDelete} delete_id={room_id} />
-      )}
-      {openEditGroupChat && (
-        <EditGroupChat open={openEditGroupChat} handleClose={handleCloseEdit} group_id={room_id} />
-      )}
-    </Box>
+      {
+        openLeave && (
+          <LeaveGroupDialog open={openLeave} handleClose={handleCloseLeave} group_id={room_id} />
+        )
+      }
+      {
+        openDelete && (
+          <DeleteChatDialog open={openDelete} handleClose={handleCloseDelete} delete_id={room_id} />
+        )
+      }
+      {
+        openEditGroupChat && (
+          <EditGroupChat open={openEditGroupChat} handleClose={handleCloseEdit} group_id={room_id} />
+        )
+      }
+    </Box >
   );
 };
 

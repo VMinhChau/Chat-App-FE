@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Badge,
@@ -22,6 +22,7 @@ import { SelectConversation } from "../redux/slices/app";
 import { FetchCurrentMessages, FetchCurrentPrivateConversation } from "../redux/slices/conversation";
 import { DotsThree } from "phosphor-react";
 import DeleteChatDialog from "../sections/Dashboard/Home/DeleteChatDialog";
+import moment from 'moment';
 import classess from "../css/ChatElement.module.css"
 
 
@@ -98,6 +99,10 @@ const PrivateChatElement = (el) => {
   const [delete_id, setDeleteId] = useState(null);
 
   const theme = useTheme();
+
+  useEffect(() => {
+    dispatch(FetchCurrentMessages({ chat_id: el.chat_id }));
+  }, [])
 
   return (
     <Badge className={classess.c_elementcustom} color="primary" >
@@ -211,7 +216,8 @@ const PrivateChatElement = (el) => {
                 {el.fullName}
               </Typography>
               <Typography variant="caption">
-                {truncateText(el.email, 20)}
+                {/* {truncateText(el.email, 20)} */}
+                {truncateText(current_messages[current_messages.length - 1]?.message)}
               </Typography>
             </Stack>
           </Stack>
@@ -221,8 +227,9 @@ const PrivateChatElement = (el) => {
             }}>
               <DotsThree fontSize="medium" />
             </IconButton>
-            <Typography sx={{ fontWeight: 600 }} variant="caption">
-              {el.time}
+            <Typography sx={{ fontWeight: 500 }} variant="caption">
+              {moment(moment.utc(current_messages[current_messages.length - 1]?.created_at)).local().format("ddd hh:mm A")}
+              {/* moment(moment.utc(el.created_at)).local().format("ddd hh:mm A") */}
             </Typography>
           </Stack>
           <Menu

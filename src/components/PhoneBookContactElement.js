@@ -19,7 +19,7 @@ import {
 import { styled, useTheme, alpha } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { SelectConversation,  UpdateTab } from "../redux/slices/app";
+import { SelectConversation, UpdateTab } from "../redux/slices/app";
 import { FetchCurrentMessages, FetchCurrentPrivateConversation } from "../redux/slices/conversation";
 import { DotsThree } from "phosphor-react";
 import DeleteChatDialog from "../sections/Dashboard/Home/DeleteChatDialog";
@@ -123,50 +123,47 @@ const PhoneBookContactElement = (el) => {
           <Stack spacing={0.3}>
             <Typography variant="subtitle2">{el.fullName}</Typography>
             <Typography variant="caption">
-              {truncateText(el.email, 20)}
+              {truncateText(el.email, 60)}
             </Typography>
           </Stack>
         </Stack>
         <Stack alignItems={"end"}>
-            <IconButton size="small" p={1} onClick={(e) => {
-              handleClick(e, el.roomId);
-            }}>
-              <DotsThree fontSize="medium" />
-            </IconButton>
-            <Typography sx={{ fontWeight: 600 }} variant="caption">
-              {el.time}
-            </Typography>
-          </Stack>
+          <IconButton size="small" p={1} onClick={(e) => {
+            handleClick(e, el.roomId);
+          }}>
+            <DotsThree fontSize="medium" />
+          </IconButton>
+        </Stack>
         <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
+          }}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+        >
+          <Button
+            onClick={() => {
+              setOpenDelete(true);
             }}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
+            fullWidth
+            startIcon={<Trash />}
           >
-            <Button
-              onClick={() => {
-                setOpenDelete(true);
-              }}
-              fullWidth
-              startIcon={<Trash />}
-            >
-              Delete
-            </Button>
-          </Menu>
-          {openDelete && (
-            <DeleteChatDialog open={openDelete} handleClose={handleCloseDelete} delete_id={delete_id} />
-          )}
+            Delete
+          </Button>
+        </Menu>
+        {openDelete && (
+          <DeleteChatDialog open={openDelete} handleClose={handleCloseDelete} delete_id={delete_id} />
+        )}
       </Stack>
     </StyledChatBox>
   );
