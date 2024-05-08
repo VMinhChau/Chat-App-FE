@@ -190,7 +190,7 @@ const PhoneBookGroupElement = (el) => {
               {el.title}
             </Typography>
             <Typography variant="caption">
-              {truncateText(el.description, 20)}
+              {truncateText(el.description, 60)}
             </Typography>
           </Stack>
         </Stack>
